@@ -1,0 +1,30 @@
+# Инфраструктура для локальной разработки. Сами web и api запускаются на хосте: pnpm dev.
+name: nisha
+
+services:
+  postgres:
+    image: postgres:18-alpine
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?задайте POSTGRES_USER в .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?задайте POSTGRES_PASSWORD в .env}
+      POSTGRES_DB: ${POSTGRES_DB:?задайте POSTGRES_DB в .env}
+    ports:
+      - '127.0.0.1:${POSTGRES_PORT:-5432}:5432'
+    volumes:
+      # С версии 18 образ хранит данные в подкаталоге по мажорной версии.
+      - postgres-data:/var/lib/postgresql
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U "$$POSTGRES_USER" -d "$$POSTGRES_DB"']
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # Ловит все письма приложения (D-020): SMTP на 1025, веб-интерфейс на 8025.
+  mailpit:
+    image: axllent/mailpit:v1.33
+    ports:
+      - '127.0.0.1:1025:1025'
+      - '127.0.0.1:8025:8025'
+
+volumes:
+  postgres-data:

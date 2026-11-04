@@ -1,0 +1,41 @@
+.accordion {
+  border-top: var(--border-1) solid var(--color-line);
+}
+
+.summary {
+  display: flex;
+  gap: var(--sp-12);
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--control-52);
+}
+
+.footer .summary {
+  font-size: var(--fs-12);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-14);
+}
+
+.filter .summary {
+  min-height: var(--control-56);
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-12);
+  color: var(--color-copper);
+}
+
+.chevron {
+  flex: none;
+  color: var(--color-text-muted);
+  transition: transform var(--dur-base) var(--ease-out);
+}
+
+.accordion[open] .chevron {
+  transform: rotate(180deg);
+}
+
+.content {
+  padding-bottom: var(--sp-16);
+}

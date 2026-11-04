@@ -1,0 +1,139 @@
+.header {
+  background: var(--color-bg);
+  border-bottom: var(--border-1) solid var(--color-line);
+}
+
+.inner {
+  display: flex;
+  gap: var(--sp-24);
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--header-h);
+}
+
+.logo {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  min-height: var(--control-44);
+  justify-content: center;
+}
+
+.logoName {
+  font-family: var(--font-serif);
+  font-size: var(--fs-24);
+  line-height: var(--lh-none);
+  letter-spacing: var(--ls-logo);
+}
+
+.logoSub {
+  display: none;
+  font-size: var(--fs-9);
+  letter-spacing: var(--ls-logo-sub);
+  color: var(--color-text-muted);
+}
+
+.nav {
+  display: none;
+}
+
+.navList {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-32);
+}
+
+.navLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-44);
+  font-size: var(--fs-12);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-16);
+  color: var(--color-text-muted);
+  transition: color var(--dur-fast) var(--ease-out);
+}
+
+.navLink:hover {
+  color: var(--color-text);
+}
+
+.navLinkActive {
+  color: var(--color-text);
+  box-shadow: inset 0 calc(-1 * var(--border-1)) 0 var(--color-copper);
+}
+
+.actions {
+  display: flex;
+  gap: var(--sp-4);
+  align-items: center;
+  margin-right: calc(-1 * var(--sp-8));
+}
+
+/* Кабинет и избранное на телефоне живут в меню. Селектор с .actions сильнее базового класса кнопки. */
+.actions .wideOnly {
+  display: none;
+}
+
+.actions .menuButton {
+  color: var(--color-text);
+}
+
+.menuList {
+  display: flex;
+  flex-direction: column;
+}
+
+.menuLink {
+  display: flex;
+  gap: var(--sp-12);
+  align-items: center;
+  min-height: var(--control-56);
+  font-family: var(--font-serif);
+  font-size: var(--fs-26);
+  text-transform: uppercase;
+  border-bottom: var(--border-1) solid var(--color-line);
+}
+
+.menuLinkActive {
+  color: var(--color-copper);
+}
+
+.menuSecondary {
+  font-family: var(--font-sans);
+  font-size: var(--fs-14);
+  text-transform: none;
+  color: var(--color-text-muted);
+}
+
+@media (--lg) {
+  .inner {
+    min-height: var(--header-h-wide);
+  }
+
+  .logoName {
+    font-size: var(--fs-30);
+  }
+
+  .logoSub {
+    display: block;
+  }
+
+  .nav {
+    display: block;
+  }
+
+  .actions .wideOnly {
+    display: inline-flex;
+  }
+
+  .actions .menuButton {
+    display: none;
+  }
+}
+
+@media (--xl) {
+  .navList {
+    gap: var(--sp-40);
+  }
+}

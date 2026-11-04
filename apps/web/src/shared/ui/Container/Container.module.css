@@ -1,0 +1,12 @@
+.container {
+  width: 100%;
+  max-width: var(--container-max);
+  padding: 0 var(--gutter);
+  margin: 0 auto;
+}
+
+@media (--md) {
+  .container {
+    padding: 0 var(--gutter-wide);
+  }
+}

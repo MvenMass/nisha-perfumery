@@ -1,0 +1,62 @@
+.checkbox {
+  display: flex;
+  gap: var(--sp-12);
+  align-items: center;
+  min-height: var(--control-44);
+  font-size: var(--fs-14);
+  cursor: pointer;
+}
+
+.box {
+  position: relative;
+  flex: none;
+  width: 18px;
+  height: 18px;
+  border: var(--border-1) solid var(--color-travertine);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+/* Галочка рисуется рамкой: не нужна отдельная иконка. */
+.box::after {
+  position: absolute;
+  top: 2px;
+  left: 5px;
+  width: 6px;
+  height: 10px;
+  content: '';
+  border: solid var(--color-text);
+  border-width: 0 var(--border-2) var(--border-2) 0;
+  opacity: 0;
+  transform: rotate(45deg);
+}
+
+.input:checked + .box {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+}
+
+.input:checked + .box::after {
+  opacity: 1;
+}
+
+.input:focus + .box {
+  outline: var(--border-2) solid var(--color-copper);
+  outline-offset: var(--sp-2);
+}
+
+.input:focus:not(:focus-visible) + .box {
+  outline: none;
+}
+
+.input:disabled + .box {
+  opacity: 0.5;
+}
+
+.count {
+  margin-left: auto;
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
+  color: var(--color-text-muted);
+}

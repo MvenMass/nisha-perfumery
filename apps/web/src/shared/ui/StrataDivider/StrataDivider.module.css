@@ -1,0 +1,62 @@
+.divider {
+  display: flex;
+  gap: var(--sp-12);
+  align-items: center;
+  padding: var(--sp-20) 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-10);
+  letter-spacing: var(--ls-10);
+  color: var(--color-text-muted);
+}
+
+.layers {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.layer {
+  display: block;
+}
+
+/* Подпись породы на телефоне скрыта — как в home-mobile.html. */
+.label {
+  display: none;
+}
+
+.lineStrong {
+  background: var(--color-line-strong);
+}
+
+.walnut {
+  background: var(--color-walnut);
+}
+
+.stone {
+  background: var(--color-stone);
+}
+
+.basalt {
+  background: var(--color-basalt);
+}
+
+.accent {
+  background: var(--color-accent);
+}
+
+.copperDark {
+  background: var(--color-copper-dark);
+}
+
+@media (--md) {
+  .divider {
+    gap: var(--sp-24);
+    padding: var(--sp-24) 0;
+    font-size: var(--fs-11);
+  }
+
+  .label {
+    display: inline;
+  }
+}

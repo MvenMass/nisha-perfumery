@@ -1,0 +1,18 @@
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-10);
+  color: var(--color-copper);
+}
+
+.muted {
+  color: var(--color-text-muted);
+}
+
+@media (--lg) {
+  .label {
+    font-size: var(--fs-12);
+    letter-spacing: var(--ls-12);
+  }
+}

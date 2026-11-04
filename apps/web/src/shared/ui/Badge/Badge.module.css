@@ -1,0 +1,53 @@
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--sp-4) var(--sp-8);
+  font-family: var(--font-mono);
+  font-size: var(--fs-10);
+  line-height: var(--lh-tight);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-10);
+  color: var(--color-text);
+}
+
+.accent {
+  background: var(--color-accent);
+}
+
+.light {
+  color: var(--color-bg);
+  background: var(--color-text);
+}
+
+.outline {
+  border: var(--border-1) solid var(--color-travertine);
+}
+
+/* Статус заказа: форма метки различается, а не только цвет (CLAUDE.md). */
+.status {
+  display: inline-flex;
+  gap: var(--sp-8);
+  align-items: center;
+  min-height: var(--control-32);
+  padding: 0 var(--sp-12);
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-10);
+  color: var(--color-text);
+  border: var(--border-1) solid transparent;
+}
+
+.fill {
+  background: var(--color-accent);
+}
+
+.statusOutline {
+  border-color: var(--color-travertine);
+}
+
+.dashed {
+  color: var(--color-text-muted);
+  border-style: dashed;
+  border-color: var(--color-line-strong);
+}

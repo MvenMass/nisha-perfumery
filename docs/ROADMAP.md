@@ -17,7 +17,7 @@
 
 ---
 
-## Этап 1. Инициализация monorepo и инфраструктуры ⬜
+## Этап 1. Инициализация monorepo и инфраструктуры ✅
 
 **Цель:** пустой, но рабочий каркас: оба приложения запускаются одной командой, качество проверяется автоматически.
 
@@ -40,7 +40,7 @@
 - Production-сборка web не содержит синтаксиса новее Safari 14 (проверено по бандлу).
 - Секретов в репозитории нет, есть `.env.example`.
 
-## Этап 2. Дизайн-система в коде ⬜
+## Этап 2. Дизайн-система в коде ✅
 
 **Цель:** все повторяющиеся элементы макетов собраны в коде один раз и проверены на всех брейкпоинтах.
 
@@ -263,3 +263,49 @@
 ## Итоги этапов
 
 _Заполняется по завершении каждого этапа._
+
+### Этап 1 — 2026-11-04
+
+**Сделано**
+- pnpm workspaces: `apps/web`, `apps/api`, `packages/contracts`; Node 26 LTS, pnpm 11, TypeScript 6.0 (D-036).
+- ESLint 9 (flat): typecheck-правила, запрет `any`, `structuredClone`, `.at()`, react-hooks, jsx-a11y, границы слоёв FSD (проверено на намеренных нарушениях: `shared → pages` и `pages/a → pages/b` ловятся). Prettier, `.editorconfig`, `.gitattributes` (LF).
+- contracts: схема ответа health и единый формат ошибки с кодами `VALIDATION_FAILED` / `NOT_FOUND` / `INTERNAL`; пакет на исходниках TS (D-035).
+- api: Fastify 5 + zod type provider, конфиг из env с валидацией, единый обработчик ошибок и 404, Helmet, CORS только для `WEB_ORIGIN`, редактирование cookie/authorization в логах, корректная остановка по SIGINT/SIGTERM, `GET /api/health`.
+- web: Vite 8 + React 19 + React Router + TanStack Query, `build.target = es2020 + safari14`, browserslist, прокси `/api`; `shared/api/http.ts` — fetch с cookie, разбор ошибок в `ApiError`, проверка ответа схемой. Временная страница со статусом api.
+- Тесты: contracts 3, api 8 (health, 404, валидация, битый JSON, 500 без утечки деталей, Helmet, CORS, env), web 5 (http-клиент). Playwright smoke в chromium, webkit и на 360 px.
+- Docker: dev-compose (PostgreSQL 18, Mailpit), Dockerfile api (multi-stage, `pnpm deploy`, пользователь `node`, healthcheck) и web (nginx, SPA-fallback, вечный кеш `/assets`).
+- GitHub Actions: format → lint → typecheck → test → build → es-check → e2e, отчёт Playwright при падении.
+
+**Проверено**
+- `pnpm dev`: api на :3000, web на :5173, `/api/health` через прокси Vite → `{"status":"ok"}`.
+- Весь конвейер CI прогнан локально и зелёный; бандл web проходит `es-check es2020`.
+- `docker compose up` → postgres и mailpit healthy; оба образа собираются, контейнер api healthy, nginx отдаёт `/` и `/catalog`.
+
+**Отложено / известные проблемы**
+- CI на GitHub ещё не запускался — ветка `feat/stage-1-infra` не запушена.
+- ESLint 9 вместо 10 и TypeScript 6.0 вместо 7 — до поддержки в jsx-a11y и typescript-eslint (D-036).
+- Playwright webkit — не настоящий Safari 14; проверка на устройствах — этап 10.
+- Проксирование `/api` в nginx и production-compose — этап 10.
+
+### Этап 2 — 2026-11-04
+
+**Сделано**
+- Стили: `tokens.css` (цвета по ролям, шрифты, размеры текста, интервалы, отступы, высоты контролов, раскладка, линии, z-index, длительности), `media.css` (custom media 768 / 1024 / 1440 и reduced motion), `reset.css`, `global.css` (видимый фокус с фолбэком для Safari 14, `.visually-hidden`, отключение анимаций при reduced motion).
+- Шрифты: свой `fonts.css` поверх @fontsource — 19 начертаний, только woff2, cyrillic + latin, знак ₽ из latin-ext Manrope (D-037).
+- Инструменты: PostCSS (global-data → custom-media → autoprefixer), stylelint с запретом цветов вне `tokens.css` (`pnpm lint` = eslint + stylelint), Testing Library + jsdom.
+- `shared/lib`: `typograph` (18 тестов), `formatPrice` из копеек, `plural`, `cx`.
+- `shared/ui`: Icon (24 иконки из макетов), Button / ButtonLink, IconButton / IconLink, Input / Textarea / Select, Checkbox, RadioCard, Chip (со свотчем и сегмент) / RemovableChip, QuantityStepper, Badge / StatusBadge, Stepper, Tabs, Breadcrumbs, Accordion, Sheet, EmptyState, Skeleton / SkeletonText, Container, SectionLabel, StrataDivider, SpecimenLabel.
+- `widgets`: Header (навигация с 1024 px, бургер-меню в Sheet, счётчик корзины со склонением), Footer (колонки с 768 px, аккордеоны на телефоне, соцсети из пропсов), ProductCard (бестселлер, новый, нет в наличии, избранное).
+- Dev-страница `/_ui` со всеми компонентами и состояниями; в production-сборку не попадает.
+
+**Проверено**
+- Тесты web: 59 (типограф, деньги, склонение, поля, чекбокс-чипы, вкладки с клавиатурой, степпер, Sheet — фокус-ловушка, Esc, возврат фокуса, блокировка прокрутки; Header; ProductCard).
+- `/_ui` на 360 / 768 / 1440 px: axe — 0 нарушений, горизонтальной прокрутки нет, ошибок в консоли нет; Sheet и мобильное меню — 0 нарушений axe. Шторка фильтров и меню сверены со скриншотами `catalog-filters-mobile.html` и `home-mobile.html`.
+- Весь конвейер CI локально зелёный, бандл проходит `es-check es2020`, в `dist` нет кода `/_ui`.
+
+**Отложено / известные проблемы**
+- Компоненты, которые встречаются в одном макете (галерея товара, выбор объёма с ценой, пирамида нот, слайдер цены, итоговый блок корзины), делаются вместе со своими страницами в этапах 4–7.
+- Тип пропсов ProductCard локальный — заменить схемой из contracts в этапе 3.
+- Ссылки шапки и подвала ведут на ещё не существующие маршруты — страницы появятся в этапах 4 и 8.
+- Анимации выезда Sheet есть, анимации закрытия нет — при необходимости добавить в этапе 9.
+- Реальный Safari 14 не проверялся (только Chromium и WebKit Playwright) — этап 10.

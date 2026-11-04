@@ -1,0 +1,27 @@
+.tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-8);
+}
+
+.tab {
+  min-height: var(--control-44);
+  padding: 0 var(--sp-14);
+  font-size: var(--fs-13);
+  color: var(--color-text);
+  background: transparent;
+  border: var(--border-1) solid var(--color-line-strong);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.tab:hover {
+  border-color: var(--color-travertine);
+}
+
+.tab[aria-selected='true'],
+.tab[aria-selected='true']:hover {
+  background: var(--color-selected);
+  border-color: var(--color-copper);
+}

@@ -1,0 +1,5 @@
+/* Брейкпоинты проекта: 360 (база, mobile-first), 768, 1024, 1440. */
+@custom-media --md (min-width: 768px);
+@custom-media --lg (min-width: 1024px);
+@custom-media --xl (min-width: 1440px);
+@custom-media --motion-ok (prefers-reduced-motion: no-preference);

@@ -1,0 +1,7 @@
+packages:
+  - apps/*
+  - packages/*
+
+# pnpm по умолчанию не запускает install-скрипты зависимостей; разрешаем только нужные.
+allowBuilds:
+  esbuild: true
