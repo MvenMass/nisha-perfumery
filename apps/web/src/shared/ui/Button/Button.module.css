@@ -1,0 +1,77 @@
+.button {
+  display: inline-flex;
+  gap: var(--sp-12);
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--sp-24);
+  font-family: var(--font-sans);
+  font-size: var(--fs-12);
+  font-weight: 600;
+  line-height: var(--lh-tight);
+  text-align: center;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-16);
+  color: var(--color-text);
+  border: var(--border-1) solid transparent;
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out),
+    color var(--dur-fast) var(--ease-out);
+}
+
+.button:disabled,
+.button[aria-disabled='true'] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.primary {
+  background: var(--color-accent);
+}
+
+.primary:hover:not(:disabled) {
+  background: var(--color-copper-dark);
+}
+
+.outline {
+  background: transparent;
+  border-color: var(--color-travertine);
+}
+
+.outline:hover:not(:disabled) {
+  border-color: var(--color-copper);
+}
+
+/* Текстовая ссылка-действие: «Читать журнал →». */
+.link {
+  min-height: var(--control-44);
+  padding: 0;
+  font-weight: 400;
+  color: var(--color-copper);
+  background: transparent;
+}
+
+.link:hover:not(:disabled) {
+  color: var(--color-text);
+}
+
+.md {
+  min-height: var(--control-44);
+  font-size: var(--fs-11);
+  letter-spacing: var(--ls-12);
+}
+
+.lg {
+  min-height: var(--control-52);
+  padding: 0 var(--sp-28);
+}
+
+.xl {
+  min-height: var(--control-56);
+  padding: 0 var(--sp-40);
+  font-size: var(--fs-13);
+}
+
+.fullWidth {
+  width: 100%;
+}
