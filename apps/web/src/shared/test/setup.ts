@@ -5,3 +5,8 @@ import { afterEach } from 'vitest';
 afterEach(() => {
   cleanup();
 });
+
+// jsdom не умеет прокручивать окно; Sheet восстанавливает прокрутку после закрытия.
+if (typeof window !== 'undefined') {
+  window.scrollTo = () => undefined;
+}
