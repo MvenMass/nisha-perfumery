@@ -17,7 +17,7 @@
 
 ---
 
-## Этап 1. Инициализация monorepo и инфраструктуры ⬜
+## Этап 1. Инициализация monorepo и инфраструктуры ✅
 
 **Цель:** пустой, но рабочий каркас: оба приложения запускаются одной командой, качество проверяется автоматически.
 
@@ -263,3 +263,26 @@
 ## Итоги этапов
 
 _Заполняется по завершении каждого этапа._
+
+### Этап 1 — 2026-11-04
+
+**Сделано**
+- pnpm workspaces: `apps/web`, `apps/api`, `packages/contracts`; Node 26 LTS, pnpm 11, TypeScript 6.0 (D-036).
+- ESLint 9 (flat): typecheck-правила, запрет `any`, `structuredClone`, `.at()`, react-hooks, jsx-a11y, границы слоёв FSD (проверено на намеренных нарушениях: `shared → pages` и `pages/a → pages/b` ловятся). Prettier, `.editorconfig`, `.gitattributes` (LF).
+- contracts: схема ответа health и единый формат ошибки с кодами `VALIDATION_FAILED` / `NOT_FOUND` / `INTERNAL`; пакет на исходниках TS (D-035).
+- api: Fastify 5 + zod type provider, конфиг из env с валидацией, единый обработчик ошибок и 404, Helmet, CORS только для `WEB_ORIGIN`, редактирование cookie/authorization в логах, корректная остановка по SIGINT/SIGTERM, `GET /api/health`.
+- web: Vite 8 + React 19 + React Router + TanStack Query, `build.target = es2020 + safari14`, browserslist, прокси `/api`; `shared/api/http.ts` — fetch с cookie, разбор ошибок в `ApiError`, проверка ответа схемой. Временная страница со статусом api.
+- Тесты: contracts 3, api 8 (health, 404, валидация, битый JSON, 500 без утечки деталей, Helmet, CORS, env), web 5 (http-клиент). Playwright smoke в chromium, webkit и на 360 px.
+- Docker: dev-compose (PostgreSQL 18, Mailpit), Dockerfile api (multi-stage, `pnpm deploy`, пользователь `node`, healthcheck) и web (nginx, SPA-fallback, вечный кеш `/assets`).
+- GitHub Actions: format → lint → typecheck → test → build → es-check → e2e, отчёт Playwright при падении.
+
+**Проверено**
+- `pnpm dev`: api на :3000, web на :5173, `/api/health` через прокси Vite → `{"status":"ok"}`.
+- Весь конвейер CI прогнан локально и зелёный; бандл web проходит `es-check es2020`.
+- `docker compose up` → postgres и mailpit healthy; оба образа собираются, контейнер api healthy, nginx отдаёт `/` и `/catalog`.
+
+**Отложено / известные проблемы**
+- CI на GitHub ещё не запускался — ветка `feat/stage-1-infra` не запушена.
+- ESLint 9 вместо 10 и TypeScript 6.0 вместо 7 — до поддержки в jsx-a11y и typescript-eslint (D-036).
+- Playwright webkit — не настоящий Safari 14; проверка на устройствах — этап 10.
+- Проксирование `/api` в nginx и production-compose — этап 10.
