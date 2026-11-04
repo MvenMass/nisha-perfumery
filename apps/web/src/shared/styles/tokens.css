@@ -1,0 +1,133 @@
+/*
+ * Токены дизайн-системы. Значения взяты из макетов docs/design/*.html и CLAUDE.md.
+ * Единственный файл, где разрешены литералы цветов (stylelint).
+ * Шкалы названы по значению в px — так проще сверять с макетом.
+ */
+:root {
+  /* --- Цвета: поверхности --- */
+  --color-bg: #141312;
+  --color-surface: #1b1a19;
+  --color-basalt: #292725;
+  --color-walnut: #382319;
+  --color-copper-dark: #4a2617;
+  --color-stone: #4a3f36;
+  --color-selected: #2a1a12;
+
+  /* --- Цвета: акценты --- */
+  --color-accent: #71351f; /* кнопки, акцентные поверхности */
+  --color-copper: #c27e54; /* акцентный текст, иконки, рамка выбранного, ошибки (D-023) */
+
+  /* --- Цвета: текст --- */
+  --color-text: #ede6db;
+  --color-text-muted: #a89c8c;
+  --color-text-on-walnut: #b5a898;
+
+  /* Только декор, рамки и крупный текст: для мелкого текста не хватает контраста. */
+  --color-travertine: #887d70;
+
+  /* --- Цвета: линии и подложки --- */
+  --color-line: #2e2b28;
+  --color-line-strong: #3a3633;
+  --color-overlay: rgb(20 19 18 / 80%); /* плашки подписей на фото */
+  --color-scrim: rgb(12 11 11 / 70%); /* затемнение под шторкой */
+
+  /* --- Шрифты --- */
+  --font-serif: 'Cormorant Garamond', 'Times New Roman', serif;
+  --font-sans: 'Manrope', system-ui, -apple-system, 'Segoe UI', roboto, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SF Mono', menlo, consolas, monospace;
+
+  /* --- Размеры текста --- */
+  --fs-9: 9px;
+  --fs-10: 10px;
+  --fs-11: 11px;
+  --fs-12: 12px;
+  --fs-13: 13px;
+  --fs-14: 14px;
+  --fs-15: 15px;
+  --fs-16: 16px;
+  --fs-17: 17px;
+  --fs-18: 18px;
+  --fs-20: 20px;
+  --fs-22: 22px;
+  --fs-24: 24px;
+  --fs-26: 26px;
+  --fs-28: 28px;
+  --fs-30: 30px;
+  --fs-32: 32px;
+  --fs-36: 36px;
+
+  /* Заголовки: мобильное значение из home-mobile.html, десктопное — из десктопных макетов. */
+  --fs-display: clamp(42px, 6vw, 88px); /* первый экран */
+  --fs-page-title: clamp(32px, 4.4vw, 64px); /* заголовок страницы: каталог, корзина */
+  --fs-section: clamp(32px, 3.4vw, 48px); /* заголовок секции */
+
+  /* --- Межбуквенные интервалы --- */
+  --ls-6: 0.06em;
+  --ls-8: 0.08em;
+  --ls-10: 0.1em;
+  --ls-12: 0.12em;
+  --ls-14: 0.14em;
+  --ls-16: 0.16em;
+  --ls-logo: 0.3em;
+  --ls-logo-sub: 0.4em;
+
+  /* --- Высота строки --- */
+  --lh-none: 1;
+  --lh-tight: 1.1;
+  --lh-snug: 1.3;
+  --lh-normal: 1.5;
+  --lh-relaxed: 1.7;
+
+  /* --- Отступы --- */
+  --sp-2: 2px;
+  --sp-3: 3px;
+  --sp-4: 4px;
+  --sp-6: 6px;
+  --sp-8: 8px;
+  --sp-10: 10px;
+  --sp-12: 12px;
+  --sp-14: 14px;
+  --sp-16: 16px;
+  --sp-18: 18px;
+  --sp-20: 20px;
+  --sp-24: 24px;
+  --sp-28: 28px;
+  --sp-32: 32px;
+  --sp-40: 40px;
+  --sp-48: 48px;
+  --sp-56: 56px;
+  --sp-64: 64px;
+  --sp-72: 72px;
+  --sp-88: 88px;
+  --sp-104: 104px;
+  --sp-120: 120px;
+
+  /* --- Контролы: высоты. Меньше 44px — только у некликабельных меток (D-023). --- */
+  --control-32: 32px;
+  --control-44: 44px;
+  --control-52: 52px;
+  --control-56: 56px;
+  --control-64: 64px;
+
+  /* --- Раскладка --- */
+  --container-max: 1360px;
+  --gutter: 16px;
+  --gutter-wide: 40px;
+  --header-h: 64px;
+  --header-h-wide: 84px;
+
+  /* --- Линии --- */
+  --border-1: 1px;
+  --border-2: 2px;
+
+  /* --- Слои --- */
+  --z-header: 10;
+  --z-sheet: 100;
+  --z-toast: 200;
+
+  /* --- Движение --- */
+  --dur-fast: 150ms;
+  --dur-base: 250ms;
+  --dur-slow: 400ms;
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+}
