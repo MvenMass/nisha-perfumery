@@ -43,7 +43,7 @@ export function Header({ cartCount, onSearch }: HeaderProps) {
   return (
     <header className={styles.header}>
       <Container className={styles.inner}>
-        <Link to="/" className={styles.logo} aria-label="Ниша, парфюмерный дом — на главную">
+        <Link to="/" className={styles.logo}>
           <span className={styles.logoName}>НИША</span>
           <span className={styles.logoSub}>ПАРФЮМЕРНЫЙ ДОМ</span>
         </Link>

@@ -54,14 +54,12 @@ export function ProductCard({
   return (
     <article className={cx(styles.card, !inStock && styles.unavailable)}>
       <div className={styles.media}>
-        {/* Снимок ведёт туда же, куда и название, поэтому убран из порядка Tab и от скринридера. */}
-        <Link to={href} tabIndex={-1} aria-hidden="true" className={styles.mediaLink}>
-          {image ? (
-            <img src={image.src} alt="" loading="lazy" className={styles.photo} />
-          ) : (
-            <span className={cx(styles.photo, styles[product.placeholder ?? 'basalt'])} />
-          )}
-        </Link>
+        {/* Снимок декоративный: название рядом, а ссылкой работает вся карточка. */}
+        {image ? (
+          <img src={image.src} alt="" loading="lazy" className={styles.photo} />
+        ) : (
+          <span className={cx(styles.photo, styles[product.placeholder ?? 'basalt'])} />
+        )}
         {!inStock ? (
           <Badge tone="outline" className={styles.badge}>
             Нет в&nbsp;наличии
