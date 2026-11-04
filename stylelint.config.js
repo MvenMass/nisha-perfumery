@@ -5,6 +5,8 @@ export default {
     'color-no-hex': true,
     'color-named': 'never',
     'function-disallowed-list': ['rgb', 'rgba', 'hsl', 'hsla'],
+    // Состояния компонентов (hover / disabled / focus) удобнее читать в порядке, а не по специфичности.
+    'no-descending-specificity': null,
     // Классы CSS Modules пишем в camelCase, чтобы обращаться к ним как styles.someClass.
     'selector-class-pattern': [
       '^[a-z][a-zA-Z0-9]*$',
