@@ -1,0 +1,55 @@
+.chip {
+  display: inline-flex;
+  gap: var(--sp-8);
+  align-items: center;
+  justify-content: center;
+  min-height: var(--control-44);
+  padding: 0 var(--sp-14);
+  font-size: var(--fs-13);
+  color: var(--color-text);
+  background: transparent;
+  border: var(--border-1) solid var(--color-line-strong);
+  transition:
+    background-color var(--dur-fast) var(--ease-out),
+    border-color var(--dur-fast) var(--ease-out);
+}
+
+.chip:hover {
+  border-color: var(--color-travertine);
+}
+
+.chip[aria-pressed='true'],
+.chip[aria-pressed='true']:hover {
+  background: var(--color-selected);
+  border-color: var(--color-copper);
+}
+
+/* Сегмент: объёмы в фильтре растягиваются на равные доли. */
+.segment {
+  flex: 1 1 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+}
+
+.swatch {
+  flex: none;
+  width: 12px;
+  height: 12px;
+}
+
+/* Тёмный свотч (базальт) иначе сливается с фоном — как в макете, обводим травертином. */
+.swatchOutlined {
+  outline: var(--border-1) solid var(--color-travertine);
+}
+
+.removable {
+  min-height: var(--control-44);
+  padding: 0 var(--sp-12);
+  font-size: var(--fs-12);
+  background: var(--color-basalt);
+  border: 0;
+}
+
+.removable:hover {
+  background: var(--color-line-strong);
+}
