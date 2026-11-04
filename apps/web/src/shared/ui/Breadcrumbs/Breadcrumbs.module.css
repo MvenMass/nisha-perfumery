@@ -1,0 +1,32 @@
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
+  letter-spacing: var(--ls-8);
+  color: var(--color-text-muted);
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-44);
+}
+
+.link:hover {
+  color: var(--color-text);
+}
+
+.current {
+  color: var(--color-text);
+}
+
+.separator {
+  padding: 0 var(--sp-6);
+}

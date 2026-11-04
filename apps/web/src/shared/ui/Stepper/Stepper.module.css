@@ -1,0 +1,45 @@
+.stepper {
+  display: grid;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding-top: var(--sp-12);
+  padding-right: var(--sp-8);
+  font-size: var(--fs-12);
+  color: var(--color-text-muted);
+  border-top: var(--border-2) solid var(--color-line-strong);
+}
+
+.reached {
+  color: var(--color-text);
+  border-top-color: var(--color-copper);
+}
+
+/* Шаги оформления: моноширинные подписи «01 · КОНТАКТЫ». */
+.mono .step {
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-10);
+}
+
+.highlight .current .label {
+  color: var(--color-copper);
+}
+
+.meta {
+  font-family: var(--font-mono);
+  font-size: var(--fs-10);
+  color: var(--color-text-muted);
+}
+
+@media (--md) {
+  .step {
+    padding-top: var(--sp-14);
+  }
+}
