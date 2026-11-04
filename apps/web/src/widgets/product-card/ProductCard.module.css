@@ -13,11 +13,6 @@
   overflow: hidden;
 }
 
-.mediaLink {
-  display: block;
-  height: 100%;
-}
-
 .photo {
   display: block;
   width: 100%;
@@ -50,7 +45,7 @@
   left: var(--sp-14);
 }
 
-.favorite {
+.media .favorite {
   position: absolute;
   top: var(--sp-8);
   right: var(--sp-8);
@@ -68,8 +63,22 @@
   color: var(--color-text);
 }
 
-.nameLink:hover {
+/* Вся карточка — зона нажатия ссылки (≥ 44px), но в порядке Tab и для скринридера ссылка одна. */
+.nameLink::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+}
+
+.card:hover .nameLink {
   color: var(--color-copper);
+}
+
+/* Кнопки лежат поверх растянутой ссылки. */
+.favorite,
+.footer button {
+  position: relative;
+  z-index: 1;
 }
 
 .notes {

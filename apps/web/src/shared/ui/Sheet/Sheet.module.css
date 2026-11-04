@@ -58,6 +58,13 @@
   border-top: var(--border-1) solid var(--color-line);
 }
 
+/* Две кнопки в 360px: поля и разрядка уже, чем у обычных кнопок, — как в макете шторки. */
+.footer button,
+.footer a {
+  padding: 0 var(--sp-18);
+  letter-spacing: var(--ls-12);
+}
+
 @media (--motion-ok) {
   .backdrop {
     animation: fade-in var(--dur-base) var(--ease-out);
