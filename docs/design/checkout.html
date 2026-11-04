@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Ниша — оформление заказа</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=Manrope:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#141312}
+a{color:#A89C8C;text-decoration:none}a:hover{color:#EDE6DB}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div style="font-family: 'Manrope', system-ui, sans-serif; color: #EDE6DB; background: #141312; width: 100%">
+
+<header style="border-bottom: 1px solid #2E2B28">
+<div style="max-width: 1360px; margin: 0 auto; padding: 0 40px; min-height: 84px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px">
+<a href="home.html" style="display: flex; flex-direction: column; gap: 2px; color: #EDE6DB"><span style="font-family: 'Cormorant Garamond', serif; font-size: 30px; letter-spacing: 0.3em; line-height: 1">НИША</span><span style="font-size: 9px; letter-spacing: 0.4em; color: #A89C8C">ПАРФЮМЕРНЫЙ ДОМ</span></a>
+<a href="cart.html" style="display: inline-flex; align-items: center; gap: 10px; min-height: 44px; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M20 12H4M10 6l-6 6 6 6"></path></svg>Вернуться в&nbsp;корзину</a>
+</div>
+</header>
+
+<div style="max-width: 1360px; margin: 0 auto; padding: 40px 40px 120px; display: flex; flex-direction: column; gap: 40px">
+<div style="display: flex; flex-direction: column; gap: 24px">
+<h1 style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 56px; line-height: 1; text-transform: uppercase">Оформление заказа</h1>
+<ol aria-label="Шаги оформления" style="margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 0; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em">
+<li style="flex: 1 1 160px; padding-top: 12px; border-top: 2px solid #C27E54; color: #EDE6DB">01 · КОНТАКТЫ</li>
+<li aria-current="step" style="flex: 1 1 160px; padding-top: 12px; border-top: 2px solid #C27E54; color: #EDE6DB">02 · ДОСТАВКА</li>
+<li style="flex: 1 1 160px; padding-top: 12px; border-top: 2px solid #3A3633; color: #A89C8C">03 · ОПЛАТА</li>
+</ol>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 48px; align-items: flex-start">
+<form style="flex: 999 1 600px; min-width: 0; display: flex; flex-direction: column; gap: 40px">
+
+<fieldset style="margin: 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 16px">
+<legend style="padding: 0 0 16px; font-family: 'Cormorant Garamond', serif; font-size: 28px">Контакты</legend>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px">
+<label style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; color: #A89C8C">Имя и&nbsp;фамилия<input type="text" value="[ИМЯ ФАМИЛИЯ]" autocomplete="name" style="min-height: 52px; padding: 0 16px; background: transparent; border: 1px solid #3A3633; color: #EDE6DB; font-family: inherit; font-size: 15px"></label>
+<label style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; color: #A89C8C">Телефон<input type="tel" value="+7 [НОМЕР]" autocomplete="tel" style="min-height: 52px; padding: 0 16px; background: transparent; border: 1px solid #3A3633; color: #EDE6DB; font-family: inherit; font-size: 15px"></label>
+<label style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; color: #A89C8C">Электронная почта<input type="email" value="name@example" autocomplete="email" aria-invalid="true" aria-describedby="email-err" style="min-height: 52px; padding: 0 16px; background: transparent; border: 1px solid #C27E54; color: #EDE6DB; font-family: inherit; font-size: 15px"><span id="email-err" style="font-size: 12px; color: #C27E54">Проверьте адрес: не&nbsp;хватает домена</span></label>
+</div>
+</fieldset>
+
+<fieldset style="margin: 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 12px">
+<legend style="padding: 0 0 16px; font-family: 'Cormorant Garamond', serif; font-size: 28px">Доставка</legend>
+<label style="display: flex; align-items: center; gap: 16px; padding: 18px 20px; border: 1px solid #C27E54; background: #2A1A12">
+<input type="radio" name="delivery" checked style="width: 18px; height: 18px; accent-color: #C27E54">
+<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#C27E54" stroke-width="1.4"><path d="M3 7h11v9H3zM14 10h4l3 3v3h-7z"></path><circle cx="7" cy="18" r="1.6"></circle><circle cx="17" cy="18" r="1.6"></circle></svg>
+<span style="flex: 1 1 auto; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 15px">Курьером</span><span style="font-size: 12px; color: #A89C8C">[N–N]&nbsp;дня, в&nbsp;удобный интервал</span></span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px">[ЦЕНА]</span>
+</label>
+<label style="display: flex; align-items: center; gap: 16px; padding: 18px 20px; border: 1px solid #3A3633">
+<input type="radio" name="delivery" style="width: 18px; height: 18px; accent-color: #C27E54">
+<svg aria-hidden="true" width="24" height="24" viewBox="0 0 36 36" fill="none" stroke="#A89C8C" stroke-width="1.6"><path d="M5 11l13-6 13 6v14l-13 6-13-6V11z"></path><path d="M5 11l13 6 13-6M18 17v14"></path></svg>
+<span style="flex: 1 1 auto; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 15px">В&nbsp;пункт выдачи</span><span style="font-size: 12px; color: #A89C8C">[N–N]&nbsp;дней</span></span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px">[ЦЕНА]</span>
+</label>
+<label style="display: flex; align-items: center; gap: 16px; padding: 18px 20px; border: 1px solid #3A3633">
+<input type="radio" name="delivery" style="width: 18px; height: 18px; accent-color: #C27E54">
+<svg aria-hidden="true" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A89C8C" stroke-width="1.4"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"></path><circle cx="12" cy="9" r="2.5"></circle></svg>
+<span style="flex: 1 1 auto; display: flex; flex-direction: column; gap: 4px"><span style="font-size: 15px">Самовывоз из&nbsp;бутика</span><span style="font-size: 12px; color: #A89C8C">[АДРЕС БУТИКА] · можно попробовать на&nbsp;месте</span></span>
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 13px">бесплатно</span>
+</label>
+</fieldset>
+
+<fieldset style="margin: 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 16px">
+<legend style="padding: 0 0 16px; font-family: 'Cormorant Garamond', serif; font-size: 28px">Адрес</legend>
+<div style="display: flex; flex-wrap: wrap; gap: 8px">
+<button type="button" aria-pressed="true" style="min-height: 40px; padding: 0 14px; background: #2A1A12; border: 1px solid #C27E54; color: #EDE6DB; font-family: inherit; font-size: 13px">Дом · [АДРЕС]</button>
+<button type="button" aria-pressed="false" style="min-height: 40px; padding: 0 14px; background: transparent; border: 1px solid #3A3633; color: #EDE6DB; font-family: inherit; font-size: 13px">+ Новый адрес</button>
+</div>
+<div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px">
+<label style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; color: #A89C8C">Город<input type="text" value="Москва" autocomplete="address-level2" style="min-height: 52px; padding: 0 16px; background: transparent; border: 1px solid #3A3633; color: #EDE6DB; font-family: inherit; font-size: 15px"></label>
+<label style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; color: #A89C8C">Улица, дом<input type="text" value="[УЛИЦА, ДОМ]" autocomplete="address-line1" style="min-height: 52px; padding: 0 16px; background: transparent; border: 1px solid #3A3633; color: #EDE6DB; font-family: inherit; font-size: 15px"></label>
+<label style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; color: #A89C8C">Квартира<input type="text" value="[КВ.]" autocomplete="address-line2" style="min-height: 52px; padding: 0 16px; background: transparent; border: 1px solid #3A3633; color: #EDE6DB; font-family: inherit; font-size: 15px"></label>
+</div>
+<label style="display: flex; flex-direction: column; gap: 8px; font-size: 12px; color: #A89C8C">Комментарий курьеру<textarea rows="3" style="padding: 14px 16px; background: transparent; border: 1px solid #3A3633; color: #EDE6DB; font-family: inherit; font-size: 15px; resize: vertical"></textarea></label>
+</fieldset>
+
+<div style="display: flex; flex-wrap: wrap; gap: 12px">
+<a href="account.html" style="display: flex; align-items: center; justify-content: center; gap: 12px; min-height: 56px; padding: 0 40px; background: #71351F; color: #EDE6DB; font-size: 13px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase">Перейти к&nbsp;оплате <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 12h16M14 6l6 6-6 6"></path></svg></a>
+<p style="margin: 0; align-self: center; max-width: 360px; font-size: 12px; line-height: 1.5; color: #A89C8C">Нажимая кнопку, вы&nbsp;соглашаетесь с&nbsp;<a href="#top" style="color: #EDE6DB; text-decoration: underline">условиями продажи</a>.</p>
+</div>
+</form>
+
+<aside aria-label="Ваш заказ" style="flex: 1 1 360px; max-width: 440px; padding: 32px; background: #1B1A19; border: 1px solid #3A3633; display: flex; flex-direction: column; gap: 20px">
+<p style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.12em; color: #C27E54">ВАШ ЗАКАЗ</p>
+<ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 16px">
+<li style="display: flex; align-items: center; gap: 14px"><span style="flex: 0 0 56px; height: 70px; background: #292725"></span><span style="flex: 1 1 auto; display: flex; flex-direction: column; gap: 4px"><span style="font-family: 'Cormorant Garamond', serif; font-size: 20px">Базальт</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #A89C8C">50&nbsp;мл × 2</span></span><span style="font-size: 14px">[СУММА]</span></li>
+<li style="display: flex; align-items: center; gap: 14px"><span style="flex: 0 0 56px; height: 70px; background: #382319"></span><span style="flex: 1 1 auto; display: flex; flex-direction: column; gap: 4px"><span style="font-family: 'Cormorant Garamond', serif; font-size: 20px">Орех</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; color: #A89C8C">100&nbsp;мл × 1</span></span><span style="font-size: 14px">[СУММА]</span></li>
+</ul>
+<dl style="margin: 0; padding-top: 16px; border-top: 1px solid #2E2B28; display: flex; flex-direction: column; gap: 12px; font-size: 14px">
+<div style="display: flex; justify-content: space-between"><dt style="color: #A89C8C">Товары</dt><dd style="margin: 0">[СУММА]</dd></div>
+<div style="display: flex; justify-content: space-between"><dt style="color: #A89C8C">Доставка курьером</dt><dd style="margin: 0">[ЦЕНА]</dd></div>
+</dl>
+<div style="display: flex; justify-content: space-between; align-items: baseline; padding-top: 16px; border-top: 1px solid #3A3633">
+<span style="font-family: 'Cormorant Garamond', serif; font-size: 26px">Итого</span>
+<span style="font-size: 26px; font-weight: 500">[ИТОГО]</span>
+</div>
+</aside>
+</div>
+</div>
+
+</div>
+</body>
+</html>

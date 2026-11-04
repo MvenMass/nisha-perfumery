@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<title>Ниша — личный кабинет, заказы</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500&amp;family=IBM+Plex+Mono:wght@400;500&amp;family=Manrope:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0;background:#141312}
+a{color:#A89C8C;text-decoration:none}a:hover{color:#EDE6DB}
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+<div style="font-family: 'Manrope', system-ui, sans-serif; color: #EDE6DB; background: #141312; width: 100%">
+
+<header style="border-bottom: 1px solid #2E2B28">
+<div style="max-width: 1360px; margin: 0 auto; padding: 0 40px; min-height: 84px; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 24px">
+<a href="home.html" style="display: flex; flex-direction: column; gap: 2px; color: #EDE6DB"><span style="font-family: 'Cormorant Garamond', serif; font-size: 30px; letter-spacing: 0.3em; line-height: 1">НИША</span><span style="font-size: 9px; letter-spacing: 0.4em; color: #A89C8C">ПАРФЮМЕРНЫЙ ДОМ</span></a>
+<nav aria-label="Основная навигация" style="display: flex; flex-wrap: wrap; gap: 36px; font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase">
+<a href="catalog.html">Каталог</a><a href="#top">Образцы</a><a href="#top">Мастерская</a><a href="#top">Журнал</a><a href="#top">Бутик</a>
+</nav>
+<div style="display: flex; gap: 4px; color: #A89C8C">
+<a href="account.html" aria-current="page" aria-label="Личный кабинет" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center; color: #EDE6DB"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"></path></svg></a>
+<a href="cart.html" aria-label="Корзина" style="width: 44px; height: 44px; display: flex; align-items: center; justify-content: center"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M5 8h14l-1 12H6L5 8z"></path><path d="M9 8V6a3 3 0 0 1 6 0v2"></path></svg></a>
+</div>
+</div>
+</header>
+
+<div style="max-width: 1360px; margin: 0 auto; padding: 48px 40px 120px; display: flex; flex-wrap: wrap; gap: 64px; align-items: flex-start">
+
+<nav aria-label="Личный кабинет" style="flex: 1 1 220px; max-width: 260px; display: flex; flex-direction: column; gap: 28px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<span style="font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em; color: #C27E54">ЛИЧНЫЙ КАБИНЕТ</span>
+<span style="font-family: 'Cormorant Garamond', serif; font-size: 30px; line-height: 1.1">[Имя]</span>
+</div>
+<ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; border-top: 1px solid #2E2B28">
+<li><a href="#top" style="display: flex; align-items: center; gap: 12px; min-height: 52px; border-bottom: 1px solid #2E2B28; font-size: 14px"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><circle cx="12" cy="8" r="4"></circle><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"></path></svg>Профиль</a></li>
+<li><a href="account.html" aria-current="page" style="display: flex; align-items: center; gap: 12px; min-height: 52px; border-bottom: 1px solid #2E2B28; font-size: 14px; color: #EDE6DB; box-shadow: inset 2px 0 0 #C27E54; padding-left: 14px"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 36 36" fill="none" stroke="#C27E54" stroke-width="1.8"><path d="M5 11l13-6 13 6v14l-13 6-13-6V11z"></path><path d="M5 11l13 6 13-6M18 17v14"></path></svg>Заказы</a></li>
+<li><a href="#top" style="display: flex; align-items: center; gap: 12px; min-height: 52px; border-bottom: 1px solid #2E2B28; font-size: 14px"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12z"></path><circle cx="12" cy="9" r="2.5"></circle></svg>Адреса</a></li>
+<li><a href="#top" style="display: flex; align-items: center; gap: 12px; min-height: 52px; border-bottom: 1px solid #2E2B28; font-size: 14px"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"></path></svg>Избранное</a></li>
+<li><button type="button" style="width: 100%; display: flex; align-items: center; gap: 12px; min-height: 52px; background: transparent; border: 0; padding: 0; color: #A89C8C; font-family: inherit; font-size: 14px; text-align: left"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M14 4h5v16h-5M10 8l-4 4 4 4M6 12h10"></path></svg>Выйти</button></li>
+</ul>
+</nav>
+
+<main style="flex: 999 1 640px; min-width: 0; display: flex; flex-direction: column; gap: 32px">
+<div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: flex-end; gap: 16px">
+<h1 style="margin: 0; font-family: 'Cormorant Garamond', serif; font-weight: 400; font-size: 56px; line-height: 1; text-transform: uppercase">Мои заказы</h1>
+<div role="tablist" aria-label="Фильтр заказов" style="display: flex; gap: 8px">
+<button type="button" role="tab" aria-selected="true" style="min-height: 40px; padding: 0 14px; background: #2A1A12; border: 1px solid #C27E54; color: #EDE6DB; font-family: inherit; font-size: 13px">Все</button>
+<button type="button" role="tab" aria-selected="false" style="min-height: 40px; padding: 0 14px; background: transparent; border: 1px solid #3A3633; color: #EDE6DB; font-family: inherit; font-size: 13px">Активные</button>
+<button type="button" role="tab" aria-selected="false" style="min-height: 40px; padding: 0 14px; background: transparent; border: 1px solid #3A3633; color: #EDE6DB; font-family: inherit; font-size: 13px">Завершённые</button>
+</div>
+</div>
+
+<article style="border: 1px solid #3A3633; background: #1B1A19">
+<div style="padding: 24px 28px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px; border-bottom: 1px solid #2E2B28">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h2 style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 15px; letter-spacing: 0.06em">ЗАКАЗ №&nbsp;[0042]</h2>
+<span style="font-size: 13px; color: #A89C8C">от&nbsp;[ДАТА] · курьером</span>
+</div>
+<span style="display: inline-flex; align-items: center; gap: 8px; min-height: 32px; padding: 0 12px; background: #71351F; color: #EDE6DB; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em">В&nbsp;ПУТИ</span>
+</div>
+<ol aria-label="Статус заказа" style="margin: 0; padding: 28px; list-style: none; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; font-size: 12px">
+<li style="padding-top: 14px; border-top: 2px solid #C27E54; display: flex; flex-direction: column; gap: 4px"><span>Оформлен</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #A89C8C">[ДАТА]</span></li>
+<li style="padding-top: 14px; border-top: 2px solid #C27E54; display: flex; flex-direction: column; gap: 4px"><span>Оплачен</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #A89C8C">[ДАТА]</span></li>
+<li aria-current="step" style="padding-top: 14px; border-top: 2px solid #C27E54; display: flex; flex-direction: column; gap: 4px"><span style="color: #C27E54">Передан в&nbsp;доставку</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px; color: #A89C8C">[ДАТА]</span></li>
+<li style="padding-top: 14px; border-top: 2px solid #3A3633; display: flex; flex-direction: column; gap: 4px; color: #A89C8C"><span>Доставлен</span><span style="font-family: 'IBM Plex Mono', monospace; font-size: 10px">ожидается [ДАТА]</span></li>
+</ol>
+<div style="padding: 0 28px 24px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px">
+<div style="display: flex; align-items: center; gap: 10px">
+<span aria-hidden="true" style="width: 52px; height: 64px; background: #292725"></span>
+<span aria-hidden="true" style="width: 52px; height: 64px; background: #382319"></span>
+<span style="font-size: 13px; color: #A89C8C">Базальт, Орех · 3&nbsp;флакона</span>
+</div>
+<div style="display: flex; align-items: center; gap: 24px">
+<span style="font-size: 18px">[ИТОГО]</span>
+<a href="#top" style="display: inline-flex; align-items: center; gap: 10px; min-height: 44px; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: #C27E54">Подробнее <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 12h16M14 6l6 6-6 6"></path></svg></a>
+</div>
+</div>
+</article>
+
+<article style="border: 1px solid #3A3633">
+<div style="padding: 24px 28px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h2 style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 15px; letter-spacing: 0.06em">ЗАКАЗ №&nbsp;[0031]</h2>
+<span style="font-size: 13px; color: #A89C8C">от&nbsp;[ДАТА] · самовывоз из&nbsp;бутика</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 24px">
+<span style="display: inline-flex; align-items: center; min-height: 32px; padding: 0 12px; border: 1px solid #887D70; color: #EDE6DB; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em">ДОСТАВЛЕН</span>
+<span style="font-size: 18px">[ИТОГО]</span>
+<button type="button" style="min-height: 44px; padding: 0 16px; background: transparent; border: 1px solid #887D70; color: #EDE6DB; font-family: inherit; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase">Повторить заказ</button>
+</div>
+</div>
+</article>
+
+<article style="border: 1px solid #3A3633">
+<div style="padding: 24px 28px; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 16px">
+<div style="display: flex; flex-direction: column; gap: 6px">
+<h2 style="margin: 0; font-family: 'IBM Plex Mono', monospace; font-weight: 500; font-size: 15px; letter-spacing: 0.06em; color: #A89C8C">ЗАКАЗ №&nbsp;[0027]</h2>
+<span style="font-size: 13px; color: #A89C8C">от&nbsp;[ДАТА] · курьером</span>
+</div>
+<div style="display: flex; flex-wrap: wrap; align-items: center; gap: 24px">
+<span style="display: inline-flex; align-items: center; min-height: 32px; padding: 0 12px; border: 1px dashed #3A3633; color: #A89C8C; font-family: 'IBM Plex Mono', monospace; font-size: 11px; letter-spacing: 0.1em">ОТМЕНЁН</span>
+<span style="font-size: 18px; color: #A89C8C; text-decoration: line-through">[ИТОГО]</span>
+</div>
+</div>
+</article>
+</main>
+</div>
+
+</div>
+</body>
+</html>
