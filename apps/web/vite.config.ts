@@ -1,10 +1,14 @@
 import react from '@vitejs/plugin-react';
-import { defineConfig } from 'vite';
+import { defineConfig } from 'vitest/config';
 
 const apiProxy = { '/api': 'http://localhost:3000' };
 
 export default defineConfig({
   plugins: [react()],
+  test: {
+    // e2e/*.spec.ts запускает Playwright, а не Vitest.
+    include: ['src/**/*.test.{ts,tsx}'],
+  },
   build: {
     // Safari 14.1 / iOS 14.5 — минимальная поддержка (D-013).
     target: ['es2020', 'safari14'],
