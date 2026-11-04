@@ -40,7 +40,7 @@
 - Production-сборка web не содержит синтаксиса новее Safari 14 (проверено по бандлу).
 - Секретов в репозитории нет, есть `.env.example`.
 
-## Этап 2. Дизайн-система в коде ⬜
+## Этап 2. Дизайн-система в коде ✅
 
 **Цель:** все повторяющиеся элементы макетов собраны в коде один раз и проверены на всех брейкпоинтах.
 
@@ -286,3 +286,26 @@ _Заполняется по завершении каждого этапа._
 - ESLint 9 вместо 10 и TypeScript 6.0 вместо 7 — до поддержки в jsx-a11y и typescript-eslint (D-036).
 - Playwright webkit — не настоящий Safari 14; проверка на устройствах — этап 10.
 - Проксирование `/api` в nginx и production-compose — этап 10.
+
+### Этап 2 — 2026-11-04
+
+**Сделано**
+- Стили: `tokens.css` (цвета по ролям, шрифты, размеры текста, интервалы, отступы, высоты контролов, раскладка, линии, z-index, длительности), `media.css` (custom media 768 / 1024 / 1440 и reduced motion), `reset.css`, `global.css` (видимый фокус с фолбэком для Safari 14, `.visually-hidden`, отключение анимаций при reduced motion).
+- Шрифты: свой `fonts.css` поверх @fontsource — 19 начертаний, только woff2, cyrillic + latin, знак ₽ из latin-ext Manrope (D-037).
+- Инструменты: PostCSS (global-data → custom-media → autoprefixer), stylelint с запретом цветов вне `tokens.css` (`pnpm lint` = eslint + stylelint), Testing Library + jsdom.
+- `shared/lib`: `typograph` (18 тестов), `formatPrice` из копеек, `plural`, `cx`.
+- `shared/ui`: Icon (24 иконки из макетов), Button / ButtonLink, IconButton / IconLink, Input / Textarea / Select, Checkbox, RadioCard, Chip (со свотчем и сегмент) / RemovableChip, QuantityStepper, Badge / StatusBadge, Stepper, Tabs, Breadcrumbs, Accordion, Sheet, EmptyState, Skeleton / SkeletonText, Container, SectionLabel, StrataDivider, SpecimenLabel.
+- `widgets`: Header (навигация с 1024 px, бургер-меню в Sheet, счётчик корзины со склонением), Footer (колонки с 768 px, аккордеоны на телефоне, соцсети из пропсов), ProductCard (бестселлер, новый, нет в наличии, избранное).
+- Dev-страница `/_ui` со всеми компонентами и состояниями; в production-сборку не попадает.
+
+**Проверено**
+- Тесты web: 59 (типограф, деньги, склонение, поля, чекбокс-чипы, вкладки с клавиатурой, степпер, Sheet — фокус-ловушка, Esc, возврат фокуса, блокировка прокрутки; Header; ProductCard).
+- `/_ui` на 360 / 768 / 1440 px: axe — 0 нарушений, горизонтальной прокрутки нет, ошибок в консоли нет; Sheet и мобильное меню — 0 нарушений axe. Шторка фильтров и меню сверены со скриншотами `catalog-filters-mobile.html` и `home-mobile.html`.
+- Весь конвейер CI локально зелёный, бандл проходит `es-check es2020`, в `dist` нет кода `/_ui`.
+
+**Отложено / известные проблемы**
+- Компоненты, которые встречаются в одном макете (галерея товара, выбор объёма с ценой, пирамида нот, слайдер цены, итоговый блок корзины), делаются вместе со своими страницами в этапах 4–7.
+- Тип пропсов ProductCard локальный — заменить схемой из contracts в этапе 3.
+- Ссылки шапки и подвала ведут на ещё не существующие маршруты — страницы появятся в этапах 4 и 8.
+- Анимации выезда Sheet есть, анимации закрытия нет — при необходимости добавить в этапе 9.
+- Реальный Safari 14 не проверялся (только Chromium и WebKit Playwright) — этап 10.
