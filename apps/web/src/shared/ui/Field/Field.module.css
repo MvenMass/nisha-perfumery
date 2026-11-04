@@ -1,0 +1,88 @@
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+  min-width: 0;
+}
+
+.label {
+  font-size: var(--fs-12);
+  color: var(--color-text-muted);
+}
+
+.control {
+  width: 100%;
+  min-height: var(--control-52);
+  padding: 0 var(--sp-16);
+  font-size: var(--fs-15);
+  color: var(--color-text);
+  background: transparent;
+  border: var(--border-1) solid var(--color-line-strong);
+  border-radius: 0;
+  transition: border-color var(--dur-fast) var(--ease-out);
+}
+
+.control:hover:not(:disabled) {
+  border-color: var(--color-travertine);
+}
+
+.control::placeholder {
+  color: var(--color-text-muted);
+}
+
+.control:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.invalid,
+.invalid:hover:not(:disabled) {
+  border-color: var(--color-copper);
+}
+
+.textarea {
+  padding: var(--sp-14) var(--sp-16);
+  resize: vertical;
+}
+
+.selectWrap {
+  position: relative;
+}
+
+.select {
+  padding-right: var(--sp-40);
+  appearance: none;
+  background: var(--color-bg);
+}
+
+.selectCompact {
+  min-height: var(--control-44);
+  padding-left: var(--sp-14);
+  font-size: var(--fs-13);
+}
+
+.chevron {
+  position: absolute;
+  top: 50%;
+  right: var(--sp-12);
+  color: var(--color-text-muted);
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+/* Сортировка в каталоге: подпись слева от поля. */
+.inline {
+  flex-direction: row;
+  gap: var(--sp-12);
+  align-items: center;
+}
+
+.message {
+  font-size: var(--fs-12);
+  line-height: var(--lh-normal);
+  color: var(--color-text-muted);
+}
+
+.error {
+  color: var(--color-copper);
+}

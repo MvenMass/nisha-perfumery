@@ -210,10 +210,10 @@ export const iconNames = Object.keys(ICONS) as IconName[];
 
 type IconProps = {
   name: IconName;
-  size?: number;
+  size?: number | undefined;
   /** Заливка контура — например, сердце у товара в избранном. */
-  filled?: boolean;
-  className?: string;
+  filled?: boolean | undefined;
+  className?: string | undefined;
 };
 
 // Иконка всегда декоративная: подпись даёт кнопка или соседний текст.

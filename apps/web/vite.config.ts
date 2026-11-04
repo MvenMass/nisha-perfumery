@@ -8,6 +8,8 @@ export default defineConfig({
   test: {
     // e2e/*.spec.ts запускает Playwright, а не Vitest.
     include: ['src/**/*.test.{ts,tsx}'],
+    // Компонентные тесты объявляют окружение jsdom в первой строке файла.
+    setupFiles: ['src/shared/test/setup.ts'],
   },
   build: {
     // Safari 14.1 / iOS 14.5 — минимальная поддержка (D-013).
