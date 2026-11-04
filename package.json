@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "pnpm -r --parallel --filter \"./apps/*\" dev",
     "build": "pnpm -r build",
-    "lint": "eslint .",
+    "lint": "eslint . && stylelint \"apps/*/src/**/*.css\"",
     "typecheck": "pnpm -r typecheck",
     "test": "pnpm -r test",
     "test:e2e": "pnpm --filter @nisha/web test:e2e",
@@ -26,6 +26,8 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "globals": "^17.14.0",
     "prettier": "^3.6.0",
+    "stylelint": "^17.16.0",
+    "stylelint-config-standard": "^40.0.0",
     "typescript": "~6.0.3",
     "typescript-eslint": "^8.72.1"
   }
