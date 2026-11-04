@@ -1,0 +1,52 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Новый пуш в ту же ветку отменяет устаревший прогон.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+
+      # Версия pnpm берётся из поля packageManager в package.json.
+      - uses: pnpm/action-setup@v6
+
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: pnpm
+
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm format:check
+      - run: pnpm lint
+      - run: pnpm typecheck
+      - run: pnpm test
+      - run: pnpm build
+
+      - name: Бандл web совместим с Safari 14 (ES2020)
+        run: pnpm --filter @nisha/web check:bundle
+
+      - name: Браузеры Playwright
+        run: pnpm --filter @nisha/web exec playwright install --with-deps chromium webkit
+
+      - run: pnpm test:e2e
+
+      - name: Отчёт Playwright
+        if: failure()
+        uses: actions/upload-artifact@v7
+        with:
+          name: playwright-report
+          path: apps/web/playwright-report
+          retention-days: 7
