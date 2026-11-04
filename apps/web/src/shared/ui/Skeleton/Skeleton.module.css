@@ -1,0 +1,31 @@
+.skeleton {
+  display: block;
+  background: var(--color-basalt);
+}
+
+.lines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+}
+
+.line {
+  height: var(--sp-12);
+}
+
+/* Последняя строка короче — так блок читается как абзац. */
+.line:last-child:not(:first-child) {
+  width: 60%;
+}
+
+@media (--motion-ok) {
+  .skeleton {
+    animation: pulse 1.6s ease-in-out infinite;
+  }
+}
+
+@keyframes pulse {
+  50% {
+    opacity: 0.5;
+  }
+}
