@@ -1,0 +1,148 @@
+.footer {
+  background: var(--color-surface);
+  border-top: var(--border-1) solid var(--color-line);
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-24);
+  padding-top: var(--sp-40);
+  padding-bottom: var(--sp-24);
+}
+
+.top {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-24);
+}
+
+.brand {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-20);
+}
+
+.logo {
+  font-family: var(--font-serif);
+  font-size: var(--fs-22);
+  letter-spacing: var(--ls-logo);
+}
+
+.tagline {
+  display: none;
+  max-width: 260px;
+  font-size: var(--fs-13);
+  line-height: 1.6;
+  color: var(--color-text-muted);
+}
+
+.socials {
+  display: none;
+  gap: var(--sp-4);
+  margin-left: calc(-1 * var(--sp-12));
+  color: var(--color-text-muted);
+}
+
+.social {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--control-44);
+  height: var(--control-44);
+}
+
+.social:hover {
+  color: var(--color-text);
+}
+
+/* На телефоне разделы — аккордеоны, на планшете и шире — колонки. */
+.accordions {
+  border-bottom: var(--border-1) solid var(--color-line);
+}
+
+.columns {
+  display: none;
+}
+
+.columnTitle {
+  margin-bottom: var(--sp-6);
+  font-size: var(--fs-11);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-16);
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  font-size: var(--fs-13);
+}
+
+.link {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-44);
+  color: var(--color-text-muted);
+}
+
+.link:hover {
+  color: var(--color-text);
+}
+
+.bottom {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4) var(--sp-16);
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: var(--fs-10);
+  color: var(--color-text-muted);
+}
+
+@media (--md) {
+  .inner {
+    gap: var(--sp-56);
+    padding-top: var(--sp-72);
+    padding-bottom: var(--sp-40);
+  }
+
+  .top {
+    flex-flow: row wrap;
+    gap: var(--sp-48);
+  }
+
+  .brand {
+    flex: 1 1 240px;
+  }
+
+  .logo {
+    font-size: var(--fs-26);
+  }
+
+  .tagline,
+  .socials {
+    display: flex;
+  }
+
+  .accordions {
+    display: none;
+  }
+
+  .columns {
+    display: flex;
+    flex: 3 1 480px;
+    flex-wrap: wrap;
+    gap: var(--sp-48);
+  }
+
+  .column {
+    flex: 1 1 160px;
+  }
+
+  .bottom {
+    padding-top: var(--sp-24);
+    font-size: var(--fs-11);
+    border-top: var(--border-1) solid var(--color-line);
+  }
+}
