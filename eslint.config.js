@@ -68,7 +68,6 @@ export default tseslint.config(
       'boundaries/elements': fsdLayers.map((layer) => ({
         type: layer,
         pattern: layer === 'app' || layer === 'shared' ? `src/${layer}` : `src/${layer}/*`,
-        mode: 'folder',
       })),
     },
     rules: {
