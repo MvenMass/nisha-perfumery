@@ -19,7 +19,7 @@ export default tseslint.config(
     languageOptions: {
       parserOptions: {
         projectService: {
-          allowDefaultProject: ['*.js'],
+          allowDefaultProject: ['*.js', 'apps/*/*.js'],
         },
         tsconfigRootDir: import.meta.dirname,
       },
