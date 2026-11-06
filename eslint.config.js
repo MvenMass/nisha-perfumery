@@ -29,7 +29,11 @@ export default tseslint.config(
       '@typescript-eslint/consistent-type-imports': 'error',
       // Fastify ждёт async-плагины и обработчики даже без await внутри.
       '@typescript-eslint/require-await': 'off',
-      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': [
+        'error',
+        // Отбрасывание полей деструктуризацией: const { secret: _secret, ...rest } = row.
+        { argsIgnorePattern: '^_', varsIgnorePattern: '^_', ignoreRestSiblings: true },
+      ],
       // Нет в Safari 14 (CLAUDE.md): structuredClone и Array.prototype.at.
       'no-restricted-globals': [
         'error',

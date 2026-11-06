@@ -6,6 +6,8 @@ import type { Env } from './config/env';
 import type { Database } from './database/client';
 import { catalogRoutes } from './modules/catalog/catalog.routes';
 import { healthRoutes } from './modules/health/health.routes';
+import { homeRoutes } from './modules/home/home.routes';
+import { storeRoutes } from './modules/store/store.routes';
 import { setupErrorHandling } from './plugins/error-handler';
 import { setupRateLimit } from './plugins/rate-limit';
 import { setupSecurity } from './plugins/security';
@@ -43,6 +45,8 @@ export async function buildApp({ env, db }: AppDeps) {
 
   await app.register(healthRoutes, { prefix: '/api' });
   await app.register(catalogRoutes, { prefix: '/api' });
+  await app.register(homeRoutes, { prefix: '/api' });
+  await app.register(storeRoutes, { prefix: '/api' });
 
   return app;
 }
