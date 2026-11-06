@@ -1,6 +1,10 @@
 import type { ProductListItem } from '@nisha/contracts';
 
-import { formatSpecimenNumber, productHref } from '../../entities/product/lib/format';
+import {
+  DENSITY_LABELS,
+  formatSpecimenNumber,
+  productHref,
+} from '../../entities/product/lib/format';
 import type { ProductCardData } from './ProductCard';
 
 // Фон-заглушка, пока у товара нет снимка, — по тону материала, как в макетах.
@@ -12,7 +16,10 @@ const PLACEHOLDER_BY_MATERIAL: Record<string, ProductCardData['placeholder']> = 
   amber: 'copperDark',
 };
 
-export function toProductCard(item: ProductListItem): ProductCardData {
+export function toProductCard(
+  item: ProductListItem,
+  options: { specimenRows?: boolean } = {},
+): ProductCardData {
   return {
     href: productHref(item.slug),
     number: formatSpecimenNumber(item.specimenNumber),
@@ -25,5 +32,12 @@ export function toProductCard(item: ProductListItem): ProductCardData {
     // «Новый образец» важнее «Бестселлера»: новинку иначе не заметят.
     badge: item.isNew ? 'new' : item.isBestseller ? 'bestseller' : undefined,
     inStock: item.inStock,
+    rows: options.specimenRows
+      ? [
+          { term: 'Происхождение', value: item.origin },
+          { term: 'Ноты', value: item.keyNotes.slice(0, 2).join(', ') },
+          { term: 'Плотность', value: DENSITY_LABELS[item.density] },
+        ]
+      : undefined,
   };
 }

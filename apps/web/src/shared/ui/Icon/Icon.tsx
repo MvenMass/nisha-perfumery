@@ -202,6 +202,59 @@ const ICONS = {
     strokeWidth: 1.3,
     body: <path d="M6 28l6-14 10-6 11 7 2 12-9 7H13z" />,
   },
+  // Этапы «Как рождается аромат» из home.html.
+  'step-material': {
+    viewBox: '0 0 40 40',
+    strokeWidth: 1.3,
+    body: (
+      <>
+        <path d="M6 28l6-14 10-6 11 7 2 12-9 7H13z" />
+        <path d="M12 14l8 6 13-5M20 20l-2 15" />
+      </>
+    ),
+  },
+  'step-sketch': {
+    viewBox: '0 0 40 40',
+    strokeWidth: 1.3,
+    body: (
+      <>
+        <path d="M8 32L28 12M24 8l8 8M14 26l-4 4" />
+        <path d="M30 26c2 3 2 6 0 7s-4-1-3-4z" />
+      </>
+    ),
+  },
+  'step-aging': {
+    viewBox: '0 0 40 40',
+    strokeWidth: 1.3,
+    body: (
+      <>
+        <path d="M10 5h20M10 35h20M12 5c0 9 8 10 8 15s-8 6-8 15M28 5c0 9-8 10-8 15s8 6 8 15" />
+        <path d="M15 31h10l-5-5z" />
+      </>
+    ),
+  },
+  'step-glass': {
+    viewBox: '0 0 40 40',
+    strokeWidth: 1.3,
+    body: (
+      <>
+        <rect x="9" y="14" width="22" height="22" rx="2" />
+        <path d="M16 14V9h8v5M14 6h12" />
+        <path d="M14 22h12" />
+      </>
+    ),
+  },
+  'step-label': {
+    viewBox: '0 0 40 40',
+    strokeWidth: 1.3,
+    body: (
+      <>
+        <path d="M5 14l15-7 15 7v14l-15 7-15-7z" />
+        <path d="M5 14l15 7 15-7M20 21v14" />
+        <path d="M12 10l15 7" />
+      </>
+    ),
+  },
 } satisfies Record<string, IconDef>;
 
 export type IconName = keyof typeof ICONS;

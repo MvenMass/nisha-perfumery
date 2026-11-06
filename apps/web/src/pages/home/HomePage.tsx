@@ -1,25 +1,59 @@
-import { healthResponseSchema } from '@nisha/contracts';
-import { useQuery } from '@tanstack/react-query';
+import { useHome } from '../../entities/product/api/queries';
+import { useStoreInfo } from '../../entities/store/queries';
+import { useMeta } from '../../shared/lib/useMeta';
+import { Container } from '../../shared/ui/Container/Container';
+import { StrataDivider } from '../../shared/ui/StrataDivider/StrataDivider';
+import { HeroCarousel } from './HeroCarousel';
+import { STRATA } from './home-content';
+import {
+  About,
+  Advantages,
+  Boutique,
+  Categories,
+  CrossSection,
+  Journal,
+  Materials,
+  Process,
+  Specimens,
+} from './HomeSections';
+import styles from './HomePage.module.css';
 
-import { apiRequest } from '../../shared/api/http';
+function Strata({ kind, surface }: { kind: keyof typeof STRATA; surface?: boolean }) {
+  const { depth, label, layers } = STRATA[kind];
+  return (
+    <div className={surface ? styles.surface : undefined}>
+      <Container>
+        <StrataDivider depth={depth} label={label} layers={layers} />
+      </Container>
+    </div>
+  );
+}
 
-// Временная страница этапа 1: проверяет связку web → api.
-// Заменяется главной по макету в этапе 4.
+// Главная по home.html / home-mobile.html. Из API — бестселлеры, «Срез» и данные бутика; тексты — в коде.
 export function HomePage() {
-  const health = useQuery({
-    queryKey: ['health'],
-    queryFn: () => apiRequest('/api/health', healthResponseSchema),
-  });
-
-  let status: string;
-  if (health.isPending) status = 'проверяем…';
-  else if (health.isError) status = `ошибка: ${health.error.message}`;
-  else status = health.data.status;
+  useMeta(
+    'Парфюмерный дом',
+    'Независимый парфюмерный дом «Ниша»: ароматы-образцы породы — известняк, травертин, базальт, орех и янтарь.',
+  );
+  const home = useHome();
+  const store = useStoreInfo();
 
   return (
-    <main>
-      <h1>Ниша</h1>
-      <p role="status">Статус API: {status}</p>
-    </main>
+    <>
+      <HeroCarousel />
+      <Advantages store={store.data} />
+      <Strata kind="limestone" />
+      <Categories />
+      {/* Ошибку загрузки бестселлеров не показываем отдельно: секция просто не появляется. */}
+      {!home.isError && <Specimens items={home.data?.bestsellers ?? []} pending={home.isPending} />}
+      <Strata kind="basalt" surface />
+      {home.data?.featured && <CrossSection product={home.data.featured} />}
+      <About />
+      <Process />
+      <Strata kind="travertine" />
+      <Materials />
+      <Journal />
+      <Boutique store={store.data} />
+    </>
   );
 }

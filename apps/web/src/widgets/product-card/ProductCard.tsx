@@ -24,6 +24,8 @@ export type ProductCardData = {
   placeholder?: 'basalt' | 'walnut' | 'copperDark' | undefined;
   badge?: 'bestseller' | 'new' | undefined;
   inStock: boolean;
+  /** Ряды этикетки вместо строки нот — «Образцы породы» на главной (home.html). */
+  rows?: Array<{ term: string; value: string }> | undefined;
 };
 
 type ProductCardProps = {
@@ -90,13 +92,14 @@ export function ProductCard({
           number={product.number}
           meta={product.materialName}
           headingLevel={headingLevel}
+          rows={product.rows}
           name={
             <Link to={href} className={styles.nameLink}>
               {name}
             </Link>
           }
         />
-        <p className={styles.notes}>{product.notes}</p>
+        {!product.rows && <p className={styles.notes}>{product.notes}</p>}
         <div className={styles.footer}>
           <span className={styles.price}>от&nbsp;{formatPrice(product.priceFromKopecks)}</span>
           {inStock ? (

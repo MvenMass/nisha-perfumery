@@ -1,0 +1,200 @@
+.hero {
+  background: var(--color-bg);
+}
+
+.inner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-20);
+  padding-top: var(--sp-32);
+  padding-bottom: var(--sp-40);
+}
+
+/* display: contents здесь не годится: Safari убирает такой элемент из дерева доступности. */
+.text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-20);
+}
+
+.copy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-20);
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-10);
+  color: var(--color-copper);
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: var(--fs-display);
+  font-weight: 400;
+  line-height: 1.02;
+  text-transform: uppercase;
+}
+
+.lead {
+  max-width: 440px;
+  font-size: var(--fs-15);
+  line-height: var(--lh-relaxed);
+  color: var(--color-text-muted);
+}
+
+.cta {
+  width: 100%;
+}
+
+.controls {
+  display: flex;
+  gap: var(--sp-8);
+  align-items: center;
+  margin-left: calc(-1 * var(--sp-12));
+}
+
+.indicator {
+  display: flex;
+  gap: var(--sp-16);
+  align-items: center;
+  font-size: var(--fs-13);
+  color: var(--color-text-muted);
+}
+
+.current {
+  color: var(--color-text);
+}
+
+.indicatorLine {
+  width: var(--sp-48);
+  height: var(--border-1);
+  background: var(--color-travertine);
+}
+
+/* --- Фото со «светом-лампой» --- */
+.figure {
+  position: relative;
+  height: 400px;
+  margin: 0;
+  overflow: hidden;
+  cursor: crosshair;
+}
+
+.photo {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(
+    ellipse at 58% 46%,
+    var(--color-copper) 0%,
+    var(--color-accent) 30%,
+    var(--color-walnut) 62%,
+    var(--color-basalt) 100%
+  );
+}
+
+/* Затемнение втрое больше фото со «световым» отверстием в центре; двигаем его целиком. */
+.shade {
+  position: absolute;
+  top: -100%;
+  left: -100%;
+  width: 300%;
+  height: 300%;
+  pointer-events: none;
+  background: radial-gradient(
+    circle 230px at 50% 50%,
+    transparent 0%,
+    var(--color-shade-soft) 45%,
+    var(--color-shade-deep) 100%
+  );
+  transition: transform var(--dur-slow) var(--ease-out);
+}
+
+.hint {
+  position: absolute;
+  top: var(--sp-24);
+  right: var(--sp-24);
+  display: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
+  letter-spacing: var(--ls-8);
+  color: var(--color-text-muted);
+  pointer-events: none;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .hint {
+    display: block;
+  }
+}
+
+/* На сенсорных экранах света-курсора нет — пятно медленно дрейфует само (home-mobile.html). */
+@media (hover: none) {
+  .shade {
+    animation: drift 14s ease-in-out infinite alternate;
+  }
+}
+
+@keyframes drift {
+  0% {
+    transform: translate3d(-12%, -8%, 0);
+  }
+
+  50% {
+    transform: translate3d(10%, 4%, 0);
+  }
+
+  100% {
+    transform: translate3d(-4%, 12%, 0);
+  }
+}
+
+@media (--md) {
+  .figure {
+    height: 520px;
+  }
+
+  .cta {
+    width: auto;
+    align-self: flex-start;
+  }
+}
+
+@media (--lg) {
+  .inner {
+    flex-direction: row;
+    gap: var(--sp-56);
+    align-items: stretch;
+    padding-top: var(--sp-88);
+    padding-bottom: var(--sp-72);
+  }
+
+  .text {
+    flex: 1 1 500px;
+    gap: var(--sp-48);
+    justify-content: space-between;
+    min-width: 0;
+  }
+
+  .copy {
+    gap: var(--sp-28);
+  }
+
+  .label {
+    font-size: var(--fs-12);
+    letter-spacing: var(--ls-12);
+  }
+
+  .lead {
+    font-size: var(--fs-16);
+  }
+
+  .figure {
+    flex: 1 1 500px;
+    min-width: 0;
+    height: 600px;
+  }
+}

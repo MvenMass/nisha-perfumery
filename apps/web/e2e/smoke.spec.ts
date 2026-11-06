@@ -1,6 +1,6 @@
 import { expect, test } from '@playwright/test';
 
-test('главная открывается и получает ответ api', async ({ page }) => {
+test('главная открывается и показывает бестселлеры из api', async ({ page }) => {
   const errors: string[] = [];
   page.on('console', (message) => {
     if (message.type() === 'error') errors.push(message.text());
@@ -9,7 +9,10 @@ test('главная открывается и получает ответ api',
 
   await page.goto('/');
 
-  await expect(page.getByRole('heading', { level: 1, name: 'Ниша' })).toBeVisible();
-  await expect(page.getByRole('status')).toHaveText('Статус API: ok');
+  await expect(
+    page.getByRole('heading', { level: 1, name: 'Ароматы, высеченные из камня' }),
+  ).toBeVisible();
+  const specimens = page.getByRole('region', { name: 'Образцы породы' });
+  await expect(specimens.getByRole('link', { name: 'Базальт' })).toBeVisible();
   expect(errors).toEqual([]);
 });

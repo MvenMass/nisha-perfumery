@@ -1,0 +1,578 @@
+/* --- Общие элементы секций --- */
+.surface {
+  background: var(--color-surface);
+}
+
+.sectionInner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-28);
+}
+
+.sectionHead {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-16) var(--sp-32);
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.headText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-10);
+}
+
+.headNote {
+  max-width: 420px;
+}
+
+.headLink {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-44);
+  font-size: var(--fs-12);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-16);
+  color: var(--color-text-muted);
+}
+
+.headLink:hover {
+  color: var(--color-text);
+}
+
+.sectionTitle {
+  font-family: var(--font-serif);
+  font-size: var(--fs-section);
+  font-weight: 400;
+  line-height: var(--lh-tight);
+  text-transform: uppercase;
+}
+
+.muted {
+  font-size: var(--fs-15);
+  line-height: var(--lh-relaxed);
+  color: var(--color-text-muted);
+}
+
+.accentLink {
+  display: inline-flex;
+  gap: var(--sp-12);
+  align-items: center;
+  align-self: flex-start;
+  min-height: var(--control-44);
+  font-size: var(--fs-12);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-16);
+  color: var(--color-copper);
+}
+
+.accentLink:hover {
+  color: var(--color-text);
+}
+
+.split {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-32);
+}
+
+.splitText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-20);
+}
+
+.splitWide {
+  min-width: 0;
+}
+
+/* --- Преимущества --- */
+.advantages {
+  padding: var(--sp-24) 0;
+  border-top: var(--border-1) solid var(--color-line);
+  border-bottom: var(--border-1) solid var(--color-line);
+}
+
+.advantagesList {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--sp-20) var(--sp-16);
+}
+
+.advantage {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-10);
+}
+
+.advantageIcon {
+  flex: none;
+  color: var(--color-copper);
+}
+
+.advantageText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+
+.advantageTitle {
+  font-size: var(--fs-11);
+  font-weight: 600;
+  line-height: 1.4;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-10);
+}
+
+/* На телефоне — только заголовок, как в home-mobile.html. */
+.advantageNote {
+  display: none;
+  font-size: var(--fs-13);
+  line-height: 1.55;
+  color: var(--color-text-muted);
+}
+
+/* --- Категории --- */
+.categories {
+  display: grid;
+  gap: var(--border-1);
+  background: var(--color-line);
+}
+
+.category {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-16);
+  justify-content: flex-end;
+  height: 180px;
+  padding: var(--sp-20) var(--sp-16);
+  color: var(--color-text);
+}
+
+.walnut {
+  background: linear-gradient(160deg, var(--color-walnut) 0%, var(--color-surface) 80%);
+}
+
+.basalt {
+  background: linear-gradient(160deg, var(--color-basalt) 0%, var(--color-bg) 80%);
+}
+
+.copperDark {
+  background: linear-gradient(160deg, var(--color-copper-dark) 0%, var(--color-surface) 80%);
+}
+
+.categoryPhoto {
+  position: absolute;
+  inset: 0;
+}
+
+.categoryTitle {
+  position: relative;
+  max-width: 240px;
+  font-family: var(--font-serif);
+  font-size: var(--fs-28);
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.categoryMore {
+  position: relative;
+  display: inline-flex;
+  gap: var(--sp-10);
+  align-items: center;
+  font-size: var(--fs-12);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-16);
+  color: var(--color-text-muted);
+}
+
+.category:hover .categoryMore {
+  color: var(--color-text);
+}
+
+/* --- Образцы породы --- */
+.specimens {
+  padding: var(--sp-56) 0 var(--sp-48);
+  background: var(--color-surface);
+}
+
+/* На телефоне — горизонтальная лента со «снапом», как в home-mobile.html. */
+.specimenRow {
+  display: grid;
+  grid-auto-columns: 248px;
+  grid-auto-flow: column;
+  gap: var(--sp-12);
+  margin: 0 calc(-1 * var(--gutter));
+  padding: 0 var(--gutter);
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 0 var(--gutter);
+  -webkit-overflow-scrolling: touch;
+}
+
+.specimenRow > li {
+  scroll-snap-align: start;
+}
+
+/* --- Срез аромата --- */
+.cross {
+  padding: var(--sp-48) 0 var(--sp-56);
+  background: var(--color-surface);
+}
+
+/* --- О доме --- */
+.about {
+  padding: var(--sp-56) 0;
+  background: var(--color-basalt);
+}
+
+.aboutInner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-20);
+  max-width: 1100px;
+}
+
+.aboutQuote {
+  font-family: var(--font-serif);
+  font-size: var(--fs-quote);
+  font-style: italic;
+  line-height: var(--lh-snug);
+}
+
+.aboutColumns {
+  display: none;
+}
+
+/* --- Как рождается аромат --- */
+.process {
+  padding: var(--sp-56) 0;
+}
+
+.steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-24);
+  padding-left: var(--sp-20);
+  border-left: var(--border-1) solid var(--color-line-strong);
+}
+
+.step {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+
+.stepDot {
+  position: absolute;
+  top: var(--sp-4);
+  left: -25px;
+  width: 9px;
+  height: 9px;
+  background: var(--color-copper);
+  border-radius: 50%;
+}
+
+.stepIcon {
+  display: none;
+  color: var(--color-copper);
+}
+
+.stepNumber {
+  font-family: var(--font-mono);
+  font-size: var(--fs-10);
+  letter-spacing: var(--ls-10);
+  color: var(--color-text-muted);
+}
+
+.stepTitle {
+  font-family: var(--font-serif);
+  font-size: var(--fs-22);
+  font-weight: 500;
+  line-height: 1.15;
+}
+
+.stepText {
+  font-size: var(--fs-13);
+  line-height: 1.55;
+  color: var(--color-text-muted);
+}
+
+/* --- Материалы --- */
+.materials {
+  background: var(--color-walnut);
+}
+
+.materialsInner {
+  display: flex;
+  flex-direction: column;
+}
+
+.materialsPhoto {
+  min-height: 320px;
+  margin: 0 calc(-1 * var(--gutter));
+  background: linear-gradient(140deg, var(--color-stone) 0%, var(--color-basalt) 100%);
+}
+
+.materialsText {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-20);
+  padding: var(--sp-48) 0;
+}
+
+.onWalnut {
+  font-size: var(--fs-15);
+  line-height: var(--lh-relaxed);
+  color: var(--color-text-on-walnut);
+}
+
+/* --- Журнал --- */
+.journal {
+  padding: var(--sp-56) 0;
+}
+
+.articles {
+  display: grid;
+  gap: var(--sp-24);
+}
+
+.article {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-16);
+  padding-top: var(--sp-24);
+  border-top: var(--border-1) solid var(--color-line);
+}
+
+.articleTitle {
+  font-family: var(--font-serif);
+  font-size: var(--fs-24);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/* --- Бутик --- */
+.boutique {
+  padding: var(--sp-48) 0 var(--sp-56);
+  background: var(--color-surface);
+}
+
+.boutiqueFacts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+  font-size: var(--fs-15);
+  color: var(--color-text-muted);
+}
+
+.boutiqueFacts li {
+  display: flex;
+  gap: var(--sp-12);
+  align-items: center;
+}
+
+.boutiqueCta {
+  align-self: stretch;
+}
+
+.boutiquePhoto {
+  min-height: 280px;
+  background: linear-gradient(
+    115deg,
+    var(--color-bg) 0%,
+    var(--color-basalt) 45%,
+    var(--color-accent) 100%
+  );
+}
+
+@media (--md) {
+  .advantagesList {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--sp-32);
+  }
+
+  .advantage {
+    flex-direction: row;
+    gap: var(--sp-16);
+  }
+
+  .advantageTitle {
+    font-size: var(--fs-12);
+    letter-spacing: var(--ls-12);
+  }
+
+  .advantageNote {
+    display: block;
+  }
+
+  /* Как в home.html: плитка не уже 320px — на планшете две колонки, на десктопе три. */
+  .categories {
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  }
+
+  .category {
+    height: 380px;
+    padding: var(--sp-40);
+  }
+
+  .categoryTitle {
+    font-size: var(--fs-36);
+  }
+
+  .specimenRow {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-auto-flow: row;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+    gap: var(--sp-24);
+  }
+
+  .aboutColumns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--sp-48);
+    padding-top: var(--sp-24);
+    border-top: var(--border-1) solid var(--color-line-strong);
+  }
+
+  .aboutColumns > p {
+    flex: 1 1 300px;
+  }
+
+  .materialsPhoto {
+    margin: 0 calc(-1 * var(--gutter-wide));
+  }
+
+  .articles {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: var(--sp-40);
+  }
+
+  .boutiqueCta {
+    align-self: flex-start;
+  }
+}
+
+@media (--lg) {
+  .sectionInner {
+    gap: var(--sp-40);
+  }
+
+  .advantages {
+    padding: var(--sp-40) 0;
+  }
+
+  .advantagesList {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .specimens {
+    padding: var(--sp-104) 0 var(--sp-88);
+  }
+
+  .specimenRow {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .split {
+    flex-direction: row;
+    gap: var(--sp-72);
+    align-items: center;
+  }
+
+  .splitText {
+    flex: 1 1 360px;
+    gap: var(--sp-24);
+  }
+
+  .splitWide {
+    flex: 1 1 560px;
+  }
+
+  .cross {
+    padding: var(--sp-88) 0 var(--sp-120);
+  }
+
+  .about {
+    padding: var(--sp-120) 0;
+  }
+
+  .aboutInner {
+    gap: var(--sp-40);
+  }
+
+  .process {
+    padding: var(--sp-120) 0;
+  }
+
+  /* Этапы — по горизонтали, точки сидят на общей линии сверху. */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 0;
+    padding-left: 0;
+    border-top: var(--border-1) solid var(--color-line-strong);
+    border-left: 0;
+  }
+
+  .step {
+    gap: var(--sp-18);
+    padding: var(--sp-40) var(--sp-28) 0 0;
+  }
+
+  .stepDot {
+    top: -5px;
+    left: 0;
+  }
+
+  .stepIcon {
+    display: block;
+  }
+
+  .stepNumber {
+    font-size: var(--fs-11);
+  }
+
+  .stepTitle {
+    font-size: var(--fs-26);
+  }
+
+  .stepText {
+    font-size: var(--fs-14);
+    line-height: 1.6;
+  }
+
+  .materialsInner {
+    flex-direction: row;
+  }
+
+  .materialsPhoto {
+    flex: 1 1 560px;
+    min-height: 640px;
+    margin: 0 0 0 calc(-1 * var(--gutter-wide));
+  }
+
+  .materialsText {
+    flex: 1 1 420px;
+    justify-content: center;
+    padding: var(--sp-88) 0 var(--sp-88) var(--sp-64);
+  }
+
+  .journal {
+    padding: var(--sp-104) 0;
+  }
+
+  .boutique {
+    padding: var(--sp-104) 0;
+    background: var(--color-bg);
+  }
+
+  .boutiquePhoto {
+    min-height: 520px;
+  }
+}
