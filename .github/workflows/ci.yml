@@ -17,6 +17,26 @@ jobs:
   check:
     runs-on: ubuntu-latest
     timeout-minutes: 20
+
+    # Тесты БД работают с настоящим PostgreSQL и создают в нём временные базы.
+    services:
+      postgres:
+        image: postgres:18-alpine
+        env:
+          POSTGRES_USER: nisha
+          POSTGRES_PASSWORD: nisha
+          POSTGRES_DB: nisha
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U nisha -d nisha"
+          --health-interval 5s
+          --health-timeout 3s
+          --health-retries 10
+
+    env:
+      DATABASE_URL: postgres://nisha:nisha@localhost:5432/nisha
+
     steps:
       - uses: actions/checkout@v7
 
