@@ -1,5 +1,6 @@
 import { useState } from 'react';
 
+import { NBSP } from '../../shared/lib/typograph';
 import { Accordion } from '../../shared/ui/Accordion/Accordion';
 import { Badge, StatusBadge } from '../../shared/ui/Badge/Badge';
 import { Breadcrumbs } from '../../shared/ui/Breadcrumbs/Breadcrumbs';
@@ -59,7 +60,7 @@ export function NavigationSection() {
               pressed={volume === value}
               onClick={() => setVolume(value)}
             >
-              {value.replace(' ', ' ')}
+              {value.replace(' ', NBSP)}
             </Chip>
           ))}
         </div>
@@ -105,7 +106,7 @@ export function NavigationSection() {
           steps={[
             { label: 'Оформлен', meta: '02.11' },
             { label: 'Оплачен', meta: '02.11' },
-            { label: 'Передан в доставку', meta: '03.11' },
+            { label: `Передан в${NBSP}доставку`, meta: '03.11' },
             { label: 'Доставлен', meta: 'ожидается 06.11' },
           ]}
         />

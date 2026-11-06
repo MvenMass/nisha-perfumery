@@ -76,7 +76,8 @@
 
 /* Кнопки лежат поверх растянутой ссылки. */
 .favorite,
-.footer button {
+.footer button,
+.footer a {
   position: relative;
   z-index: 1;
 }
