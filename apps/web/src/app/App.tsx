@@ -3,14 +3,18 @@ import type { RouteObject } from 'react-router';
 
 import { CatalogPage } from '../pages/catalog/CatalogPage';
 import { HomePage } from '../pages/home/HomePage';
-import { NotFoundPage } from '../pages/not-found/NotFoundPage';
-import { RouteErrorPage } from '../pages/not-found/RouteErrorPage';
+
+import { ProductPage } from '../pages/product/ProductPage';
+import { NotFoundPage } from '../widgets/not-found/NotFoundPage';
+import { RouteErrorPage } from '../widgets/not-found/RouteErrorPage';
+
 import { AppLayout } from './AppLayout';
 import { Providers } from './providers';
 
 const shopRoutes: RouteObject[] = [
   { index: true, element: <HomePage /> },
   { path: 'catalog', element: <CatalogPage /> },
+  { path: 'catalog/:slug', element: <ProductPage /> },
   { path: '*', element: <NotFoundPage /> },
 ];
 
