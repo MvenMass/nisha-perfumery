@@ -1,0 +1,37 @@
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+  padding: var(--sp-20);
+  border: var(--border-1) dashed var(--color-line-strong);
+}
+
+.lead {
+  font-size: var(--fs-13);
+  line-height: var(--lh-normal);
+  color: var(--color-text-muted);
+}
+
+.row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+}
+
+.done {
+  padding: var(--sp-20);
+  font-size: var(--fs-14);
+  line-height: var(--lh-normal);
+  border: var(--border-1) solid var(--color-copper);
+}
+
+@media (--md) {
+  .row {
+    flex-direction: row;
+    align-items: flex-end;
+  }
+
+  .row > :first-child {
+    flex: 1 1 auto;
+  }
+}

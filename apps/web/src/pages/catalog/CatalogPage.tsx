@@ -124,7 +124,7 @@ export function CatalogPage() {
           <div className={styles.heroRow}>
             <h1 className={styles.title}>Каталог образцов</h1>
             <p className={styles.found} aria-live="polite">
-              {total === undefined ? ' ' : `Найдено: ${specimensCount(total)}`}
+              {total === undefined ? '\u00A0' : `Найдено: ${specimensCount(total)}`}
             </p>
           </div>
           <div aria-hidden="true" className={styles.strata}>
