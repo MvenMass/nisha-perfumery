@@ -4,6 +4,7 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 
 import type { Env } from './config/env';
 import type { Database } from './database/client';
+import { catalogRoutes } from './modules/catalog/catalog.routes';
 import { healthRoutes } from './modules/health/health.routes';
 import { setupErrorHandling } from './plugins/error-handler';
 import { setupRateLimit } from './plugins/rate-limit';
@@ -41,6 +42,7 @@ export async function buildApp({ env, db }: AppDeps) {
   await setupRateLimit(app);
 
   await app.register(healthRoutes, { prefix: '/api' });
+  await app.register(catalogRoutes, { prefix: '/api' });
 
   return app;
 }
