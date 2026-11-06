@@ -15,6 +15,7 @@
     "test:e2e": "pnpm --filter @nisha/web test:e2e",
     "db:generate": "pnpm --filter @nisha/api db:generate",
     "db:migrate": "pnpm --filter @nisha/api db:migrate",
+    "db:seed": "pnpm --filter @nisha/api db:seed",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },

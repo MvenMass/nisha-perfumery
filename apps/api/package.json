@@ -10,12 +10,14 @@
     "typecheck": "tsc --noEmit -p .",
     "test": "vitest run",
     "db:generate": "drizzle-kit generate",
-    "db:migrate": "tsx --env-file-if-exists=../../.env src/database/migrate.ts"
+    "db:migrate": "tsx --env-file-if-exists=../../.env src/database/migrate.ts",
+    "db:seed": "tsx --env-file-if-exists=../../.env src/database/seed.ts"
   },
   "dependencies": {
     "@fastify/cors": "^11.4.0",
     "@fastify/helmet": "^13.2.0",
     "@nisha/contracts": "workspace:*",
+    "argon2": "^0.45.2",
     "drizzle-orm": "^0.45.4",
     "fastify": "^5.12.8",
     "fastify-type-provider-zod": "^7.0.0",
