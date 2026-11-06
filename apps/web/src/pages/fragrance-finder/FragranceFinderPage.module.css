@@ -1,0 +1,80 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-32);
+  max-width: 960px;
+  padding-top: var(--sp-24);
+  padding-bottom: var(--sp-72);
+}
+
+.intro {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-14);
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: var(--fs-page-title);
+  font-weight: 400;
+  line-height: var(--lh-none);
+  text-transform: uppercase;
+}
+
+.lead {
+  max-width: 560px;
+  font-size: var(--fs-15);
+  line-height: var(--lh-relaxed);
+  color: var(--color-text-muted);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-40);
+}
+
+/* float возвращает legend в поток — иначе он садится на рамку fieldset. */
+.legend {
+  display: flex;
+  float: left;
+  flex-direction: column;
+  gap: var(--sp-6);
+  width: 100%;
+  margin-bottom: var(--sp-16);
+  font-family: var(--font-serif);
+  font-size: var(--fs-28);
+  line-height: var(--lh-tight);
+}
+
+.step {
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
+  letter-spacing: var(--ls-10);
+  color: var(--color-copper);
+}
+
+.options {
+  display: grid;
+  clear: both;
+  gap: var(--sp-12);
+}
+
+.submit {
+  align-self: stretch;
+}
+
+@media (--md) {
+  .page {
+    padding-top: var(--sp-40);
+    padding-bottom: var(--sp-104);
+  }
+
+  .options {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .submit {
+    align-self: flex-start;
+  }
+}

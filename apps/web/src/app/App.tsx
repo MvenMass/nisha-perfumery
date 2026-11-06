@@ -2,6 +2,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router';
 import type { RouteObject } from 'react-router';
 
 import { CatalogPage } from '../pages/catalog/CatalogPage';
+import { FragranceFinderPage } from '../pages/fragrance-finder/FragranceFinderPage';
 import { HomePage } from '../pages/home/HomePage';
 
 import { ProductPage } from '../pages/product/ProductPage';
@@ -15,6 +16,7 @@ const shopRoutes: RouteObject[] = [
   { index: true, element: <HomePage /> },
   { path: 'catalog', element: <CatalogPage /> },
   { path: 'catalog/:slug', element: <ProductPage /> },
+  { path: 'fragrance-finder', element: <FragranceFinderPage /> },
   { path: '*', element: <NotFoundPage /> },
 ];
 
