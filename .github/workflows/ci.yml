@@ -61,6 +61,13 @@ jobs:
       - name: Браузеры Playwright
         run: pnpm --filter @nisha/web exec playwright install --with-deps chromium webkit
 
+      # e2e работают с настоящим api и каталогом из сида.
+      - name: База для e2e
+        run: pnpm db:migrate && pnpm db:seed
+        env:
+          ADMIN_EMAIL: admin@nisha.test
+          ADMIN_PASSWORD: ci-admin-password
+
       - run: pnpm test:e2e
 
       - name: Отчёт Playwright
