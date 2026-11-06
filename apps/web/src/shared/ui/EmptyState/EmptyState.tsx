@@ -14,7 +14,7 @@ type EmptyStateProps = {
   icon?: IconName | undefined;
   /** Кнопка или ссылка: «Сбросить фильтры», «В каталог». */
   action?: ReactNode;
-  headingLevel?: 'h2' | 'h3' | undefined;
+  headingLevel?: 'h1' | 'h2' | 'h3' | undefined;
   className?: string | undefined;
 };
 

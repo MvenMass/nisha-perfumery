@@ -2,9 +2,19 @@ import { createBrowserRouter, RouterProvider } from 'react-router';
 import type { RouteObject } from 'react-router';
 
 import { HomePage } from '../pages/home/HomePage';
+import { NotFoundPage } from '../pages/not-found/NotFoundPage';
+import { RouteErrorPage } from '../pages/not-found/RouteErrorPage';
+import { AppLayout } from './AppLayout';
 import { Providers } from './providers';
 
-const routes: RouteObject[] = [{ path: '/', element: <HomePage /> }];
+const shopRoutes: RouteObject[] = [
+  { index: true, element: <HomePage /> },
+  { path: '*', element: <NotFoundPage /> },
+];
+
+const routes: RouteObject[] = [
+  { element: <AppLayout />, errorElement: <RouteErrorPage />, children: shopRoutes },
+];
 
 // Витрина компонентов только для разработки: в production-сборке ветка вырезается вместе с чанком.
 if (import.meta.env.DEV) {
