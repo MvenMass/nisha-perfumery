@@ -1,0 +1,28 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.main {
+  flex: 1 0 auto;
+}
+
+/* Ссылка «К содержимому»: невидима, пока на неё не попал фокус с клавиатуры. */
+.skipLink {
+  position: absolute;
+  top: var(--sp-8);
+  left: var(--sp-8);
+  z-index: var(--z-toast);
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--control-44);
+  padding: 0 var(--sp-16);
+  color: var(--color-text);
+  background: var(--color-accent);
+  transform: translateY(-200%);
+}
+
+.skipLink:focus {
+  transform: none;
+}
