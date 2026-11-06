@@ -45,6 +45,8 @@ describe('GET /api/products', () => {
       isBestseller: true,
       keyNotes: ['чёрный перец', 'бергамот', 'ладан'],
       material: { slug: 'basalt', name: 'Базальт' },
+      origin: 'вулканическое плато',
+      density: 'high',
     });
   });
 
