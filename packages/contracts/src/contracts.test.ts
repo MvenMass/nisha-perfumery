@@ -38,6 +38,15 @@ describe('catalogQuerySchema', () => {
     expect(catalogQuerySchema.safeParse({ limit: '500' }).success).toBe(false);
   });
 
+  it('разбирает плотность и поиск, пустые параметры считает отсутствующими', () => {
+    const query = catalogQuerySchema.parse({ density: 'high,light', q: '  ладан ', priceMin: '' });
+    expect(query).toMatchObject({ density: ['high', 'light'], q: 'ладан' });
+    expect(query.priceMin).toBeUndefined();
+    expect(catalogQuerySchema.parse({ q: '' }).q).toBeUndefined();
+    expect(catalogQuerySchema.safeParse({ q: 'л' }).success).toBe(false);
+    expect(catalogQuerySchema.safeParse({ density: 'heavy' }).success).toBe(false);
+  });
+
   it('отклоняет slug с недопустимыми символами', () => {
     expect(catalogQuerySchema.safeParse({ material: 'Basalt!' }).success).toBe(false);
   });

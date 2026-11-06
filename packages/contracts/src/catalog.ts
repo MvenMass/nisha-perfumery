@@ -1,6 +1,7 @@
 import { z } from 'zod';
 
 import {
+  densitySchema,
   imageSchema,
   kopecksSchema,
   paginationSchema,
@@ -16,23 +17,34 @@ export type CatalogSort = z.infer<typeof catalogSortSchema>;
 // Цена в URL — в целых рублях: `?priceMin=4000` читается человеком. Сервер переводит в копейки.
 const rublesSchema = z.coerce.number().int().nonnegative().max(10_000_000);
 
-/** GET /products — фильтры каталога. Объём и цена применяются к одному варианту (D-025). */
-export const catalogQuerySchema = z
+// Пустой параметр в URL (`?q=`) означает «нет фильтра», а не ошибку.
+const emptyToUndefined = (value: unknown) => (value === '' ? undefined : value);
+
+/**
+ * Поля фильтра по отдельности: клиент разбирает URL поле за полем и отбрасывает только неверное,
+ * а не весь запрос (ручная правка адреса не должна сбрасывать остальные фильтры).
+ */
+export const catalogQueryFieldsSchema = z
   .object({
     category: queryListSchema(slugSchema),
     material: queryListSchema(slugSchema),
     collection: queryListSchema(slugSchema),
+    density: queryListSchema(densitySchema),
     volume: queryListSchema(z.coerce.number().int().positive()),
-    priceMin: rublesSchema.optional(),
-    priceMax: rublesSchema.optional(),
+    priceMin: z.preprocess(emptyToUndefined, rublesSchema.optional()),
+    priceMax: z.preprocess(emptyToUndefined, rublesSchema.optional()),
+    /** Поиск по названию, номеру образца, материалу и нотам. */
+    q: z.preprocess(emptyToUndefined, z.string().trim().min(2).max(60).optional()),
     sort: catalogSortSchema.default('popular'),
   })
-  .extend(paginationSchema.shape)
-  .refine(
-    ({ priceMin, priceMax }) =>
-      priceMin === undefined || priceMax === undefined || priceMin <= priceMax,
-    { message: 'Нижняя граница цены больше верхней', path: ['priceMin'] },
-  );
+  .extend(paginationSchema.shape);
+
+/** GET /products — фильтры каталога. Объём и цена применяются к одному варианту (D-025). */
+export const catalogQuerySchema = catalogQueryFieldsSchema.refine(
+  ({ priceMin, priceMax }) =>
+    priceMin === undefined || priceMax === undefined || priceMin <= priceMax,
+  { message: 'Нижняя граница цены больше верхней', path: ['priceMin'] },
+);
 export type CatalogQuery = z.infer<typeof catalogQuerySchema>;
 /** Сырые параметры до разбора — то, что лежит в URL. */
 export type CatalogQueryInput = z.input<typeof catalogQuerySchema>;
@@ -70,6 +82,7 @@ export const catalogFiltersResponseSchema = z.object({
   categories: z.array(facetSchema),
   materials: z.array(facetSchema.extend({ swatchColor: z.string() })),
   collections: z.array(facetSchema),
+  densities: z.array(z.object({ value: densitySchema, count: z.number().int().nonnegative() })),
   volumes: z.array(
     z.object({ volumeMl: z.number().int().positive(), count: z.number().int().nonnegative() }),
   ),
