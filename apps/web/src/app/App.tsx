@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router';
 import type { RouteObject } from 'react-router';
 
+import { CatalogPage } from '../pages/catalog/CatalogPage';
 import { HomePage } from '../pages/home/HomePage';
 import { NotFoundPage } from '../pages/not-found/NotFoundPage';
 import { RouteErrorPage } from '../pages/not-found/RouteErrorPage';
@@ -9,6 +10,7 @@ import { Providers } from './providers';
 
 const shopRoutes: RouteObject[] = [
   { index: true, element: <HomePage /> },
+  { path: 'catalog', element: <CatalogPage /> },
   { path: '*', element: <NotFoundPage /> },
 ];
 
