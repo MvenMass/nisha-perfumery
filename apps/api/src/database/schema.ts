@@ -1,3 +1,5 @@
+// Форма снимка адреса — та же Zod-схема, что валидирует его в API (один источник правды).
+import type { DeliveryAddressSnapshot } from '@nisha/contracts';
 import { sql } from 'drizzle-orm';
 import {
   boolean,
@@ -388,11 +390,6 @@ export const stockNotifications = pgTable(
 
 // --- Заказы ---
 
-/** Снимок адреса доставки в заказе: адрес мог измениться или быть удалён позже. */
-export type DeliveryAddressSnapshot =
-  | { kind: 'courier'; city: string; street: string; apartment: string | null }
-  | { kind: 'pickup_point'; pointId: string; address: string };
-
 export const orders = pgTable(
   'orders',
   {
@@ -409,6 +406,7 @@ export const orders = pgTable(
     contactPhone: text().notNull(),
     contactEmail: text().notNull(),
     deliveryMethod: deliveryMethod().notNull(),
+    // Снимок: адрес мог измениться или быть удалён после заказа.
     deliveryAddress: jsonb().$type<DeliveryAddressSnapshot>(),
     deliveryComment: text(),
     itemsTotalKopecks: integer().notNull(),
