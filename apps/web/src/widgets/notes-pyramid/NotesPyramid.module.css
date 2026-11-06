@@ -1,0 +1,137 @@
+.pyramid {
+  display: flex;
+  gap: var(--sp-20);
+}
+
+/* Шкала времени слева — только от 768px; на телефоне время пишется в подписи слоя. */
+.scale {
+  display: none;
+  flex: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: var(--sp-56);
+  padding: var(--sp-4) 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-10);
+  color: var(--color-text-muted);
+  text-align: right;
+}
+
+.layers {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--sp-2);
+  min-width: 0;
+}
+
+.layer {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  justify-content: center;
+
+  /* Толщина приходит из данных (длительность слоя); на телефоне слои тоньше, как в home-mobile. */
+  min-height: calc(var(--thickness) * 0.62px);
+  padding: var(--sp-12) var(--sp-16);
+  color: var(--color-text);
+}
+
+.top {
+  background: var(--color-stone);
+}
+
+.heart {
+  background: var(--color-accent);
+}
+
+.base {
+  background: var(--color-walnut);
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-10);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-10);
+}
+
+.longLabel {
+  display: none;
+}
+
+.notes {
+  font-family: var(--font-serif);
+  font-size: var(--fs-20);
+  line-height: var(--lh-tight);
+}
+
+.heart .notes {
+  font-size: var(--fs-22);
+}
+
+.base .notes {
+  font-size: var(--fs-24);
+}
+
+/* Тонкие прослойки между слоями — как в срезе породы. */
+.seam {
+  height: var(--sp-4);
+  background: var(--color-basalt);
+}
+
+.seamWide {
+  height: var(--sp-6);
+  background: var(--color-line-strong);
+}
+
+.bedrock {
+  display: none;
+  height: var(--sp-28);
+  background: var(--color-basalt);
+}
+
+@media (--md) {
+  .scale {
+    display: flex;
+  }
+
+  .layer {
+    flex-direction: row;
+    gap: var(--sp-16);
+    align-items: center;
+    justify-content: space-between;
+    min-height: calc(var(--thickness) * 1px);
+    padding: var(--sp-16) var(--sp-28);
+  }
+
+  .label {
+    font-size: var(--fs-11);
+    letter-spacing: var(--ls-12);
+  }
+
+  .shortLabel {
+    display: none;
+  }
+
+  .longLabel {
+    display: inline;
+  }
+
+  .notes {
+    font-size: var(--fs-26);
+    text-align: right;
+  }
+
+  .heart .notes {
+    font-size: var(--fs-30);
+  }
+
+  .base .notes {
+    font-size: var(--fs-32);
+  }
+
+  .bedrock {
+    display: block;
+  }
+}
