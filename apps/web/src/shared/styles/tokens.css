@@ -31,6 +31,10 @@
   --color-overlay: rgb(20 19 18 / 80%); /* плашки подписей на фото */
   --color-scrim: rgb(12 11 11 / 70%); /* затемнение под шторкой */
 
+  /* Тень вокруг «света-лампы» на первом экране — значения из home.html. */
+  --color-shade-soft: rgb(20 19 18 / 50%);
+  --color-shade-deep: rgb(20 19 18 / 93%);
+
   /* --- Шрифты --- */
   --font-serif: 'Cormorant Garamond', 'Times New Roman', serif;
   --font-sans: 'Manrope', system-ui, -apple-system, 'Segoe UI', roboto, sans-serif;
