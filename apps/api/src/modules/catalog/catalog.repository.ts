@@ -67,6 +67,8 @@ const listItemFields = {
   name: products.name,
   materialSlug: materials.slug,
   materialName: materials.name,
+  origin: products.origin,
+  density: products.density,
   keyNotes,
   priceFromKopecks: priceFrom,
   volumesMl: volumes,
@@ -83,6 +85,8 @@ export type ListItemRow = {
   name: string;
   materialSlug: string;
   materialName: string;
+  origin: string;
+  density: 'light' | 'medium' | 'high';
   keyNotes: string[];
   priceFromKopecks: number;
   volumesMl: number[];

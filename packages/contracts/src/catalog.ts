@@ -55,6 +55,9 @@ export const productListItemSchema = z.object({
   specimenNumber: z.number().int().positive(),
   name: z.string(),
   material: referenceSchema,
+  /** Для этикетки образца на главной: «вулканическое плато». */
+  origin: z.string(),
+  density: densitySchema,
   /** Первые ноты пирамиды для карточки: «перец, ладан, ветивер». */
   keyNotes: z.array(z.string()),
   /** Минимальная цена среди активных объёмов (D-025). */
