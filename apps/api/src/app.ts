@@ -7,6 +7,7 @@ import type { Database } from './database/client';
 import { catalogRoutes } from './modules/catalog/catalog.routes';
 import { healthRoutes } from './modules/health/health.routes';
 import { homeRoutes } from './modules/home/home.routes';
+import { stockNotificationRoutes } from './modules/stock-notifications/stock-notifications.routes';
 import { storeRoutes } from './modules/store/store.routes';
 import { setupErrorHandling } from './plugins/error-handler';
 import { setupRateLimit } from './plugins/rate-limit';
@@ -47,6 +48,7 @@ export async function buildApp({ env, db }: AppDeps) {
   await app.register(catalogRoutes, { prefix: '/api' });
   await app.register(homeRoutes, { prefix: '/api' });
   await app.register(storeRoutes, { prefix: '/api' });
+  await app.register(stockNotificationRoutes, { prefix: '/api' });
 
   return app;
 }

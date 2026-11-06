@@ -102,7 +102,11 @@ describe('GET /api/catalog/filters', () => {
       count: 4,
       swatchColor: '#292725',
     });
-    expect(filters.densities.map((d) => d.value)).toEqual(['light', 'medium', 'high']);
+    expect(filters.densities).toEqual([
+      { value: 'light', count: 5 },
+      { value: 'medium', count: 5 },
+      { value: 'high', count: 5 },
+    ]);
     expect(filters.volumes.find((v) => v.volumeMl === 30)?.count).toBe(11);
     expect(filters.price).toEqual({ minKopecks: 190_000, maxKopecks: 1_150_000 });
   });
