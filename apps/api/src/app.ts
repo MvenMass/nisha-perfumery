@@ -3,11 +3,25 @@ import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 
 import type { Env } from './config/env';
+import type { Database } from './database/client';
 import { healthRoutes } from './modules/health/health.routes';
 import { setupErrorHandling } from './plugins/error-handler';
+import { setupRateLimit } from './plugins/rate-limit';
 import { setupSecurity } from './plugins/security';
 
-export async function buildApp(env: Env) {
+declare module 'fastify' {
+  interface FastifyInstance {
+    db: Database;
+  }
+}
+
+type AppDeps = {
+  env: Env;
+  /** Пулом владеет вызывающий код: сервер закрывает его при остановке, тесты — вместе с базой. */
+  db: Database;
+};
+
+export async function buildApp({ env, db }: AppDeps) {
   const app = Fastify({
     logger:
       env.NODE_ENV === 'test'
@@ -20,9 +34,11 @@ export async function buildApp(env: Env) {
 
   app.setValidatorCompiler(validatorCompiler);
   app.setSerializerCompiler(serializerCompiler);
+  app.decorate('db', db);
 
   setupErrorHandling(app);
   await setupSecurity(app, env.WEB_ORIGIN);
+  await setupRateLimit(app);
 
   await app.register(healthRoutes, { prefix: '/api' });
 

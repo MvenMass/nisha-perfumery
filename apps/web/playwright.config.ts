@@ -24,7 +24,7 @@ export default defineConfig({
   ],
   webServer: [
     {
-      command: 'pnpm exec tsx src/server.ts',
+      command: 'pnpm exec tsx --env-file-if-exists=../../.env src/server.ts',
       cwd: '../api',
       url: 'http://localhost:3000/api/health',
       reuseExistingServer: !isCI,

@@ -1,5 +1,9 @@
 import { z } from 'zod';
 
+const databaseUrlSchema = z
+  .url()
+  .refine((value) => /^postgres(ql)?:\/\//.test(value), 'Ожидается адрес postgres://…');
+
 const envSchema = z.object({
   NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
   API_HOST: z.string().min(1).default('127.0.0.1'),
@@ -7,17 +11,13 @@ const envSchema = z.object({
   // Единственный origin, которому разрешены запросы с cookie (CORS).
   WEB_ORIGIN: z.url().default('http://localhost:5173'),
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent']).default('info'),
+  DATABASE_URL: databaseUrlSchema,
 });
 
 export type Env = z.infer<typeof envSchema>;
 
-// Отдельно от envSchema: пока HTTP-маршрутам не нужна БД, сервер не должен требовать DATABASE_URL.
-// В этапе 4 схемы объединятся.
-const databaseEnvSchema = z.object({
-  DATABASE_URL: z
-    .url()
-    .refine((value) => /^postgres(ql)?:\/\//.test(value), 'Ожидается адрес postgres://…'),
-});
+// Скриптам миграций и сида нужна только БД — остальные переменные сервера им не важны.
+const databaseEnvSchema = z.object({ DATABASE_URL: databaseUrlSchema });
 
 export type DatabaseEnv = z.infer<typeof databaseEnvSchema>;
 

@@ -1,8 +1,13 @@
 import { buildApp } from './app';
 import { loadEnv } from './config/env';
+import { createDatabase } from './database/client';
 
 const env = loadEnv();
-const app = await buildApp(env);
+const { db, pool } = createDatabase(env.DATABASE_URL);
+const app = await buildApp({ env, db });
+app.addHook('onClose', async () => {
+  await pool.end();
+});
 
 for (const signal of ['SIGINT', 'SIGTERM'] as const) {
   process.once(signal, () => {
