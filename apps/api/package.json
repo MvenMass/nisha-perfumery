@@ -8,7 +8,9 @@
     "build": "tsup",
     "start": "node dist/server.js",
     "typecheck": "tsc --noEmit -p .",
-    "test": "vitest run"
+    "test": "vitest run",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx --env-file-if-exists=../../.env src/database/migrate.ts"
   },
   "dependencies": {
     "@fastify/cors": "^11.4.0",
