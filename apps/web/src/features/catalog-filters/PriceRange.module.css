@@ -1,0 +1,94 @@
+.range {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+}
+
+/* Два ползунка поверх одной дорожки. Клики по дорожке ловят только «ручки». */
+.slider {
+  position: relative;
+  height: var(--control-44);
+}
+
+.track,
+.fill {
+  position: absolute;
+  top: 50%;
+  height: var(--border-2);
+  margin-top: -1px;
+}
+
+.track {
+  right: 0;
+  left: 0;
+  background: var(--color-line-strong);
+}
+
+.fill {
+  background: var(--color-copper);
+}
+
+.thumbInput {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  pointer-events: none;
+  background: transparent;
+  appearance: none;
+}
+
+.thumbInput::-webkit-slider-runnable-track {
+  height: 100%;
+  background: transparent;
+}
+
+.thumbInput::-webkit-slider-thumb {
+  width: 16px;
+  height: 16px;
+  margin-top: 14px;
+  pointer-events: auto;
+  cursor: pointer;
+  background: var(--color-text);
+  border: 0;
+  border-radius: 50%;
+  appearance: none;
+}
+
+.thumbInput::-moz-range-thumb {
+  width: 16px;
+  height: 16px;
+  pointer-events: auto;
+  cursor: pointer;
+  background: var(--color-text);
+  border: 0;
+  border-radius: 50%;
+}
+
+.thumbInput::-moz-range-track {
+  background: transparent;
+}
+
+.thumbInput:focus {
+  outline: none;
+}
+
+.thumbInput:focus::-webkit-slider-thumb {
+  outline: var(--border-2) solid var(--color-copper);
+  outline-offset: var(--sp-2);
+}
+
+.thumbInput:focus::-moz-range-thumb {
+  outline: var(--border-2) solid var(--color-copper);
+  outline-offset: var(--sp-2);
+}
+
+.fields {
+  display: flex;
+  gap: var(--sp-8);
+}
+
+.fields > * {
+  flex: 1 1 0;
+}

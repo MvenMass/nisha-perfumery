@@ -1,0 +1,79 @@
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.group {
+  padding: var(--sp-20) 0;
+  border-bottom: var(--border-1) solid var(--color-line);
+}
+
+.group:last-child {
+  border-bottom: 0;
+}
+
+/* Свёрнутая группа в шторке: свой отступ и линия есть у аккордеона, лишние убираем. */
+.form .accordionGroup {
+  padding: 0;
+  border-top: 0;
+  border-bottom: var(--border-1) solid var(--color-line);
+}
+
+.form .accordionGroup:last-child {
+  border-bottom: 0;
+}
+
+.panel .group:first-child {
+  padding-top: 0;
+}
+
+/* legend у fieldset по умолчанию садится на верхнюю рамку; float возвращает его в поток (как в макете). */
+.legend {
+  float: left;
+  width: 100%;
+  margin-bottom: var(--sp-14);
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-12);
+  color: var(--color-copper);
+}
+
+.legend + * {
+  clear: both;
+}
+
+.column {
+  display: flex;
+  flex-direction: column;
+}
+
+.wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-8);
+}
+
+.segments {
+  display: flex;
+  gap: var(--sp-8);
+}
+
+.bars {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: var(--sp-2);
+  width: var(--sp-24);
+}
+
+.bar {
+  height: var(--sp-2);
+  background: var(--color-travertine);
+}
+
+@media (--lg) {
+  .group {
+    padding: var(--sp-24) 0;
+  }
+}

@@ -1,0 +1,171 @@
+.hero {
+  background: var(--color-surface);
+  border-bottom: var(--border-1) solid var(--color-line);
+}
+
+.heroInner {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-16);
+  padding-top: var(--sp-24);
+  padding-bottom: var(--sp-20);
+}
+
+.heroRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-12) var(--sp-24);
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: var(--fs-page-title);
+  font-weight: 400;
+  line-height: var(--lh-none);
+  text-transform: uppercase;
+}
+
+.found {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  color: var(--color-text-muted);
+}
+
+.strata {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.strata span {
+  display: block;
+}
+
+.layout {
+  display: flex;
+  gap: var(--sp-48);
+  align-items: flex-start;
+  padding-top: var(--sp-24);
+  padding-bottom: var(--sp-72);
+}
+
+/* Боковая панель — только на широких экранах; на остальных фильтры открываются шторкой. */
+.aside {
+  display: none;
+  flex: 0 0 280px;
+}
+
+.content {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--sp-24);
+  min-width: 0;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-12) var(--sp-16);
+  align-items: center;
+  justify-content: space-between;
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-8);
+  align-items: center;
+}
+
+.resetAll {
+  min-height: var(--control-44);
+  padding: 0 var(--sp-8);
+  font-size: var(--fs-12);
+  color: var(--color-copper);
+  text-decoration: underline;
+  background: transparent;
+  border: 0;
+}
+
+.resetAll:hover {
+  color: var(--color-text);
+}
+
+.controls {
+  display: flex;
+  gap: var(--sp-12);
+  align-items: center;
+  margin-left: auto;
+}
+
+.sortWide {
+  display: none;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: var(--sp-24);
+}
+
+.more {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-16);
+  align-items: center;
+  padding-top: var(--sp-16);
+}
+
+.shown {
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
+  color: var(--color-text-muted);
+}
+
+.progress {
+  width: 240px;
+  max-width: 100%;
+  height: var(--border-2);
+  background: var(--color-line-strong);
+}
+
+.progressFill {
+  height: 100%;
+  background: var(--color-copper);
+}
+
+.skeletonCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+}
+
+@media (--md) {
+  .heroInner {
+    gap: var(--sp-20);
+    padding-top: var(--sp-40);
+    padding-bottom: var(--sp-32);
+  }
+}
+
+@media (--lg) {
+  .layout {
+    padding-top: var(--sp-48);
+    padding-bottom: var(--sp-104);
+  }
+
+  .aside {
+    display: block;
+  }
+
+  .content .mobileOnly {
+    display: none;
+  }
+
+  .sortWide {
+    display: block;
+  }
+}
