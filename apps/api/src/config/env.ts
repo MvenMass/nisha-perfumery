@@ -11,10 +11,28 @@ const envSchema = z.object({
 
 export type Env = z.infer<typeof envSchema>;
 
-export function loadEnv(source: NodeJS.ProcessEnv = process.env): Env {
-  const result = envSchema.safeParse(source);
+// Отдельно от envSchema: пока HTTP-маршрутам не нужна БД, сервер не должен требовать DATABASE_URL.
+// В этапе 4 схемы объединятся.
+const databaseEnvSchema = z.object({
+  DATABASE_URL: z
+    .url()
+    .refine((value) => /^postgres(ql)?:\/\//.test(value), 'Ожидается адрес postgres://…'),
+});
+
+export type DatabaseEnv = z.infer<typeof databaseEnvSchema>;
+
+function parse<T extends z.ZodType>(schema: T, source: NodeJS.ProcessEnv): z.infer<T> {
+  const result = schema.safeParse(source);
   if (!result.success) {
     throw new Error(`Неверные переменные окружения:\n${z.prettifyError(result.error)}`);
   }
   return result.data;
+}
+
+export function loadEnv(source: NodeJS.ProcessEnv = process.env): Env {
+  return parse(envSchema, source);
+}
+
+export function loadDatabaseEnv(source: NodeJS.ProcessEnv = process.env): DatabaseEnv {
+  return parse(databaseEnvSchema, source);
 }
