@@ -10,6 +10,7 @@ import { useGuestCart } from '../../entities/cart/guest-cart';
 import { cartQueryKey } from '../../entities/cart/queries';
 import { addressesQueryKey } from '../../entities/address/queries';
 import { orderKeys } from '../../entities/order/queries';
+import { meQueryKey } from '../../entities/user/queries';
 import { apiRequest } from '../../shared/api/http';
 
 /**
@@ -62,6 +63,8 @@ export function useCreateOrder(viewer: User | null) {
       void queryClient.invalidateQueries({ queryKey: cartQueryKey(viewer) });
       void queryClient.invalidateQueries({ queryKey: orderKeys.all });
       void queryClient.invalidateQueries({ queryKey: addressesQueryKey });
+      // Сервер мог запомнить телефон из заказа в профиле.
+      if (viewer) void queryClient.invalidateQueries({ queryKey: meQueryKey });
     },
   });
 }

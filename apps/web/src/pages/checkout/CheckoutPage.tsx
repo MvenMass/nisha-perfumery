@@ -105,10 +105,24 @@ export function CheckoutPage() {
 
   const unavailable = lines.some((line) => line.status !== 'available');
 
+  // После первой неудачной отправки форма перепроверяет себя на каждое изменение:
+  // подпись под уже исправленным полем не должна висеть до следующего нажатия.
+  const change = (next: CheckoutDraft) => {
+    setDraft(next);
+    if (Object.keys(errors).length > 0) {
+      const result = validateCheckout(next, !viewer);
+      setErrors(result.ok ? {} : result.errors);
+    }
+  };
+
   const submit = () => {
     const result = validateCheckout(draft, !viewer);
     if (!result.ok) {
       setErrors(result.errors);
+      // Ошибка может быть выше экрана: переводим фокус на первое неверное поле.
+      requestAnimationFrame(() => {
+        document.querySelector<HTMLElement>('main [aria-invalid="true"]')?.focus();
+      });
       return;
     }
     setErrors({});
@@ -154,7 +168,7 @@ export function CheckoutPage() {
         <CheckoutForm
           viewer={viewer}
           draft={draft}
-          onChange={setDraft}
+          onChange={change}
           errors={errors}
           addresses={addresses.data?.items ?? []}
           quote={quote.data}

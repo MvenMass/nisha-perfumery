@@ -41,8 +41,9 @@ const METHOD_ICONS: Record<DeliveryMethod, IconName> = {
   boutique: 'pin',
 };
 
+// Адрес, сохранённый при оформлении, назван по улице — не повторяем её дважды.
 function addressTitle(address: Address): string {
-  return `${address.label} · ${address.street}`;
+  return address.label === address.street ? address.street : `${address.label} · ${address.street}`;
 }
 
 /** Форма оформления по checkout.html: контакты, доставка, адрес или пункт, оплата (D-030). */
