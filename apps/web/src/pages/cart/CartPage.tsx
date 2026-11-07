@@ -3,8 +3,7 @@ import type { CartLine, CartResponse } from '@nisha/contracts';
 import { useCart } from '../../entities/cart/queries';
 import { useViewer } from '../../entities/user/queries';
 import { bottlesCount, specimensCount } from '../../entities/product/lib/format';
-import { useChangeCart } from '../../features/cart/mutations';
-import { ApiError } from '../../shared/api/http';
+import { cartErrorText, useChangeCart } from '../../features/cart/mutations';
 import { formatPrice } from '../../shared/lib/money';
 import { useMeta } from '../../shared/lib/useMeta';
 import { Button, ButtonLink } from '../../shared/ui/Button/Button';
@@ -14,16 +13,6 @@ import { Icon } from '../../shared/ui/Icon/Icon';
 import { Skeleton } from '../../shared/ui/Skeleton/Skeleton';
 import { CartLineItem } from './CartLineItem';
 import styles from './CartPage.module.css';
-
-function changeErrorText(error: unknown): string {
-  if (error instanceof ApiError) {
-    if (error.code === 'OUT_OF_STOCK' || error.code === 'NOT_FOUND' || error.code === 'CONFLICT') {
-      return error.message;
-    }
-    if (error.code === 'NETWORK') return 'Нет соединения. Попробуйте ещё раз.';
-  }
-  return 'Не получилось изменить корзину. Попробуйте ещё раз.';
-}
 
 function CartSkeleton() {
   return (
@@ -88,7 +77,7 @@ export function CartPage() {
 
   const errorFor = (line: CartLine) =>
     change.isError && change.variables.variantId === line.variantId
-      ? changeErrorText(change.error)
+      ? cartErrorText(change.error)
       : undefined;
 
   const setQuantity = (line: CartLine, quantity: number) =>

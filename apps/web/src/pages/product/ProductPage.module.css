@@ -269,10 +269,25 @@
   gap: var(--sp-8);
 }
 
-.soon {
+.added,
+.addError {
   margin-top: calc(-1 * var(--sp-8));
-  font-size: var(--fs-12);
+  font-size: var(--fs-13);
+  line-height: var(--lh-normal);
+}
+
+.added {
   color: var(--color-text-muted);
+}
+
+.addedLink {
+  color: var(--color-copper);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.addError {
+  color: var(--color-copper);
 }
 
 .perks {

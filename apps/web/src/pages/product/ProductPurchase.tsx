@@ -1,9 +1,11 @@
 import type { ProductDetail, ProductVariant } from '@nisha/contracts';
 import { useState } from 'react';
-import { useLocation } from 'react-router';
+import { Link, useLocation } from 'react-router';
 
 import { bottlesLeft, formatVolume } from '../../entities/product/lib/format';
 import { useStoreInfo } from '../../entities/store/queries';
+import { cartErrorText, useChangeCart } from '../../features/cart/mutations';
+import { useToggleFavorite } from '../../features/favorite/useToggleFavorite';
 import { NotifyForm } from '../../features/stock-notification/NotifyForm';
 import { cx } from '../../shared/lib/cx';
 import { formatPrice } from '../../shared/lib/money';
@@ -48,6 +50,8 @@ export function ProductPurchase({ product }: { product: ProductDetail }) {
   );
   const [quantity, setQuantity] = useState(1);
   const store = useStoreInfo();
+  const change = useChangeCart();
+  const favorite = useToggleFavorite(product.id);
   const variant = product.variants.find((item) => item.id === selectedId);
 
   if (!variant) return null;
@@ -103,13 +107,49 @@ export function ProductPurchase({ product }: { product: ProductDetail }) {
             />
           </div>
           <div className={styles.actions}>
-            {/* Корзина и избранное появятся на этапах 5–6. */}
-            <Button size="xl" fullWidth disabled>
-              Добавить в&nbsp;корзину
+            <Button
+              size="xl"
+              fullWidth
+              disabled={change.isPending}
+              onClick={() =>
+                change.mutate({
+                  type: 'add',
+                  variantId: variant.id,
+                  quantity,
+                  stock: variant.stock,
+                })
+              }
+            >
+              {change.isPending ? 'Добавляем…' : 'Добавить в\u00A0корзину'}
             </Button>
-            <IconButton icon="heart" variant="outline" size={56} label="В избранное" disabled />
+            <IconButton
+              icon="heart"
+              variant="outline"
+              size={56}
+              label="В избранное"
+              pressed={favorite.active}
+              disabled={favorite.disabled}
+              onClick={favorite.toggle}
+            />
           </div>
-          <p className={styles.soon}>Корзина и&nbsp;избранное скоро заработают.</p>
+          {change.isSuccess && change.variables.variantId === variant.id && (
+            <p role="status" className={styles.added}>
+              {formatVolume(variant.volumeMl)} в&nbsp;корзине.{' '}
+              <Link to="/cart" className={styles.addedLink}>
+                Перейти в&nbsp;корзину
+              </Link>
+            </p>
+          )}
+          {change.isError && (
+            <p role="alert" className={styles.addError}>
+              {cartErrorText(change.error)}
+            </p>
+          )}
+          {favorite.failed && (
+            <p role="alert" className={styles.addError}>
+              Не получилось изменить избранное. Попробуйте ещё раз.
+            </p>
+          )}
         </>
       )}
 

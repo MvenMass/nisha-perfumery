@@ -10,8 +10,7 @@ import { Icon } from '../../shared/ui/Icon/Icon';
 import { SectionLabel } from '../../shared/ui/SectionLabel/SectionLabel';
 import { Skeleton } from '../../shared/ui/Skeleton/Skeleton';
 import { NotesPyramid } from '../../widgets/notes-pyramid/NotesPyramid';
-import { ProductCard } from '../../widgets/product-card/ProductCard';
-import { toProductCard } from '../../widgets/product-card/to-product-card';
+import { ShopProductCard } from '../../widgets/product-card/ShopProductCard';
 import { CATEGORY_TILES, JOURNAL_PREVIEW, PROCESS_STEPS } from './home-content';
 import styles from './HomePage.module.css';
 
@@ -98,7 +97,7 @@ export function Specimens({ items, pending }: { items: ProductListItem[]; pendin
               ))
             : items.map((item) => (
                 <li key={item.id}>
-                  <ProductCard product={toProductCard(item, { specimenRows: true })} />
+                  <ShopProductCard item={item} specimenRows withFavorite />
                 </li>
               ))}
         </ul>
