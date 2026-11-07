@@ -1,15 +1,21 @@
-import { Link, useNavigate } from 'react-router';
+import { Link, NavLink, Outlet, useNavigate } from 'react-router';
 
 import { useMe } from '../../entities/user/queries';
 import { useLogout } from '../../features/auth/mutations';
-import { useMeta } from '../../shared/lib/useMeta';
+import { cx } from '../../shared/lib/cx';
 import { Container } from '../../shared/ui/Container/Container';
 import { Icon } from '../../shared/ui/Icon/Icon';
+import type { IconName } from '../../shared/ui/Icon/Icon';
 import styles from './AccountPage.module.css';
 
-// Кабинет по account.html. «Заказы» и «Адреса» добавятся в этапе 7; избранное — общая страница /favorites.
+const SECTIONS: Array<{ to: string; label: string; icon: IconName; end: boolean }> = [
+  { to: '/account', label: 'Профиль', icon: 'user', end: true },
+  { to: '/account/orders', label: 'Заказы', icon: 'box', end: false },
+  { to: '/account/addresses', label: 'Адреса', icon: 'pin', end: false },
+];
+
+/** Кабинет по account.html: меню слева, раздел — справа. */
 export function AccountPage() {
-  useMeta('Личный кабинет');
   const user = useMe().data;
   const logout = useLogout();
   const navigate = useNavigate();
@@ -24,13 +30,22 @@ export function AccountPage() {
           <span className={styles.name}>{user.name}</span>
         </div>
         <ul className={styles.menu}>
+          {SECTIONS.map((section) => (
+            <li key={section.to}>
+              <NavLink
+                to={section.to}
+                end={section.end}
+                className={({ isActive }) =>
+                  cx(styles.menuItem, isActive && styles.menuItemCurrent)
+                }
+              >
+                <Icon name={section.icon} size={18} />
+                {section.label}
+              </NavLink>
+            </li>
+          ))}
           <li>
-            <a href="#profile" aria-current="page" className={styles.menuItemCurrent}>
-              <Icon name="user" size={18} />
-              Профиль
-            </a>
-          </li>
-          <li>
+            {/* Избранное доступно и гостю, поэтому это общая страница, а не раздел кабинета (D-058). */}
             <Link to="/favorites" className={styles.menuItem}>
               <Icon name="heart" size={18} />
               Избранное
@@ -57,33 +72,9 @@ export function AccountPage() {
         )}
       </nav>
 
-      <section id="profile" aria-labelledby="profile-title" className={styles.main}>
-        <h1 id="profile-title" className={styles.title}>
-          Профиль
-        </h1>
-        <dl className={styles.facts}>
-          <div className={styles.fact}>
-            <dt>Имя</dt>
-            <dd>{user.name}</dd>
-          </div>
-          <div className={styles.fact}>
-            <dt>Электронная почта</dt>
-            <dd>{user.email}</dd>
-          </div>
-          {user.phone && (
-            <div className={styles.fact}>
-              <dt>Телефон</dt>
-              <dd>{user.phone}</dd>
-            </div>
-          )}
-          {user.role === 'admin' && (
-            <div className={styles.fact}>
-              <dt>Роль</dt>
-              <dd>администратор</dd>
-            </div>
-          )}
-        </dl>
-      </section>
+      <div className={styles.main}>
+        <Outlet />
+      </div>
     </Container>
   );
 }

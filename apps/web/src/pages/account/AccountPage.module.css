@@ -39,7 +39,6 @@
 }
 
 .menuItem,
-.menuItemCurrent,
 .menuButton {
   display: flex;
   gap: var(--sp-12);
@@ -47,7 +46,12 @@
   width: 100%;
   min-height: var(--control-52);
   font-size: var(--fs-14);
+  color: var(--color-text-muted);
   border-bottom: var(--border-1) solid var(--color-line);
+}
+
+.menuItem:hover {
+  color: var(--color-text);
 }
 
 /* Активный раздел — медная полоса слева, как в account.html. */
@@ -61,17 +65,8 @@
   color: var(--color-copper);
 }
 
-.menuItem {
-  color: var(--color-text-muted);
-}
-
-.menuItem:hover {
-  color: var(--color-text);
-}
-
 .menuButton {
   padding: 0;
-  color: var(--color-text-muted);
   text-align: left;
   background: transparent;
   border-top: 0;
@@ -93,6 +88,34 @@
   flex-direction: column;
   gap: var(--sp-32);
   min-width: 0;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-32);
+  min-width: 0;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-16);
+  max-width: 560px;
+}
+
+.formActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-12);
+}
+
+.sectionHead {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-16);
+  align-items: flex-end;
+  justify-content: space-between;
 }
 
 .title {

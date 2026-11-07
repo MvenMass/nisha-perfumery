@@ -1,5 +1,11 @@
 import { authResponseSchema } from '@nisha/contracts';
-import type { LoginRequest, RegisterRequest, User } from '@nisha/contracts';
+import type {
+  LoginRequest,
+  RegisterRequest,
+  SetPasswordRequest,
+  UpdateProfileRequest,
+  User,
+} from '@nisha/contracts';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import type { QueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
@@ -74,5 +80,35 @@ export function useLogout() {
       queryClient.removeQueries({ predicate: (query) => query.queryKey[0] !== 'products' });
       queryClient.setQueryData(meQueryKey, null);
     },
+  });
+}
+
+/** Имя и телефон в профиле; телефон потом подставляется в контакты при оформлении. */
+export function useUpdateProfile() {
+  const setUser = useSetUser();
+  return useMutation({
+    mutationFn: (input: UpdateProfileRequest) =>
+      apiRequest('/api/auth/me', authResponseSchema, {
+        method: 'PATCH',
+        body: JSON.stringify(input),
+      }),
+    onSuccess: ({ user }) => setUser(user),
+  });
+}
+
+/** Пароль по ссылке из письма (D-060): после успеха пользователь вошёл. */
+export function useSetPassword() {
+  const queryClient = useQueryClient();
+  const setUser = useSetUser();
+  return useMutation({
+    mutationFn: async (input: SetPasswordRequest) => {
+      const response = await apiRequest('/api/auth/set-password', authResponseSchema, {
+        method: 'POST',
+        body: JSON.stringify(input),
+      });
+      await syncGuestData(queryClient, response.user);
+      return response;
+    },
+    onSuccess: ({ user }) => setUser(user),
   });
 }

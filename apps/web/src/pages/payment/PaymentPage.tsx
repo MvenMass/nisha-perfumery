@@ -51,7 +51,8 @@ function Cancelled({ order }: { order: Order }) {
       <h1 className={styles.title}>Заказ отменён</h1>
       <p className={styles.text}>{CANCELLED_TEXT}</p>
       <RepeatOrderButton
-        order={order}
+        orderId={order.id}
+        items={order.items}
         viewer={viewer}
         label="Вернуть образцы в корзину"
         variant="primary"

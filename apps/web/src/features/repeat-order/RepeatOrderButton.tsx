@@ -18,7 +18,9 @@ const REASONS: Record<RepeatOrderResponse['unavailable'][number]['reason'], stri
 };
 
 type RepeatOrderButtonProps = {
-  order: Pick<Order, 'id' | 'items'>;
+  orderId: string;
+  /** Позиции заказа — нужны только гостю, у которого корзина в браузере. */
+  items?: Order['items'] | undefined;
   viewer: User | null;
   /** «Повторить заказ» в кабинете или «Вернуть образцы в корзину» после отказа оплаты. */
   label: string;
@@ -31,23 +33,31 @@ type RepeatOrderButtonProps = {
  * недоступное. Гостю (после отказа оплаты) — локальная корзина; цены и наличие покажет
  * корзина, как обычно.
  */
-export function RepeatOrderButton({ order, viewer, label, variant, size }: RepeatOrderButtonProps) {
+export function RepeatOrderButton({
+  orderId,
+  items = [],
+  viewer,
+  label,
+  variant,
+  size,
+}: RepeatOrderButtonProps) {
   const queryClient = useQueryClient();
   const navigate = useNavigate();
 
   const repeat = useMutation({
     mutationFn: async (): Promise<RepeatOrderResponse['unavailable']> => {
       if (!viewer) {
-        const { items, setQuantity } = useGuestCart.getState();
-        for (const item of order.items) {
+        const guest = useGuestCart.getState();
+        for (const item of items) {
           if (!item.variantId) continue;
-          const current = items.find((line) => line.variantId === item.variantId)?.quantity ?? 0;
-          setQuantity(item.variantId, current + item.quantity);
+          const current =
+            guest.items.find((line) => line.variantId === item.variantId)?.quantity ?? 0;
+          guest.setQuantity(item.variantId, current + item.quantity);
         }
         return [];
       }
       const response = await apiRequest(
-        `/api/orders/${order.id}/repeat`,
+        `/api/orders/${orderId}/repeat`,
         repeatOrderResponseSchema,
         { method: 'POST' },
       );

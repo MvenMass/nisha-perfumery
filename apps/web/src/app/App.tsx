@@ -2,7 +2,11 @@ import { createBrowserRouter, RouterProvider } from 'react-router';
 import type { RouteObject } from 'react-router';
 
 import { AccountPage } from '../pages/account/AccountPage';
-import { LoginPage, RegisterPage } from '../pages/auth/AuthPages';
+import { AddressesSection } from '../pages/account/AddressesSection';
+import { OrderDetailSection } from '../pages/account/OrderDetailSection';
+import { OrdersSection } from '../pages/account/OrdersSection';
+import { ProfileSection } from '../pages/account/ProfileSection';
+import { LoginPage, RegisterPage, SetPasswordPage } from '../pages/auth/AuthPages';
 import { CartPage } from '../pages/cart/CartPage';
 import { CatalogPage } from '../pages/catalog/CatalogPage';
 import { CheckoutPage } from '../pages/checkout/CheckoutPage';
@@ -38,7 +42,14 @@ const shopRoutes: RouteObject[] = [
         <AccountPage />
       </RequireAuth>
     ),
+    children: [
+      { index: true, element: <ProfileSection /> },
+      { path: 'orders', element: <OrdersSection /> },
+      { path: 'orders/:orderId', element: <OrderDetailSection /> },
+      { path: 'addresses', element: <AddressesSection /> },
+    ],
   },
+  { path: 'set-password', element: <SetPasswordPage /> },
   { path: '*', element: <NotFoundPage /> },
 ];
 

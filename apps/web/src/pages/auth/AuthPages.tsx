@@ -3,7 +3,7 @@ import { Link, Navigate, useNavigate, useSearchParams } from 'react-router';
 
 import { useMe } from '../../entities/user/queries';
 import { safeNext } from '../../features/auth/auth-utils';
-import { LoginForm, RegisterForm } from '../../features/auth/AuthForms';
+import { LoginForm, RegisterForm, SetPasswordForm } from '../../features/auth/AuthForms';
 import { useMeta } from '../../shared/lib/useMeta';
 import { Container } from '../../shared/ui/Container/Container';
 import { SectionLabel } from '../../shared/ui/SectionLabel/SectionLabel';
@@ -81,6 +81,45 @@ export function RegisterPage() {
       }
     >
       <RegisterForm onSuccess={goNext} />
+    </AuthLayout>
+  );
+}
+
+/**
+ * «Задать пароль» по ссылке из письма после гостевого заказа (D-060). Если ссылки нет
+ * в адресе, объясняем, откуда её взять, — форма без токена бесполезна.
+ */
+export function SetPasswordPage() {
+  useMeta('Задать пароль');
+  const [params] = useSearchParams();
+  const token = params.get('token');
+  const navigate = useNavigate();
+
+  return (
+    <AuthLayout
+      title="Пароль"
+      footer={
+        <>
+          Уже задавали пароль? <Link to="/login?next=/account/orders">Войти</Link>
+        </>
+      }
+    >
+      {token ? (
+        <>
+          <p className={styles.lead}>
+            Задайте пароль, чтобы видеть свои заказы в&nbsp;личном кабинете.
+          </p>
+          <SetPasswordForm
+            token={token}
+            onSuccess={() => void navigate('/account/orders', { replace: true })}
+          />
+        </>
+      ) : (
+        <p className={styles.lead}>
+          Откройте ссылку из&nbsp;письма, которое пришло после заказа. Если письма нет, оформите
+          заказ или зарегистрируйтесь.
+        </p>
+      )}
     </AuthLayout>
   );
 }

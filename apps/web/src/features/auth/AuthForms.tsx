@@ -1,4 +1,8 @@
-import { loginRequestSchema, registerRequestSchema } from '@nisha/contracts';
+import {
+  loginRequestSchema,
+  registerRequestSchema,
+  setPasswordRequestSchema,
+} from '@nisha/contracts';
 import type { LoginRequest, RegisterRequest } from '@nisha/contracts';
 import { useState } from 'react';
 import type { FormEvent } from 'react';
@@ -8,7 +12,7 @@ import { Button } from '../../shared/ui/Button/Button';
 import { Input } from '../../shared/ui/Field/Input';
 import { authErrorMessage } from './auth-utils';
 import styles from './AuthForms.module.css';
-import { useLogin, useRegister } from './mutations';
+import { useLogin, useRegister, useSetPassword } from './mutations';
 
 type FormProps = { onSuccess: () => void };
 
@@ -118,6 +122,45 @@ export function RegisterForm({ onSuccess }: FormProps) {
       <FormAlert message={alert} />
       <Button type="submit" size="xl" fullWidth disabled={register.isPending}>
         {register.isPending ? 'Создаём…' : 'Создать аккаунт'}
+      </Button>
+    </form>
+  );
+}
+
+/** Пароль для гостевого аккаунта по ссылке из письма (D-060). */
+export function SetPasswordForm({ token, onSuccess }: FormProps & { token: string }) {
+  const setPassword = useSetPassword();
+  const [errors, setErrors] = useState<Record<string, string>>({});
+  const [alert, setAlert] = useState<string>();
+
+  const submit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const parsed = setPasswordRequestSchema.safeParse({ ...readForm(event), token });
+    if (!parsed.success) {
+      setErrors(fieldErrors(parsed.error));
+      return;
+    }
+    setErrors({});
+    setAlert(undefined);
+    setPassword.mutate(parsed.data, {
+      onSuccess,
+      onError: (error) => setAlert(authErrorMessage(error).message),
+    });
+  };
+
+  return (
+    <form className={styles.form} onSubmit={submit} noValidate>
+      <Input
+        label="Новый пароль"
+        name="password"
+        type="password"
+        autoComplete="new-password"
+        hint="Не короче 8 символов"
+        error={errors.password}
+      />
+      <FormAlert message={alert ?? errors.token} />
+      <Button type="submit" size="xl" fullWidth disabled={setPassword.isPending}>
+        {setPassword.isPending ? 'Сохраняем…' : 'Задать пароль'}
       </Button>
     </form>
   );
