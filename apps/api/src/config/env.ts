@@ -14,6 +14,8 @@ const envSchema = z.object({
   DATABASE_URL: databaseUrlSchema,
   // Secure-cookie по умолчанию только в production: Safari не принимает их на http://localhost.
   COOKIE_SECURE: z.stringbool().optional(),
+  // Пока есть только мок-провайдер; ЮKassa добавится значением этого же enum.
+  PAYMENT_PROVIDER: z.enum(['mock']).default('mock'),
 });
 
 export type Env = z.infer<typeof envSchema>;

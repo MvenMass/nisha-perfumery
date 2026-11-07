@@ -4,11 +4,15 @@ import { loadEnv } from '../config/env';
 import { runSeed } from '../database/seed';
 import { createTestDatabase } from '../database/test-database';
 import { SESSION_COOKIE } from '../modules/auth/session';
+import { createMemoryMailer } from '../modules/mailer/mailer';
+import type { Mail } from '../modules/mailer/mailer';
 import type { TestDatabase } from '../database/test-database';
 
 export type TestApp = {
   app: App;
   testDb: TestDatabase;
+  /** Письма, «отправленные» приложением за время теста. */
+  mails: Mail[];
   close: () => Promise<void>;
 };
 
@@ -34,10 +38,12 @@ export async function createTestApp(): Promise<TestApp> {
     WEB_ORIGIN: 'https://nisha.test',
     DATABASE_URL: testDb.url,
   });
-  const app = await buildApp({ env, db: testDb.db });
+  const mailer = createMemoryMailer();
+  const app = await buildApp({ env, db: testDb.db, mailer });
   return {
     app,
     testDb,
+    mails: mailer.sent,
     close: async () => {
       await app.close();
       await testDb.drop();

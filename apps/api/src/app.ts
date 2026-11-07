@@ -12,6 +12,8 @@ import { catalogRoutes } from './modules/catalog/catalog.routes';
 import { favoritesRoutes } from './modules/favorites/favorites.routes';
 import { healthRoutes } from './modules/health/health.routes';
 import { homeRoutes } from './modules/home/home.routes';
+import { createConsoleMailer } from './modules/mailer/mailer';
+import type { Mailer } from './modules/mailer/mailer';
 import { stockNotificationRoutes } from './modules/stock-notifications/stock-notifications.routes';
 import { storeRoutes } from './modules/store/store.routes';
 import { setupAuth } from './plugins/auth';
@@ -23,6 +25,8 @@ import { setupSecurity } from './plugins/security';
 declare module 'fastify' {
   interface FastifyInstance {
     db: Database;
+    env: Env;
+    mailer: Mailer;
   }
 }
 
@@ -30,9 +34,11 @@ type AppDeps = {
   env: Env;
   /** Пулом владеет вызывающий код: сервер закрывает его при остановке, тесты — вместе с базой. */
   db: Database;
+  /** По умолчанию письма пишутся в лог; тесты подставляют mailer, который их запоминает. */
+  mailer?: Mailer;
 };
 
-export async function buildApp({ env, db }: AppDeps) {
+export async function buildApp({ env, db, mailer }: AppDeps) {
   const app = Fastify({
     logger:
       env.NODE_ENV === 'test'
@@ -46,6 +52,8 @@ export async function buildApp({ env, db }: AppDeps) {
   app.setValidatorCompiler(validatorCompiler);
   app.setSerializerCompiler(serializerCompiler);
   app.decorate('db', db);
+  app.decorate('env', env);
+  app.decorate('mailer', mailer ?? createConsoleMailer(app.log));
 
   setupErrorHandling(app);
   await setupSecurity(app, env.WEB_ORIGIN);

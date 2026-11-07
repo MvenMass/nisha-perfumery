@@ -414,6 +414,8 @@ export const orders = pgTable(
     totalKopecks: integer().notNull(),
     // Повторная отправка формы с тем же ключом не создаёт второй заказ.
     idempotencyKey: text().notNull(),
+    // SHA-256 ключа из ссылки, по которой гость открывает оплату и подтверждение без входа (D-060).
+    accessTokenHash: text(),
     // Неоплаченный заказ отменяется по истечении срока, остатки возвращаются (D-016).
     paymentExpiresAt: timestamp({ withTimezone: true }),
     createdAt: createdAt(),
@@ -421,6 +423,7 @@ export const orders = pgTable(
   },
   (t) => [
     unique('orders_user_idempotency_unique').on(t.userId, t.idempotencyKey),
+    uniqueIndex('orders_access_token_hash_unique').on(t.accessTokenHash),
     check('orders_items_total_positive', sql`${t.itemsTotalKopecks} > 0`),
     check('orders_delivery_price_non_negative', sql`${t.deliveryPriceKopecks} >= 0`),
     check(
