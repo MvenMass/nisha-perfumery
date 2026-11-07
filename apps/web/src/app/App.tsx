@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router';
 import type { RouteObject } from 'react-router';
 
+import { LoginPage, RegisterPage } from '../pages/auth/AuthPages';
 import { CatalogPage } from '../pages/catalog/CatalogPage';
 import { FragranceFinderPage } from '../pages/fragrance-finder/FragranceFinderPage';
 import { HomePage } from '../pages/home/HomePage';
@@ -17,6 +18,8 @@ const shopRoutes: RouteObject[] = [
   { path: 'catalog', element: <CatalogPage /> },
   { path: 'catalog/:slug', element: <ProductPage /> },
   { path: 'fragrance-finder', element: <FragranceFinderPage /> },
+  { path: 'login', element: <LoginPage /> },
+  { path: 'register', element: <RegisterPage /> },
   { path: '*', element: <NotFoundPage /> },
 ];
 
