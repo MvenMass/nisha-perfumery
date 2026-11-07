@@ -15,6 +15,8 @@ import { healthRoutes } from './modules/health/health.routes';
 import { homeRoutes } from './modules/home/home.routes';
 import { createConsoleMailer } from './modules/mailer/mailer';
 import type { Mailer } from './modules/mailer/mailer';
+import { ordersRoutes } from './modules/orders/orders.routes';
+import { mockPaymentRoutes } from './modules/payments/payments.routes';
 import { stockNotificationRoutes } from './modules/stock-notifications/stock-notifications.routes';
 import { storeRoutes } from './modules/store/store.routes';
 import { setupAuth } from './plugins/auth';
@@ -72,6 +74,8 @@ export async function buildApp({ env, db, mailer }: AppDeps) {
   await app.register(cartRoutes, { prefix: '/api' });
   await app.register(favoritesRoutes, { prefix: '/api' });
   await app.register(checkoutRoutes, { prefix: '/api' });
+  await app.register(ordersRoutes, { prefix: '/api' });
+  if (env.PAYMENT_PROVIDER === 'mock') await app.register(mockPaymentRoutes, { prefix: '/api' });
 
   return app;
 }

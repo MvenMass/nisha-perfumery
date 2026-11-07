@@ -1,6 +1,6 @@
 import { z } from 'zod';
 
-import { emailSchema, uuidSchema } from './common';
+import { emailSchema, phoneSchema, uuidSchema } from './common';
 
 // Верхняя граница защищает argon2 от гигантских строк; нижняя — минимальная разумная длина.
 export const passwordSchema = z
@@ -51,3 +51,17 @@ export const meResponseSchema = z.object({
   user: userSchema.nullable(),
 });
 export type MeResponse = z.infer<typeof meResponseSchema>;
+
+/** POST /auth/set-password — пароль для гостевого аккаунта по ссылке из письма (D-060). */
+export const setPasswordRequestSchema = z.object({
+  token: z.string().min(16).max(128),
+  password: passwordSchema,
+});
+export type SetPasswordRequest = z.infer<typeof setPasswordRequestSchema>;
+
+/** PATCH /auth/me — имя и телефон; телефон подставляется в контакты при оформлении. */
+export const updateProfileRequestSchema = z.object({
+  name: personNameSchema,
+  phone: phoneSchema.nullable(),
+});
+export type UpdateProfileRequest = z.infer<typeof updateProfileRequestSchema>;

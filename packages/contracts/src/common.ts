@@ -17,6 +17,11 @@ export const emailSchema = z
   .toLowerCase()
   .pipe(z.email('Проверьте адрес почты').max(254, 'Слишком длинный адрес'));
 
+export const phoneSchema = z
+  .string()
+  .trim()
+  .regex(/^\+?[\d\s()-]{10,20}$/, 'Проверьте номер телефона');
+
 export const isoDateTimeSchema = z.iso.datetime({ offset: true });
 
 export const densitySchema = z.enum(['light', 'medium', 'high']);

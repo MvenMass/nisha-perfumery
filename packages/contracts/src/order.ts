@@ -9,6 +9,7 @@ import {
   isoDateTimeSchema,
   kopecksSchema,
   paginationSchema,
+  phoneSchema,
   positiveKopecksSchema,
   slugSchema,
   uuidSchema,
@@ -32,10 +33,7 @@ export type DeliveryMethod = z.infer<typeof deliveryMethodSchema>;
 
 export const contactSchema = z.object({
   name: personNameSchema,
-  phone: z
-    .string()
-    .trim()
-    .regex(/^\+?[\d\s()-]{10,20}$/, 'Проверьте номер телефона'),
+  phone: phoneSchema,
   email: emailSchema,
 });
 export type Contact = z.infer<typeof contactSchema>;
@@ -117,6 +115,34 @@ export const orderSchema = z.object({
   paymentExpiresAt: isoDateTimeSchema.nullable(),
 });
 export type Order = z.infer<typeof orderSchema>;
+
+/**
+ * Ответ POST /orders. accessToken — только для заказа без входа: по нему гость открывает
+ * оплату и подтверждение (D-060). У вошедшего — null, доступ даёт сессия.
+ */
+export const createOrderResponseSchema = z.object({
+  order: orderSchema,
+  accessToken: z.string().nullable(),
+});
+export type CreateOrderResponse = z.infer<typeof createOrderResponseSchema>;
+
+export const orderParamsSchema = z.object({ id: uuidSchema });
+
+/** GET /orders/:id?token=… — ключ гостевого доступа к заказу. */
+export const orderAccessQuerySchema = z.object({
+  token: z.string().min(16).max(128).optional(),
+});
+
+/**
+ * POST /payments/mock/notify — аналог уведомления платёжного провайдера для мок-оплаты.
+ * Настоящий провайдер присылает такое уведомление сам; здесь его отправляет страница оплаты.
+ */
+export const mockPaymentNotifySchema = z.object({
+  orderId: uuidSchema,
+  token: z.string().min(16).max(128).optional(),
+  result: z.enum(['succeeded', 'failed']),
+});
+export type MockPaymentNotify = z.infer<typeof mockPaymentNotifySchema>;
 
 /** Вкладки кабинета: активные — до «Доставлен», завершённые — доставленные и отменённые (D-017). */
 export const orderListQuerySchema = z
