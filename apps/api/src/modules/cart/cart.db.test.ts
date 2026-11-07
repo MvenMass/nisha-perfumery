@@ -201,6 +201,21 @@ describe('слияние гостевой корзины', () => {
     ]);
   });
 
+  it('сохраняет порядок гостевых позиций', async () => {
+    const user = await newUser();
+    const ids = [
+      (await variant('walnut', 30)).id,
+      (await variant('limestone', 30)).id,
+      (await variant('amber', 30)).id,
+    ];
+    const body = await cart(
+      await request('POST', '/api/cart/merge', user, {
+        items: ids.map((variantId) => ({ variantId, quantity: 1 })),
+      }),
+    );
+    expect(body.lines.map((line) => line.variantId)).toEqual(ids);
+  });
+
   it('сохраняет закончившуюся позицию с пометкой', async () => {
     const user = await newUser();
     const obsidian = await variant('obsidian', 30);
