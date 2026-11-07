@@ -81,7 +81,14 @@ export async function upsertCartItem(
 ): Promise<void> {
   await db
     .insert(cartItems)
-    .values({ cartId, variantId: item.variantId, quantity: item.quantity })
+    // clock_timestamp, а не now(): now() одинаков на всю транзакцию, и позиции, перенесённые
+    // одним слиянием, потеряли бы порядок добавления.
+    .values({
+      cartId,
+      variantId: item.variantId,
+      quantity: item.quantity,
+      addedAt: sql`clock_timestamp()`,
+    })
     .onConflictDoUpdate({
       target: [cartItems.cartId, cartItems.variantId],
       set: { quantity: item.quantity },
