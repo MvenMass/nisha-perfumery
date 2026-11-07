@@ -13,7 +13,7 @@ import type {
 import { and, eq } from 'drizzle-orm';
 
 import type { Database, DbExecutor } from '../../database/client';
-import { addresses, cartItems, orderItems, orders, payments } from '../../database/schema';
+import { addresses, cartItems, orderItems, orders, payments, users } from '../../database/schema';
 import { AppError } from '../../shared/errors';
 import { hashToken, newToken } from '../../shared/token';
 import { insertAddress } from '../addresses/addresses.service';
@@ -30,6 +30,7 @@ import {
   addHistory,
   changeStock,
   findExpiredOrderIds,
+  findHistories,
   findItemsWithImages,
   findOrderByKey,
   findOrderItems,
@@ -221,6 +222,10 @@ async function createInTransaction(
     if (viewer) {
       const cartId = await findCartId(tx, viewer.id);
       if (cartId) await tx.delete(cartItems).where(eq(cartItems.cartId, cartId));
+      // Телефон из первого заказа запоминаем в профиле — в следующий раз форма подставит его сама.
+      if (!viewer.phone) {
+        await tx.update(users).set({ phone: request.contact.phone }).where(eq(users.id, viewer.id));
+      }
     }
     return { row, accessToken, ownerHasPassword: owner.hasPassword };
   });
@@ -367,10 +372,11 @@ export async function listOrders(
         ? DONE_STATUSES
         : undefined;
   const { rows, total } = await findUserOrders(db, userId, statuses, query);
-  const items = await findItemsWithImages(
-    db,
-    rows.map((row) => row.id),
-  );
+  const ids = rows.map((row) => row.id);
+  const [items, histories] = await Promise.all([
+    findItemsWithImages(db, ids),
+    findHistories(db, ids),
+  ]);
   return {
     total,
     items: rows.map((row) => {
@@ -385,6 +391,9 @@ export async function listOrders(
         productNames: [...new Set(own.map((item) => item.productName))],
         bottlesCount: own.reduce((sum, item) => sum + item.quantity, 0),
         images: own.flatMap((item) => (item.image ? [item.image] : [])).slice(0, 3),
+        history: histories
+          .filter((event) => event.orderId === row.id)
+          .map((event) => ({ status: event.status, at: event.at.toISOString() })),
       };
     }),
   };

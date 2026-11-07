@@ -80,6 +80,7 @@ describe('история заказов', () => {
     expect(all.total).toBe(2);
     expect(all.items.map((item) => item.id)).toEqual([second.id, first.id]);
     expect(all.items[0]).toMatchObject({ productNames: ['Орех', 'Янтарь'], bottlesCount: 2 });
+    expect(all.items[0]?.history.map((event) => event.status)).toEqual(['pending']);
 
     const active = orderListResponseSchema.parse(
       (await request('GET', '/api/orders?filter=active', user)).json(),

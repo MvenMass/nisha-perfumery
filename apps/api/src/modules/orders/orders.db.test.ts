@@ -141,6 +141,12 @@ describe('оформление пользователем', () => {
     expect(await stock(limestone.id)).toBe(before - 2);
     expect(await ctx.testDb.db.select().from(cartItems)).toHaveLength(0);
 
+    const [profile] = await ctx.testDb.db
+      .select({ phone: users.phone })
+      .from(users)
+      .where(eq(users.email, 'buyer@nisha.test'));
+    expect(profile?.phone).toBe('+7 900 000-00-00');
+
     const saved = await ctx.testDb.db.select().from(addresses);
     expect(saved.map((row) => row.street)).toEqual(['Тверская, 1']);
     const [payment] = await ctx.testDb.db

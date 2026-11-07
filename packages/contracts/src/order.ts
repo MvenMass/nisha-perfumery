@@ -160,6 +160,8 @@ export const orderListItemSchema = z.object({
   productNames: z.array(z.string()),
   bottlesCount: z.number().int().positive(),
   images: z.array(imageSchema),
+  /** Для шкалы статуса активного заказа прямо в списке, как в account.html. */
+  history: z.array(orderStatusEventSchema),
 });
 export type OrderListItem = z.infer<typeof orderListItemSchema>;
 

@@ -172,3 +172,16 @@ export async function findItemsWithImages(db: DbExecutor, orderIds: string[]) {
     .where(inArray(orderItems.orderId, orderIds))
     .orderBy(asc(orderItems.id));
 }
+
+export async function findHistories(db: DbExecutor, orderIds: string[]) {
+  if (orderIds.length === 0) return [];
+  return db
+    .select({
+      orderId: orderStatusHistory.orderId,
+      status: orderStatusHistory.status,
+      at: orderStatusHistory.createdAt,
+    })
+    .from(orderStatusHistory)
+    .where(inArray(orderStatusHistory.orderId, orderIds))
+    .orderBy(asc(orderStatusHistory.createdAt));
+}
