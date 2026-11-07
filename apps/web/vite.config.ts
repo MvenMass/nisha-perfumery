@@ -1,7 +1,10 @@
+import process from 'node:process';
+
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
 
-const apiProxy = { '/api': 'http://localhost:3000' };
+// e2e поднимает свой api на другом порту, чтобы не конфликтовать с открытым pnpm dev.
+const apiProxy = { '/api': process.env.API_PROXY_TARGET ?? 'http://localhost:3000' };
 
 export default defineConfig({
   plugins: [react()],
