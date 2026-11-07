@@ -32,3 +32,9 @@ export const addressSchema = z.object({
   isDefault: z.boolean(),
 });
 export type Address = z.infer<typeof addressSchema>;
+
+export const addressParamsSchema = z.object({ id: uuidSchema });
+
+/** Адрес по умолчанию — первым, дальше — от новых к старым. */
+export const addressesResponseSchema = z.object({ items: z.array(addressSchema) });
+export type AddressesResponse = z.infer<typeof addressesResponseSchema>;

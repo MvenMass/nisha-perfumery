@@ -2,13 +2,17 @@ import {
   createOrderRequestSchema,
   createOrderResponseSchema,
   orderAccessQuerySchema,
+  orderListQuerySchema,
+  orderListResponseSchema,
   orderParamsSchema,
   orderSchema,
+  repeatOrderResponseSchema,
 } from '@nisha/contracts';
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
+import { requireAuth, signedInUser } from '../../plugins/auth';
 import { mockPaymentProvider } from '../payments/provider';
-import { createOrder, getOrder } from './orders.service';
+import { createOrder, getOrder, listOrders, repeatOrder } from './orders.service';
 
 export const ordersRoutes: FastifyPluginAsyncZod = async (app) => {
   const deps = () => ({
@@ -42,5 +46,23 @@ export const ordersRoutes: FastifyPluginAsyncZod = async (app) => {
       },
     },
     async (request) => getOrder(app.db, request.params.id, request.user, request.query.token),
+  );
+
+  app.get(
+    '/orders',
+    {
+      preHandler: requireAuth,
+      schema: { querystring: orderListQuerySchema, response: { 200: orderListResponseSchema } },
+    },
+    async (request) => listOrders(app.db, signedInUser(request).id, request.query),
+  );
+
+  app.post(
+    '/orders/:id/repeat',
+    {
+      preHandler: requireAuth,
+      schema: { params: orderParamsSchema, response: { 200: repeatOrderResponseSchema } },
+    },
+    async (request) => repeatOrder(app.db, request.params.id, signedInUser(request)),
   );
 };

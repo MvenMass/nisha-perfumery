@@ -1,9 +1,13 @@
 import type {
+  CartItemInput,
   CartLine,
   CreateOrderRequest,
   CreateOrderResponse,
   DeliveryAddressSnapshot,
   Order,
+  OrderListQuery,
+  OrderListResponse,
+  RepeatOrderResponse,
   User,
 } from '@nisha/contracts';
 import { and, eq } from 'drizzle-orm';
@@ -12,21 +16,25 @@ import type { Database, DbExecutor } from '../../database/client';
 import { addresses, cartItems, orderItems, orders, payments } from '../../database/schema';
 import { AppError } from '../../shared/errors';
 import { hashToken, newToken } from '../../shared/token';
+import { insertAddress } from '../addresses/addresses.service';
 import { issuePasswordToken, sendSetPasswordMail } from '../auth/password-link';
-import { findCartId } from '../cart/cart.repository';
+import { findCartId, findVariants } from '../cart/cart.repository';
+import { mergeCart } from '../cart/cart.service';
 import { checkoutItems, quoteCheckout } from '../checkout/checkout.service';
 import { findPickupPoint } from '../delivery/pickup-points';
 import type { Mailer } from '../mailer/mailer';
 import type { PaymentProvider } from '../payments/provider';
 import { resolveGuestOwner } from './guest-account';
-import { assertTransition } from './order-status';
+import { ACTIVE_STATUSES, assertTransition, DONE_STATUSES } from './order-status';
 import {
   addHistory,
   changeStock,
   findExpiredOrderIds,
+  findItemsWithImages,
   findOrderByKey,
   findOrderItems,
   findOrderRow,
+  findUserOrders,
   loadOrder,
   lockVariants,
 } from './orders.repository';
@@ -90,16 +98,7 @@ async function resolveDelivery(
   }
 
   const { newAddress, save } = delivery.address;
-  if (viewer && save) {
-    await db.insert(addresses).values({
-      userId: viewer.id,
-      label: newAddress.label,
-      city: newAddress.city,
-      street: newAddress.street,
-      apartment: newAddress.apartment ?? null,
-      comment: newAddress.comment ?? null,
-    });
-  }
+  if (viewer && save) await insertAddress(db, viewer.id, newAddress, 'skip');
   return {
     address: {
       kind: 'courier',
@@ -353,4 +352,76 @@ export async function getOrder(
   token: string | undefined,
 ): Promise<Order> {
   return loadOrder(db, await findAccessibleOrder(db, orderId, viewer, token));
+}
+
+/** История в кабинете с вкладками «Все / Активные / Завершённые» (D-017). */
+export async function listOrders(
+  db: Database,
+  userId: string,
+  query: OrderListQuery,
+): Promise<OrderListResponse> {
+  const statuses =
+    query.filter === 'active'
+      ? ACTIVE_STATUSES
+      : query.filter === 'done'
+        ? DONE_STATUSES
+        : undefined;
+  const { rows, total } = await findUserOrders(db, userId, statuses, query);
+  const items = await findItemsWithImages(
+    db,
+    rows.map((row) => row.id),
+  );
+  return {
+    total,
+    items: rows.map((row) => {
+      const own = items.filter((item) => item.orderId === row.id);
+      return {
+        id: row.id,
+        number: row.number,
+        status: row.status,
+        createdAt: row.createdAt.toISOString(),
+        deliveryMethod: row.deliveryMethod,
+        totalKopecks: row.totalKopecks,
+        productNames: [...new Set(own.map((item) => item.productName))],
+        bottlesCount: own.reduce((sum, item) => sum + item.quantity, 0),
+        images: own.flatMap((item) => (item.image ? [item.image] : [])).slice(0, 3),
+      };
+    }),
+  };
+}
+
+/**
+ * «Повторить заказ» (D-041): доступное кладётся в корзину по текущим ценам по правилам
+ * слияния (сумма с тем, что уже лежит, с обрезкой остатком); недоступное возвращается с причиной.
+ */
+export async function repeatOrder(
+  db: Database,
+  orderId: string,
+  user: User,
+): Promise<RepeatOrderResponse> {
+  const row = await findAccessibleOrder(db, orderId, user, undefined);
+  const items = await findOrderItems(db, row.id);
+  const variants = new Map(
+    (
+      await findVariants(
+        db,
+        items.flatMap((item) => (item.variantId ? [item.variantId] : [])),
+      )
+    ).map((variant) => [variant.variantId, variant]),
+  );
+
+  const available: CartItemInput[] = [];
+  const unavailable: RepeatOrderResponse['unavailable'] = [];
+  for (const item of items) {
+    const variant = item.variantId ? variants.get(item.variantId) : undefined;
+    const base = { productName: item.productName, volumeMl: item.volumeMl };
+    if (!variant) unavailable.push({ ...base, reason: 'removed' });
+    else if (!variant.isPublished || !variant.isActive)
+      unavailable.push({ ...base, reason: 'unpublished' });
+    else if (variant.stock === 0) unavailable.push({ ...base, reason: 'out_of_stock' });
+    else available.push({ variantId: variant.variantId, quantity: item.quantity });
+  }
+
+  const cart = await mergeCart(db, user.id, available);
+  return { cart, unavailable };
 }
