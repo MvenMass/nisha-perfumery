@@ -1,0 +1,268 @@
+/* Корзина по cart.html; на 360 итог уходит под список, как остальные мобильные экраны. */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-32);
+  padding-top: var(--sp-32);
+  padding-bottom: var(--sp-72);
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-16);
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: var(--fs-page-title);
+  font-weight: 400;
+  line-height: var(--lh-none);
+  text-transform: uppercase;
+}
+
+.count {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  color: var(--color-text-muted);
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-40);
+}
+
+.lines {
+  min-width: 0;
+  border-top: var(--border-1) solid var(--color-line-strong);
+}
+
+/* Позиция: на 360 фото и описание в первой строке, степпер, сумма и удаление — во второй. */
+.line {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-16) var(--sp-24);
+  align-items: center;
+  padding: var(--sp-24) 0;
+  border-bottom: var(--border-1) solid var(--color-line);
+}
+
+.skeletonLine {
+  display: flex;
+  gap: var(--sp-24);
+  align-items: center;
+  padding: var(--sp-24) 0;
+  border-bottom: var(--border-1) solid var(--color-line);
+}
+
+.media {
+  position: relative;
+  flex: 0 0 96px;
+  height: 120px;
+  overflow: hidden;
+  background: var(--color-basalt);
+}
+
+/* Затемняется только фото закончившейся позиции, текст остаётся контрастным. */
+.mediaMissing {
+  opacity: 0.6;
+}
+
+.photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.info {
+  display: flex;
+  flex: 1 1 160px;
+  flex-direction: column;
+  gap: var(--sp-8);
+  min-width: 0;
+}
+
+.number {
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-10);
+  color: var(--color-copper);
+}
+
+.name {
+  font-family: var(--font-serif);
+  font-size: var(--fs-28);
+  line-height: var(--lh-none);
+  color: var(--color-text);
+}
+
+.name:hover {
+  color: var(--color-copper);
+}
+
+.meta {
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  color: var(--color-text-muted);
+}
+
+.status {
+  display: flex;
+  gap: var(--sp-8);
+  align-items: flex-start;
+  font-size: var(--fs-13);
+  line-height: var(--lh-snug);
+  color: var(--color-copper);
+}
+
+.status svg {
+  flex: none;
+  margin-top: var(--sp-2);
+}
+
+.lineTotal {
+  flex: 1 1 auto;
+  font-size: var(--fs-17);
+  text-align: right;
+}
+
+.remove {
+  color: var(--color-text-muted);
+}
+
+.notify {
+  flex: 1 1 100%;
+}
+
+.continue {
+  padding-top: var(--sp-24);
+}
+
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-20);
+  padding: var(--sp-24);
+  background: var(--color-surface);
+  border: var(--border-1) solid var(--color-line-strong);
+}
+
+.summary[aria-busy='true'] .summaryList dd,
+.summary[aria-busy='true'] .totalValue {
+  opacity: 0.6;
+}
+
+.summaryLabel {
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-12);
+  color: var(--color-copper);
+}
+
+.summaryList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+  font-size: var(--fs-14);
+}
+
+.summaryRow {
+  display: flex;
+  gap: var(--sp-16);
+  justify-content: space-between;
+}
+
+.summaryRow dt {
+  color: var(--color-text-muted);
+}
+
+.summaryRow dd {
+  margin: 0;
+  text-align: right;
+}
+
+.total {
+  display: flex;
+  gap: var(--sp-16);
+  align-items: baseline;
+  justify-content: space-between;
+  padding-top: var(--sp-16);
+  border-top: var(--border-1) solid var(--color-line-strong);
+}
+
+.totalLabel {
+  font-family: var(--font-serif);
+  font-size: var(--fs-26);
+}
+
+.totalValue {
+  font-size: var(--fs-26);
+  font-weight: 500;
+}
+
+.soon {
+  font-size: var(--fs-12);
+  color: var(--color-text-muted);
+}
+
+.perk {
+  display: flex;
+  gap: var(--sp-10);
+  font-size: var(--fs-12);
+  line-height: var(--lh-normal);
+  color: var(--color-text-muted);
+}
+
+.perk svg {
+  flex: none;
+  color: var(--color-copper);
+}
+
+@media (--md) {
+  .media {
+    flex-basis: 120px;
+    height: 150px;
+  }
+
+  .info {
+    flex-basis: 220px;
+  }
+
+  .lineTotal {
+    flex: 0 0 120px;
+  }
+
+  .summary {
+    padding: var(--sp-32);
+  }
+}
+
+@media (--lg) {
+  .page {
+    gap: var(--sp-40);
+    padding-top: var(--sp-40);
+    padding-bottom: var(--sp-120);
+  }
+
+  .layout {
+    flex-direction: row;
+    gap: var(--sp-48);
+    align-items: flex-start;
+  }
+
+  .lines {
+    flex: 1 1 auto;
+  }
+
+  .summary {
+    position: sticky;
+    top: calc(var(--header-h-wide) + var(--sp-24));
+    flex: 0 0 400px;
+  }
+}

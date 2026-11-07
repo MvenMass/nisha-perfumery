@@ -3,10 +3,10 @@ import type { RouteObject } from 'react-router';
 
 import { AccountPage } from '../pages/account/AccountPage';
 import { LoginPage, RegisterPage } from '../pages/auth/AuthPages';
+import { CartPage } from '../pages/cart/CartPage';
 import { CatalogPage } from '../pages/catalog/CatalogPage';
 import { FragranceFinderPage } from '../pages/fragrance-finder/FragranceFinderPage';
 import { HomePage } from '../pages/home/HomePage';
-
 import { ProductPage } from '../pages/product/ProductPage';
 import { NotFoundPage } from '../widgets/not-found/NotFoundPage';
 import { RouteErrorPage } from '../widgets/not-found/RouteErrorPage';
@@ -20,6 +20,7 @@ const shopRoutes: RouteObject[] = [
   { path: 'catalog', element: <CatalogPage /> },
   { path: 'catalog/:slug', element: <ProductPage /> },
   { path: 'fragrance-finder', element: <FragranceFinderPage /> },
+  { path: 'cart', element: <CartPage /> },
   { path: 'login', element: <LoginPage /> },
   { path: 'register', element: <RegisterPage /> },
   {

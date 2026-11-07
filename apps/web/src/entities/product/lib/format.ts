@@ -24,3 +24,6 @@ export const specimensCount = (count: number) =>
 
 export const bottlesLeft = (count: number) =>
   `Осталось ${count}${NBSP}${plural(count, ['флакон', 'флакона', 'флаконов'])}`;
+
+export const bottlesCount = (count: number) =>
+  `${count}${NBSP}${plural(count, ['флакон', 'флакона', 'флаконов'])}`;

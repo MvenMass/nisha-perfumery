@@ -20,7 +20,8 @@ const NAV_ITEMS = [
 
 const ROUTES = {
   account: '/account',
-  favorites: '/account/favorites',
+  // Избранное доступно и гостю (D-040), поэтому не внутри кабинета.
+  favorites: '/favorites',
   cart: '/cart',
 };
 
