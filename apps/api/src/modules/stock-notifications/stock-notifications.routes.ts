@@ -15,7 +15,7 @@ export const stockNotificationRoutes: FastifyPluginAsyncZod = async (app) => {
       },
     },
     async (request, reply) => {
-      const { created, body } = await subscribeToRestock(app.db, request.body);
+      const { created, body } = await subscribeToRestock(app.db, request.body, request.user);
       return reply.code(created ? 201 : 200).send(body);
     },
   );

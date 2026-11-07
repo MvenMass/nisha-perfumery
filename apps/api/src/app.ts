@@ -6,6 +6,7 @@ import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 import { cookieSecure } from './config/env';
 import type { Env } from './config/env';
 import type { Database } from './database/client';
+import { authRoutes } from './modules/auth/auth.routes';
 import { catalogRoutes } from './modules/catalog/catalog.routes';
 import { healthRoutes } from './modules/health/health.routes';
 import { homeRoutes } from './modules/home/home.routes';
@@ -52,6 +53,7 @@ export async function buildApp({ env, db }: AppDeps) {
   setupCsrf(app, { webOrigin: env.WEB_ORIGIN });
 
   await app.register(healthRoutes, { prefix: '/api' });
+  await app.register(authRoutes, { prefix: '/api', secure: cookieSecure(env) });
   await app.register(catalogRoutes, { prefix: '/api' });
   await app.register(homeRoutes, { prefix: '/api' });
   await app.register(storeRoutes, { prefix: '/api' });

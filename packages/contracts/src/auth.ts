@@ -38,6 +38,14 @@ export const userSchema = z.object({
 });
 export type User = z.infer<typeof userSchema>;
 
+/** GET /auth/csrf — токен для заголовка x-csrf-token (дублирует cookie, D-006). */
+export const csrfResponseSchema = z.object({ token: z.string().min(16) });
+export type CsrfResponse = z.infer<typeof csrfResponseSchema>;
+
+/** POST /auth/register и /auth/login. */
+export const authResponseSchema = z.object({ user: userSchema });
+export type AuthResponse = z.infer<typeof authResponseSchema>;
+
 /** GET /auth/me — null, если сессии нет. */
 export const meResponseSchema = z.object({
   user: userSchema.nullable(),
