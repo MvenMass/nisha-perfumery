@@ -9,6 +9,7 @@ import type { Database } from './database/client';
 import { authRoutes } from './modules/auth/auth.routes';
 import { cartRoutes } from './modules/cart/cart.routes';
 import { catalogRoutes } from './modules/catalog/catalog.routes';
+import { favoritesRoutes } from './modules/favorites/favorites.routes';
 import { healthRoutes } from './modules/health/health.routes';
 import { homeRoutes } from './modules/home/home.routes';
 import { stockNotificationRoutes } from './modules/stock-notifications/stock-notifications.routes';
@@ -60,6 +61,7 @@ export async function buildApp({ env, db }: AppDeps) {
   await app.register(storeRoutes, { prefix: '/api' });
   await app.register(stockNotificationRoutes, { prefix: '/api' });
   await app.register(cartRoutes, { prefix: '/api' });
+  await app.register(favoritesRoutes, { prefix: '/api' });
 
   return app;
 }

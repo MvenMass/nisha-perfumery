@@ -214,6 +214,16 @@ export async function findBestsellers(db: Database, limit: number): Promise<List
     .limit(limit);
 }
 
+/** Карточки по списку id — для избранного; невидимые в каталоге товары отбрасываются. */
+export async function findListItemsByIds(db: Database, ids: string[]): Promise<ListItemRow[]> {
+  if (ids.length === 0) return [];
+  return db
+    .select(listItemFields)
+    .from(products)
+    .innerJoin(materials, eq(materials.id, products.materialId))
+    .where(and(isVisible, inArray(products.id, ids)));
+}
+
 /** «Из той же породы» (D-026): в наличии — раньше, затем материал, плотность, общая категория. */
 export async function findRelated(
   db: Database,
