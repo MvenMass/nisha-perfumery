@@ -12,9 +12,15 @@ const envSchema = z.object({
   WEB_ORIGIN: z.url().default('http://localhost:5173'),
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent']).default('info'),
   DATABASE_URL: databaseUrlSchema,
+  // Secure-cookie по умолчанию только в production: Safari не принимает их на http://localhost.
+  COOKIE_SECURE: z.stringbool().optional(),
 });
 
 export type Env = z.infer<typeof envSchema>;
+
+export function cookieSecure(env: Env): boolean {
+  return env.COOKIE_SECURE ?? env.NODE_ENV === 'production';
+}
 
 // Скриптам миграций и сида нужна только БД — остальные переменные сервера им не важны.
 const databaseEnvSchema = z.object({ DATABASE_URL: databaseUrlSchema });

@@ -1,7 +1,9 @@
+import cookie from '@fastify/cookie';
 import Fastify from 'fastify';
 import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
 
+import { cookieSecure } from './config/env';
 import type { Env } from './config/env';
 import type { Database } from './database/client';
 import { catalogRoutes } from './modules/catalog/catalog.routes';
@@ -9,6 +11,7 @@ import { healthRoutes } from './modules/health/health.routes';
 import { homeRoutes } from './modules/home/home.routes';
 import { stockNotificationRoutes } from './modules/stock-notifications/stock-notifications.routes';
 import { storeRoutes } from './modules/store/store.routes';
+import { setupAuth } from './plugins/auth';
 import { setupErrorHandling } from './plugins/error-handler';
 import { setupRateLimit } from './plugins/rate-limit';
 import { setupSecurity } from './plugins/security';
@@ -43,6 +46,8 @@ export async function buildApp({ env, db }: AppDeps) {
   setupErrorHandling(app);
   await setupSecurity(app, env.WEB_ORIGIN);
   await setupRateLimit(app);
+  await app.register(cookie);
+  setupAuth(app, { secure: cookieSecure(env) });
 
   await app.register(healthRoutes, { prefix: '/api' });
   await app.register(catalogRoutes, { prefix: '/api' });
