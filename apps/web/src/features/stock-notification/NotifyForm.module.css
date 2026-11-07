@@ -35,3 +35,8 @@
     flex: 1 1 auto;
   }
 }
+
+.error {
+  font-size: var(--fs-13);
+  color: var(--color-copper);
+}

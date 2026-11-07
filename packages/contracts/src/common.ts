@@ -11,7 +11,11 @@ export const kopecksSchema = z.number().int().nonnegative().max(Number.MAX_SAFE_
 export const positiveKopecksSchema = kopecksSchema.positive();
 
 // Email сравнивается без учёта регистра, поэтому нормализуется до проверки — так же, как в БД.
-export const emailSchema = z.string().trim().toLowerCase().pipe(z.email().max(254));
+export const emailSchema = z
+  .string()
+  .trim()
+  .toLowerCase()
+  .pipe(z.email('Проверьте адрес почты').max(254, 'Слишком длинный адрес'));
 
 export const isoDateTimeSchema = z.iso.datetime({ offset: true });
 

@@ -1,0 +1,142 @@
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-40);
+  padding-top: var(--sp-32);
+  padding-bottom: var(--sp-72);
+}
+
+.nav {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-28);
+}
+
+.who {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-10);
+  color: var(--color-copper);
+}
+
+.name {
+  font-family: var(--font-serif);
+  font-size: var(--fs-30);
+  line-height: var(--lh-tight);
+}
+
+.menu {
+  display: flex;
+  flex-direction: column;
+  border-top: var(--border-1) solid var(--color-line);
+}
+
+.menuItemCurrent,
+.menuButton {
+  display: flex;
+  gap: var(--sp-12);
+  align-items: center;
+  width: 100%;
+  min-height: var(--control-52);
+  font-size: var(--fs-14);
+  border-bottom: var(--border-1) solid var(--color-line);
+}
+
+/* Активный раздел — медная полоса слева, как в account.html. */
+.menuItemCurrent {
+  padding-left: var(--sp-14);
+  color: var(--color-text);
+  box-shadow: inset var(--border-2) 0 0 var(--color-copper);
+}
+
+.menuItemCurrent svg {
+  color: var(--color-copper);
+}
+
+.menuButton {
+  padding: 0;
+  color: var(--color-text-muted);
+  text-align: left;
+  background: transparent;
+  border-top: 0;
+  border-right: 0;
+  border-left: 0;
+}
+
+.menuButton:hover:not(:disabled) {
+  color: var(--color-text);
+}
+
+.error {
+  font-size: var(--fs-13);
+  color: var(--color-copper);
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-32);
+  min-width: 0;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: var(--fs-page-title);
+  font-weight: 400;
+  line-height: var(--lh-none);
+  text-transform: uppercase;
+}
+
+.facts {
+  max-width: 560px;
+  font-family: var(--font-mono);
+  font-size: var(--fs-12);
+  border: var(--border-1) solid var(--color-line-strong);
+}
+
+.fact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-8) var(--sp-16);
+  justify-content: space-between;
+  padding: var(--sp-12) var(--sp-16);
+  border-bottom: var(--border-1) solid var(--color-line);
+}
+
+.fact:last-child {
+  border-bottom: 0;
+}
+
+.fact dt {
+  color: var(--color-text-muted);
+}
+
+.fact dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (--lg) {
+  .page {
+    flex-direction: row;
+    gap: var(--sp-64);
+    align-items: flex-start;
+    padding-top: var(--sp-48);
+    padding-bottom: var(--sp-120);
+  }
+
+  .nav {
+    flex: 0 0 260px;
+  }
+
+  .main {
+    flex: 1 1 auto;
+  }
+}

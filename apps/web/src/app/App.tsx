@@ -1,6 +1,7 @@
 import { createBrowserRouter, RouterProvider } from 'react-router';
 import type { RouteObject } from 'react-router';
 
+import { AccountPage } from '../pages/account/AccountPage';
 import { LoginPage, RegisterPage } from '../pages/auth/AuthPages';
 import { CatalogPage } from '../pages/catalog/CatalogPage';
 import { FragranceFinderPage } from '../pages/fragrance-finder/FragranceFinderPage';
@@ -12,6 +13,7 @@ import { RouteErrorPage } from '../widgets/not-found/RouteErrorPage';
 
 import { AppLayout } from './AppLayout';
 import { Providers } from './providers';
+import { RequireAuth } from './RequireAuth';
 
 const shopRoutes: RouteObject[] = [
   { index: true, element: <HomePage /> },
@@ -20,6 +22,14 @@ const shopRoutes: RouteObject[] = [
   { path: 'fragrance-finder', element: <FragranceFinderPage /> },
   { path: 'login', element: <LoginPage /> },
   { path: 'register', element: <RegisterPage /> },
+  {
+    path: 'account',
+    element: (
+      <RequireAuth>
+        <AccountPage />
+      </RequireAuth>
+    ),
+  },
   { path: '*', element: <NotFoundPage /> },
 ];
 
