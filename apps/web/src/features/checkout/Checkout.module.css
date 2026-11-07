@@ -1,0 +1,147 @@
+/* Форма оформления по checkout.html. */
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-40);
+  min-width: 0;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-16);
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}
+
+/* float + clear: Safari иначе рисует legend на рамке fieldset, а не над содержимым. */
+.legend {
+  float: left;
+  width: 100%;
+  padding: 0;
+  font-family: var(--font-serif);
+  font-size: var(--fs-28);
+  font-weight: 400;
+  line-height: var(--lh-tight);
+}
+
+.legend + * {
+  clear: both;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: var(--sp-16);
+}
+
+.options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+}
+
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-8);
+}
+
+.note {
+  max-width: 560px;
+  font-size: var(--fs-14);
+  line-height: var(--lh-relaxed);
+  color: var(--color-text-muted);
+}
+
+.error {
+  font-size: var(--fs-13);
+  line-height: var(--lh-normal);
+  color: var(--color-copper);
+}
+
+.submitRow {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-12) var(--sp-24);
+  align-items: center;
+}
+
+.terms {
+  max-width: 360px;
+  font-size: var(--fs-12);
+  line-height: var(--lh-normal);
+  color: var(--color-text-muted);
+}
+
+/* --- Пункты выдачи --- */
+
+.pickup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-16);
+}
+
+/* Схема вместо карты (D-031): соотношение 16:9 через padding — aspect-ratio нет в Safari 14. */
+.map {
+  position: relative;
+  height: 0;
+  padding-top: 56%;
+  overflow: hidden;
+  background-color: var(--color-basalt);
+  background-image:
+    linear-gradient(var(--color-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--color-line) 1px, transparent 1px);
+  background-size: 48px 48px;
+  border: var(--border-1) solid var(--color-line-strong);
+}
+
+.mapPoint {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--control-44);
+  height: var(--control-44);
+  padding: 0;
+  cursor: pointer;
+  background: transparent;
+  border: 0;
+  transform: translate(-50%, -50%);
+}
+
+.mapDot {
+  width: 12px;
+  height: 12px;
+  background: var(--color-travertine);
+  border: var(--border-2) solid var(--color-bg);
+  border-radius: 50%;
+}
+
+.mapPointActive .mapDot {
+  width: 18px;
+  height: 18px;
+  background: var(--color-copper);
+}
+
+.mapCaption {
+  position: absolute;
+  bottom: var(--sp-8);
+  left: var(--sp-12);
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
+  color: var(--color-text-muted);
+}
+
+.pointList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+  min-width: 0;
+  padding: 0;
+  margin: 0;
+  border: 0;
+}

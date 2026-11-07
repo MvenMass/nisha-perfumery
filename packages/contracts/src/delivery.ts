@@ -42,5 +42,7 @@ export const checkoutQuoteSchema = z.object({
   /** Сколько осталось до бесплатной доставки; 0 — уже бесплатно или способ бесплатный. */
   untilFreeDeliveryKopecks: kopecksSchema,
   totalKopecks: kopecksSchema,
+  /** Цена каждого способа при этой корзине — для карточек выбора доставки. */
+  options: z.array(z.object({ method: deliveryMethodSchema, priceKopecks: kopecksSchema })),
 });
 export type CheckoutQuote = z.infer<typeof checkoutQuoteSchema>;

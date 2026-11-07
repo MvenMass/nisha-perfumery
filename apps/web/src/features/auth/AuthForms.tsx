@@ -3,9 +3,10 @@ import type { LoginRequest, RegisterRequest } from '@nisha/contracts';
 import { useState } from 'react';
 import type { FormEvent } from 'react';
 
+import { fieldErrors } from '../../shared/lib/form';
 import { Button } from '../../shared/ui/Button/Button';
 import { Input } from '../../shared/ui/Field/Input';
-import { authErrorMessage, fieldErrors } from './auth-utils';
+import { authErrorMessage } from './auth-utils';
 import styles from './AuthForms.module.css';
 import { useLogin, useRegister } from './mutations';
 

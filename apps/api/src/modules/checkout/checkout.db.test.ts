@@ -45,6 +45,11 @@ describe('POST /api/checkout/quote', () => {
     expect(courier.deliveryPriceKopecks).toBe(49_000);
     expect(courier.totalKopecks).toBe(basalt.price + 49_000);
     expect(courier.untilFreeDeliveryKopecks).toBe(1_000_000 - basalt.price);
+    expect(courier.options).toEqual([
+      { method: 'courier', priceKopecks: 49_000 },
+      { method: 'pickup_point', priceKopecks: 29_000 },
+      { method: 'boutique', priceKopecks: 0 },
+    ]);
 
     const boutique = checkoutQuoteSchema.parse((await quote({ method: 'boutique', items })).json());
     expect(boutique.deliveryPriceKopecks).toBe(0);

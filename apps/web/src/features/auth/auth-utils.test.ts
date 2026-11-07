@@ -2,7 +2,8 @@ import { registerRequestSchema } from '@nisha/contracts';
 import { describe, expect, it } from 'vitest';
 
 import { ApiError } from '../../shared/api/http';
-import { authErrorMessage, fieldErrors, safeNext } from './auth-utils';
+import { fieldErrors } from '../../shared/lib/form';
+import { authErrorMessage, safeNext } from './auth-utils';
 
 describe('safeNext', () => {
   it.each([

@@ -55,13 +55,27 @@ function Summary({ cart, updating }: { cart: CartResponse; updating: boolean }) 
           {formatPrice(itemsTotalKopecks)}
         </span>
       </div>
-      {/* Оформление появится в этапе 7 — до него кнопка видна, но не ведёт на пустую страницу. */}
-      <Button size="xl" fullWidth disabled aria-describedby="checkout-soon" iconEnd="arrow-right">
-        Оформить заказ
-      </Button>
-      <p id="checkout-soon" className={styles.soon}>
-        Оформление заказа появится в&nbsp;следующей версии.
-      </p>
+      {bottles > 0 ? (
+        <ButtonLink to="/checkout" size="xl" fullWidth iconEnd="arrow-right">
+          Оформить заказ
+        </ButtonLink>
+      ) : (
+        // Всё в корзине закончилось — оформлять нечего, но кнопка остаётся на своём месте.
+        <Button
+          size="xl"
+          fullWidth
+          disabled
+          iconEnd="arrow-right"
+          aria-describedby="checkout-empty"
+        >
+          Оформить заказ
+        </Button>
+      )}
+      {bottles === 0 && (
+        <p id="checkout-empty" className={styles.soon}>
+          Сейчас в&nbsp;корзине нет образцов в&nbsp;наличии.
+        </p>
+      )}
       <p className={styles.perk}>
         <Icon name="gift" size={18} />
         Каждый заказ упакуем вручную и&nbsp;вложим этикетку образца.

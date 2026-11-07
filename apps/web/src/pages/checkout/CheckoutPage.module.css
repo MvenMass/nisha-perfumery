@@ -1,0 +1,190 @@
+/* Оформление по checkout.html; на 360 «Ваш заказ» уходит под форму. */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-32);
+  padding-top: var(--sp-32);
+  padding-bottom: var(--sp-72);
+}
+
+.head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-24);
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: var(--fs-page-title);
+  font-weight: 400;
+  line-height: var(--lh-none);
+  text-transform: uppercase;
+}
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-40);
+}
+
+.alert {
+  font-size: var(--fs-14);
+  line-height: var(--lh-normal);
+  color: var(--color-copper);
+}
+
+.alertLink {
+  color: var(--color-text);
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.summary {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-20);
+  padding: var(--sp-24);
+  background: var(--color-surface);
+  border: var(--border-1) solid var(--color-line-strong);
+}
+
+.summary[aria-busy='true'] .summaryList dd,
+.summary[aria-busy='true'] .totalValue {
+  opacity: 0.6;
+}
+
+.summaryLabel {
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-12);
+  color: var(--color-copper);
+}
+
+.summaryLines {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-16);
+}
+
+.summaryLine {
+  display: flex;
+  gap: var(--sp-14);
+  align-items: center;
+}
+
+.summaryPhoto {
+  flex: 0 0 56px;
+  height: 70px;
+  overflow: hidden;
+  background: var(--color-basalt);
+}
+
+.summaryPhoto img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.summaryText {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: var(--sp-4);
+  min-width: 0;
+}
+
+.summaryName {
+  font-family: var(--font-serif);
+  font-size: var(--fs-20);
+}
+
+.summaryMeta {
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
+  color: var(--color-text-muted);
+}
+
+.summaryPrice {
+  font-size: var(--fs-14);
+  white-space: nowrap;
+}
+
+.summaryList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+  padding-top: var(--sp-16);
+  font-size: var(--fs-14);
+  border-top: var(--border-1) solid var(--color-line);
+}
+
+.summaryRow {
+  display: flex;
+  gap: var(--sp-16);
+  justify-content: space-between;
+}
+
+.summaryRow dt {
+  color: var(--color-text-muted);
+}
+
+.summaryRow dd {
+  margin: 0;
+  text-align: right;
+}
+
+.summaryHint {
+  font-size: var(--fs-12);
+  color: var(--color-text-muted);
+}
+
+.total {
+  display: flex;
+  gap: var(--sp-16);
+  align-items: baseline;
+  justify-content: space-between;
+  padding-top: var(--sp-16);
+  border-top: var(--border-1) solid var(--color-line-strong);
+}
+
+.totalLabel {
+  font-family: var(--font-serif);
+  font-size: var(--fs-26);
+}
+
+.totalValue {
+  font-size: var(--fs-26);
+  font-weight: 500;
+}
+
+@media (--md) {
+  .summary {
+    padding: var(--sp-32);
+  }
+}
+
+@media (--lg) {
+  .page {
+    gap: var(--sp-40);
+    padding-top: var(--sp-40);
+    padding-bottom: var(--sp-120);
+  }
+
+  .layout {
+    flex-direction: row;
+    gap: var(--sp-48);
+    align-items: flex-start;
+  }
+
+  .layout > form {
+    flex: 1 1 auto;
+  }
+
+  .summary {
+    position: sticky;
+    top: calc(var(--header-h-wide) + var(--sp-24));
+    flex: 0 0 400px;
+  }
+}

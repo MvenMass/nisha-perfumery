@@ -1,3 +1,4 @@
+import { deliveryMethodSchema } from '@nisha/contracts';
 import type { CartItemInput, CheckoutQuote, DeliveryMethod } from '@nisha/contracts';
 
 import type { DbExecutor } from '../../database/client';
@@ -40,5 +41,9 @@ export async function quoteCheckout(
     deliveryPriceKopecks: delivery.priceKopecks,
     untilFreeDeliveryKopecks: delivery.untilFreeKopecks,
     totalKopecks: cart.summary.itemsTotalKopecks + delivery.priceKopecks,
+    options: deliveryMethodSchema.options.map((option) => ({
+      method: option,
+      priceKopecks: deliveryPrice(option, cart.summary.itemsTotalKopecks, settings).priceKopecks,
+    })),
   };
 }

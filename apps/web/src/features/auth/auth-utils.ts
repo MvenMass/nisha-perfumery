@@ -1,5 +1,3 @@
-import type { z } from 'zod';
-
 import { ApiError } from '../../shared/api/http';
 
 const DEFAULT_NEXT = '/account';
@@ -13,16 +11,6 @@ export function safeNext(value: string | null | undefined): string {
     return DEFAULT_NEXT;
   }
   return value;
-}
-
-/** Первая ошибка каждого поля — для подписи под полем. */
-export function fieldErrors(error: z.ZodError): Record<string, string> {
-  const result: Record<string, string> = {};
-  for (const issue of error.issues) {
-    const field = String(issue.path[0] ?? '');
-    result[field] ??= issue.message;
-  }
-  return result;
 }
 
 /** Ответ сервера → текст над кнопкой и, если понятно, ошибка конкретного поля. */
