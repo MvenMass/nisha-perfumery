@@ -2,7 +2,7 @@ import { z } from 'zod';
 
 import { addressInputSchema } from './address';
 import { personNameSchema } from './auth';
-import { cartItemInputSchema, cartResponseSchema } from './cart';
+import { CART_MAX_LINES, cartItemInputSchema, cartResponseSchema } from './cart';
 import {
   emailSchema,
   imageSchema,
@@ -65,7 +65,7 @@ export const createOrderRequestSchema = z.object({
   /** Повторная отправка с тем же ключом вернёт уже созданный заказ (D-016). */
   idempotencyKey: uuidSchema,
   /** Только для гостя: корзина живёт в браузере. У вошедшего берётся серверная корзина. */
-  items: z.array(cartItemInputSchema).min(1).max(50).optional(),
+  items: z.array(cartItemInputSchema).min(1).max(CART_MAX_LINES).optional(),
 });
 export type CreateOrderRequest = z.infer<typeof createOrderRequestSchema>;
 

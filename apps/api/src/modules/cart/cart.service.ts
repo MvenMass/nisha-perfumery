@@ -12,11 +12,11 @@ import {
   getOrCreateCartId,
   upsertCartItem,
 } from './cart.repository';
-import type { Executor } from './cart.repository';
+import type { DbExecutor } from '../../database/client';
 
 const variantIds = (items: Array<{ variantId: string }>) => items.map((item) => item.variantId);
 
-async function cartFor(db: Executor, cartId: string | undefined): Promise<CartResponse> {
+async function cartFor(db: DbExecutor, cartId: string | undefined): Promise<CartResponse> {
   const items = cartId ? await findCartItems(db, cartId) : [];
   return buildCart(items, await findVariants(db, variantIds(items)));
 }

@@ -1,6 +1,6 @@
 import { and, asc, eq, inArray, sql } from 'drizzle-orm';
 
-import type { Database } from '../../database/client';
+import type { DbExecutor } from '../../database/client';
 import { cartItems, carts, productVariants, products } from '../../database/schema';
 import { firstImage } from '../catalog/catalog.repository';
 
@@ -22,10 +22,7 @@ export type VariantRow = {
 
 export type StoredItem = { variantId: string; quantity: number };
 
-// Тип транзакции Drizzle совместим с Database по нужным здесь методам.
-export type Executor = Pick<Database, 'select' | 'insert' | 'update' | 'delete'>;
-
-export async function findVariants(db: Executor, variantIds: string[]): Promise<VariantRow[]> {
+export async function findVariants(db: DbExecutor, variantIds: string[]): Promise<VariantRow[]> {
   if (variantIds.length === 0) return [];
   return db
     .select({
@@ -47,13 +44,13 @@ export async function findVariants(db: Executor, variantIds: string[]): Promise<
     .where(inArray(productVariants.id, variantIds));
 }
 
-export async function findCartId(db: Executor, userId: string): Promise<string | undefined> {
+export async function findCartId(db: DbExecutor, userId: string): Promise<string | undefined> {
   const [row] = await db.select({ id: carts.id }).from(carts).where(eq(carts.userId, userId));
   return row?.id;
 }
 
 /** Корзина создаётся при первом изменении: у пользователя, который только смотрит, строки нет. */
-export async function getOrCreateCartId(db: Executor, userId: string): Promise<string> {
+export async function getOrCreateCartId(db: DbExecutor, userId: string): Promise<string> {
   const [created] = await db
     .insert(carts)
     .values({ userId })
@@ -66,7 +63,7 @@ export async function getOrCreateCartId(db: Executor, userId: string): Promise<s
 }
 
 // Порядок позиций — порядок добавления: так список не «прыгает» при изменении количества.
-export async function findCartItems(db: Executor, cartId: string): Promise<StoredItem[]> {
+export async function findCartItems(db: DbExecutor, cartId: string): Promise<StoredItem[]> {
   return db
     .select({ variantId: cartItems.variantId, quantity: cartItems.quantity })
     .from(cartItems)
@@ -75,7 +72,7 @@ export async function findCartItems(db: Executor, cartId: string): Promise<Store
 }
 
 export async function upsertCartItem(
-  db: Executor,
+  db: DbExecutor,
   cartId: string,
   item: StoredItem,
 ): Promise<void> {
@@ -97,7 +94,7 @@ export async function upsertCartItem(
 }
 
 export async function deleteCartItem(
-  db: Executor,
+  db: DbExecutor,
   cartId: string,
   variantId: string,
 ): Promise<void> {
@@ -107,7 +104,7 @@ export async function deleteCartItem(
   await touchCart(db, cartId);
 }
 
-async function touchCart(db: Executor, cartId: string): Promise<void> {
+async function touchCart(db: DbExecutor, cartId: string): Promise<void> {
   await db
     .update(carts)
     .set({ updatedAt: sql`now()` })

@@ -2,7 +2,7 @@ import type { CatalogQuery } from '@nisha/contracts';
 import { and, asc, desc, eq, inArray, ne, sql } from 'drizzle-orm';
 import type { SQL } from 'drizzle-orm';
 
-import type { Database } from '../../database/client';
+import type { Database, DbExecutor } from '../../database/client';
 import {
   categories,
   collections,
@@ -304,7 +304,7 @@ export async function findFeaturedSlug(db: Database): Promise<string | undefined
   return row?.slug;
 }
 
-export async function findStoreSettings(db: Database) {
+export async function findStoreSettings(db: DbExecutor) {
   const [row] = await db.select().from(storeSettings).where(eq(storeSettings.id, 1));
   // Строку создаёт сид; без неё магазин не может посчитать доставку и «Осталось N».
   if (!row)

@@ -24,3 +24,9 @@ export function createDatabase(
 }
 
 export type Database = ReturnType<typeof createDatabase>['db'];
+
+/**
+ * То, что умеют и база, и транзакция: функции модулей принимают его, чтобы работать
+ * как отдельно, так и внутри общей транзакции (создание заказа, слияние корзины).
+ */
+export type DbExecutor = Pick<Database, 'select' | 'insert' | 'update' | 'delete' | 'execute'>;
