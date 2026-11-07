@@ -43,6 +43,15 @@ export const requireAuth: preHandlerAsyncHookHandler = async (request) => {
   if (!request.user) throw unauthorized(request);
 };
 
+/**
+ * Пользователь маршрута под requireAuth. Если хук почему-то не сработал — это ошибка
+ * конфигурации маршрута (500), а не тихий доступ гостя к чужим данным.
+ */
+export function signedInUser(request: FastifyRequest): User {
+  if (!request.user) throw new Error(`Маршрут ${request.url} вызван без requireAuth`);
+  return request.user;
+}
+
 /** preHandler: только для роли. Без входа — 401, с другой ролью — 403. */
 export function requireRole(role: UserRole): preHandlerAsyncHookHandler {
   return async (request) => {
