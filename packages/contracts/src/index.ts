@@ -4,6 +4,7 @@ export * from './cart';
 export * from './catalog';
 export * from './common';
 export * from './errors';
+export * from './favorites';
 export * from './health';
 export * from './home';
 export * from './order';
