@@ -5,6 +5,7 @@ import { AccountPage } from '../pages/account/AccountPage';
 import { LoginPage, RegisterPage } from '../pages/auth/AuthPages';
 import { CartPage } from '../pages/cart/CartPage';
 import { CatalogPage } from '../pages/catalog/CatalogPage';
+import { FavoritesPage } from '../pages/favorites/FavoritesPage';
 import { FragranceFinderPage } from '../pages/fragrance-finder/FragranceFinderPage';
 import { HomePage } from '../pages/home/HomePage';
 import { ProductPage } from '../pages/product/ProductPage';
@@ -21,6 +22,7 @@ const shopRoutes: RouteObject[] = [
   { path: 'catalog/:slug', element: <ProductPage /> },
   { path: 'fragrance-finder', element: <FragranceFinderPage /> },
   { path: 'cart', element: <CartPage /> },
+  { path: 'favorites', element: <FavoritesPage /> },
   { path: 'login', element: <LoginPage /> },
   { path: 'register', element: <RegisterPage /> },
   {

@@ -38,6 +38,7 @@
   border-top: var(--border-1) solid var(--color-line);
 }
 
+.menuItem,
 .menuItemCurrent,
 .menuButton {
   display: flex;
@@ -58,6 +59,14 @@
 
 .menuItemCurrent svg {
   color: var(--color-copper);
+}
+
+.menuItem {
+  color: var(--color-text-muted);
+}
+
+.menuItem:hover {
+  color: var(--color-text);
 }
 
 .menuButton {

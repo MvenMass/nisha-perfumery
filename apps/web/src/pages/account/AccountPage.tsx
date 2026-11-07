@@ -1,4 +1,4 @@
-import { useNavigate } from 'react-router';
+import { Link, useNavigate } from 'react-router';
 
 import { useMe } from '../../entities/user/queries';
 import { useLogout } from '../../features/auth/mutations';
@@ -7,7 +7,7 @@ import { Container } from '../../shared/ui/Container/Container';
 import { Icon } from '../../shared/ui/Icon/Icon';
 import styles from './AccountPage.module.css';
 
-// Каркас кабинета по account.html. Разделы «Заказы», «Адреса», «Избранное» добавятся в этапах 6–7.
+// Кабинет по account.html. «Заказы» и «Адреса» добавятся в этапе 7; избранное — общая страница /favorites.
 export function AccountPage() {
   useMeta('Личный кабинет');
   const user = useMe().data;
@@ -29,6 +29,12 @@ export function AccountPage() {
               <Icon name="user" size={18} />
               Профиль
             </a>
+          </li>
+          <li>
+            <Link to="/favorites" className={styles.menuItem}>
+              <Icon name="heart" size={18} />
+              Избранное
+            </Link>
           </li>
           <li>
             <button
