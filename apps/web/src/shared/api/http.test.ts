@@ -1,5 +1,6 @@
 import { healthResponseSchema } from '@nisha/contracts';
 import { afterEach, describe, expect, it, vi } from 'vitest';
+import { z } from 'zod';
 
 import { ApiError, apiRequest } from './http';
 
@@ -65,6 +66,36 @@ describe('apiRequest', () => {
 
     const error = await catchApiError(apiRequest('/api/health', healthResponseSchema));
     expect(error).toMatchObject({ status: 502, code: 'BAD_RESPONSE' });
+  });
+
+  it('для изменяющего запроса без cookie сначала берёт CSRF-токен и кладёт его в заголовок', async () => {
+    const fetchMock = vi.fn((url: string) =>
+      Promise.resolve(
+        url === '/api/auth/csrf'
+          ? json({ token: 'csrf-token-from-server' })
+          : json({ status: 'ok' }),
+      ),
+    );
+    vi.stubGlobal('fetch', fetchMock);
+
+    await apiRequest('/api/stock-notifications', healthResponseSchema, {
+      method: 'POST',
+      body: '{}',
+    });
+
+    expect(fetchMock.mock.calls.map(([url]) => url)).toEqual([
+      '/api/auth/csrf',
+      '/api/stock-notifications',
+    ]);
+    const init = fetchMock.mock.calls[1] as unknown as [string, RequestInit];
+    expect(new Headers(init[1].headers).get('x-csrf-token')).toBe('csrf-token-from-server');
+  });
+
+  it('204 без тела считается успехом', async () => {
+    mockFetch(new Response(null, { status: 204 }));
+    await expect(apiRequest('/api/auth/logout', z.undefined(), { method: 'GET' })).resolves.toBe(
+      undefined,
+    );
   });
 
   it('сеть недоступна → NETWORK', async () => {
