@@ -2,11 +2,7 @@ import type { Contact } from '@nisha/contracts';
 import { eq } from 'drizzle-orm';
 
 import type { DbExecutor } from '../../database/client';
-import { passwordTokens, users } from '../../database/schema';
-import { hashToken, newToken } from '../../shared/token';
-import type { Mailer } from '../mailer/mailer';
-
-const SET_PASSWORD_TTL_MS = 7 * 24 * 60 * 60 * 1000;
+import { users } from '../../database/schema';
 
 export type OrderOwner = { userId: string; hasPassword: boolean };
 
@@ -26,34 +22,4 @@ export async function resolveGuestOwner(db: DbExecutor, contact: Contact): Promi
     .where(eq(users.email, contact.email));
   if (!user) throw new Error(`Не удалось найти или создать аккаунт ${contact.email}`);
   return { userId: user.id, hasPassword: user.passwordHash !== null };
-}
-
-/** Одноразовая ссылка «Задать пароль» для гостевого аккаунта; в БД — только хеш. */
-export async function issuePasswordToken(
-  db: DbExecutor,
-  userId: string,
-  now = new Date(),
-): Promise<string> {
-  const token = newToken();
-  await db.insert(passwordTokens).values({
-    userId,
-    tokenHash: hashToken(token),
-    expiresAt: new Date(now.getTime() + SET_PASSWORD_TTL_MS),
-  });
-  return token;
-}
-
-export async function sendSetPasswordMail(
-  mailer: Mailer,
-  options: { email: string; token: string; webOrigin: string; orderNumber?: number },
-): Promise<void> {
-  const link = `${options.webOrigin}/set-password?token=${encodeURIComponent(options.token)}`;
-  const intro = options.orderNumber
-    ? `Заказ № ${options.orderNumber} сохранён в вашем аккаунте «Ниши».`
-    : 'Для этого адреса уже есть аккаунт «Ниши» без пароля.';
-  await mailer.send({
-    to: options.email,
-    subject: 'Задайте пароль, чтобы видеть свои заказы',
-    text: `${intro}\nЗадайте пароль по ссылке — она действует 7 дней:\n${link}`,
-  });
 }

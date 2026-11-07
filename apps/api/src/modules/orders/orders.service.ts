@@ -12,12 +12,13 @@ import type { Database, DbExecutor } from '../../database/client';
 import { addresses, cartItems, orderItems, orders, payments } from '../../database/schema';
 import { AppError } from '../../shared/errors';
 import { hashToken, newToken } from '../../shared/token';
+import { issuePasswordToken, sendSetPasswordMail } from '../auth/password-link';
 import { findCartId } from '../cart/cart.repository';
 import { checkoutItems, quoteCheckout } from '../checkout/checkout.service';
 import { findPickupPoint } from '../delivery/pickup-points';
 import type { Mailer } from '../mailer/mailer';
 import type { PaymentProvider } from '../payments/provider';
-import { issuePasswordToken, resolveGuestOwner, sendSetPasswordMail } from './guest-account';
+import { resolveGuestOwner } from './guest-account';
 import { assertTransition } from './order-status';
 import {
   addHistory,
