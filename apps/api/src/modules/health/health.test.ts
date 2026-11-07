@@ -63,7 +63,8 @@ describe('api: каркас', () => {
     const response = await app.inject({
       method: 'POST',
       url: '/api/test-json',
-      headers: { 'content-type': 'application/json' },
+      headers: { 'content-type': 'application/json', 'x-csrf-token': 't' },
+      cookies: { nisha_csrf: 't' },
       payload: '{"broken":',
     });
 

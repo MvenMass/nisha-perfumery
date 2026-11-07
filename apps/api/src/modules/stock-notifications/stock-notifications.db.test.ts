@@ -3,7 +3,7 @@ import { eq } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import { products, stockNotifications } from '../../database/schema';
-import { createTestApp } from '../../shared/test-app';
+import { createTestApp, CSRF } from '../../shared/test-app';
 import type { TestApp } from '../../shared/test-app';
 
 let ctx: TestApp;
@@ -33,6 +33,7 @@ function subscribe(payload: object, remoteAddress = `10.0.0.${(ip += 1)}`) {
     url: '/api/stock-notifications',
     payload,
     remoteAddress,
+    ...CSRF,
   });
 }
 

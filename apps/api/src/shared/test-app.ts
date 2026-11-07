@@ -11,6 +11,12 @@ export type TestApp = {
   close: () => Promise<void>;
 };
 
+/** Пара «cookie + заголовок» для double-submit CSRF: изменяющие запросы без неё получают 403. */
+export const CSRF = {
+  cookies: { nisha_csrf: 'test-csrf-token' },
+  headers: { 'x-csrf-token': 'test-csrf-token' },
+} as const;
+
 /** Дата сида в тестах фиксирована: порядок «новинок» и даты публикации не плавают. */
 export const SEED_NOW = new Date('2026-11-01T12:00:00Z');
 
