@@ -16,3 +16,13 @@ export function useMe() {
 }
 
 export const isAdmin = (user: User | null | undefined) => user?.role === 'admin';
+
+/**
+ * Кто смотрит страницу: undefined — ещё не известно, null — гость.
+ * Если /me не ответил, считаем гостем: корзина и избранное гостя всё равно работают.
+ */
+export function useViewer(): User | null | undefined {
+  const me = useMe();
+  if (me.isPending) return undefined;
+  return me.data ?? null;
+}
