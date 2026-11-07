@@ -33,12 +33,21 @@ export async function createTestDatabase(): Promise<TestDatabase> {
   const url = new URL(baseUrl);
   url.pathname = `/${name}`;
   await runMigrations(url.toString());
-  const { db, pool } = createDatabase(url.toString());
+  // DROP … WITH (FORCE) обрывает соединения, которые pg ещё не успел закрыть, — это ожидаемо
+  // (код 57P01) и только во время удаления базы. Остальные ошибки пишем в лог.
+  let dropping = false;
+  const { db, pool } = createDatabase(url.toString(), {
+    onIdleError: (error) => {
+      if (dropping && 'code' in error && error.code === '57P01') return;
+      console.error('Соединение с тестовой БД оборвалось', error);
+    },
+  });
 
   return {
     db,
     url: url.toString(),
     drop: async () => {
+      dropping = true;
       await pool.end();
       await admin.query(`DROP DATABASE ${name} WITH (FORCE)`);
       await admin.end();

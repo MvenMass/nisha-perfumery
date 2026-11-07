@@ -3,7 +3,9 @@ import { loadEnv } from './config/env';
 import { createDatabase } from './database/client';
 
 const env = loadEnv();
-const { db, pool } = createDatabase(env.DATABASE_URL);
+const { db, pool } = createDatabase(env.DATABASE_URL, {
+  onIdleError: (error) => app.log.error({ err: error }, 'Соединение с БД оборвалось'),
+});
 const app = await buildApp({ env, db });
 app.addHook('onClose', async () => {
   await pool.end();
