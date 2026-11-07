@@ -1,4 +1,4 @@
-import type { StockNotificationRequest, StockNotificationResponse } from '@nisha/contracts';
+import type { StockNotificationRequest, StockNotificationResponse, User } from '@nisha/contracts';
 import { and, eq, sql } from 'drizzle-orm';
 
 import type { Database } from '../../database/client';
@@ -12,9 +12,11 @@ import { AppError } from '../../shared/errors';
 export async function subscribeToRestock(
   db: Database,
   request: StockNotificationRequest,
+  user: User | null,
 ): Promise<{ created: boolean; body: StockNotificationResponse }> {
-  // До появления сессий (этап 5) email обязателен; потом вошедшему подставим адрес аккаунта.
-  if (!request.email) throw new AppError('VALIDATION_FAILED', 'Укажите email для уведомления');
+  // Вошедшему не нужно вводить email — берём адрес аккаунта.
+  const email = request.email ?? user?.email;
+  if (!email) throw new AppError('VALIDATION_FAILED', 'Укажите email для уведомления');
 
   const [product] = await db
     .select({ id: products.id })
@@ -43,7 +45,7 @@ export async function subscribeToRestock(
   // повтор не ошибка, а «уже подписаны».
   const inserted = await db
     .insert(stockNotifications)
-    .values({ productId: product.id, email: request.email })
+    .values({ productId: product.id, email, userId: user?.id ?? null })
     .onConflictDoNothing({
       target: [stockNotifications.productId, stockNotifications.email],
       where: sql`${stockNotifications.notifiedAt} IS NULL`,
