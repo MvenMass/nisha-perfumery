@@ -12,6 +12,7 @@ import { homeRoutes } from './modules/home/home.routes';
 import { stockNotificationRoutes } from './modules/stock-notifications/stock-notifications.routes';
 import { storeRoutes } from './modules/store/store.routes';
 import { setupAuth } from './plugins/auth';
+import { setupCsrf } from './plugins/csrf';
 import { setupErrorHandling } from './plugins/error-handler';
 import { setupRateLimit } from './plugins/rate-limit';
 import { setupSecurity } from './plugins/security';
@@ -48,6 +49,7 @@ export async function buildApp({ env, db }: AppDeps) {
   await setupRateLimit(app);
   await app.register(cookie);
   setupAuth(app, { secure: cookieSecure(env) });
+  setupCsrf(app, { webOrigin: env.WEB_ORIGIN });
 
   await app.register(healthRoutes, { prefix: '/api' });
   await app.register(catalogRoutes, { prefix: '/api' });
