@@ -15,8 +15,7 @@ import { Container } from '../../shared/ui/Container/Container';
 import { EmptyState } from '../../shared/ui/EmptyState/EmptyState';
 import { Select } from '../../shared/ui/Field/Select';
 import { Skeleton, SkeletonText } from '../../shared/ui/Skeleton/Skeleton';
-import { ProductCard } from '../../widgets/product-card/ProductCard';
-import { toProductCard } from '../../widgets/product-card/to-product-card';
+import { ShopProductCard } from '../../widgets/product-card/ShopProductCard';
 import styles from './CatalogPage.module.css';
 
 const SORT_OPTIONS: Array<{ value: CatalogSort; label: string }> = [
@@ -89,7 +88,7 @@ export function CatalogPage() {
         <ul className={styles.grid} aria-busy={products.isFetching && !products.isFetchingNextPage}>
           {items.map((item) => (
             <li key={item.id}>
-              <ProductCard product={toProductCard(item)} headingLevel="h2" />
+              <ShopProductCard item={item} headingLevel="h2" />
             </li>
           ))}
         </ul>

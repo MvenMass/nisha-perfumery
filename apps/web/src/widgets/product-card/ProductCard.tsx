@@ -32,13 +32,13 @@ type ProductCardProps = {
   product: ProductCardData;
   /**
    * «+» открывает выбор объёма, а не кладёт товар сразу (D-025).
-   * Без обработчика «+» ведёт на страницу товара — пока нет корзины (этап 6).
+   * Без обработчика «+» ведёт на страницу товара (витрина компонентов).
    */
   onChooseVolume?: (() => void) | undefined;
   /** «Сообщить о поступлении» (D-029). Без обработчика — ссылка на форму на странице товара. */
   onNotify?: (() => void) | undefined;
   /** Избранное показывается там, где оно есть в макете (главная). */
-  favorite?: { active: boolean; onToggle: () => void } | undefined;
+  favorite?: { active: boolean; disabled?: boolean | undefined; onToggle: () => void } | undefined;
   headingLevel?: 'h2' | 'h3' | undefined;
 };
 
@@ -81,6 +81,7 @@ export function ProductCard({
             icon="heart"
             label={`В избранное: ${name}`}
             pressed={favorite.active}
+            disabled={favorite.disabled}
             className={styles.favorite}
             onClick={favorite.onToggle}
           />

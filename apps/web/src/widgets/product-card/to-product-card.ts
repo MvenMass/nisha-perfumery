@@ -18,7 +18,7 @@ const PLACEHOLDER_BY_MATERIAL: Record<string, ProductCardData['placeholder']> = 
 
 export function toProductCard(
   item: ProductListItem,
-  options: { specimenRows?: boolean } = {},
+  options: { specimenRows?: boolean | undefined } = {},
 ): ProductCardData {
   return {
     href: productHref(item.slug),
