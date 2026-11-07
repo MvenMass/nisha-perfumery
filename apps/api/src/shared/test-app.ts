@@ -3,6 +3,7 @@ import type { App } from '../app';
 import { loadEnv } from '../config/env';
 import { runSeed } from '../database/seed';
 import { createTestDatabase } from '../database/test-database';
+import { SESSION_COOKIE } from '../modules/auth/session';
 import type { TestDatabase } from '../database/test-database';
 
 export type TestApp = {
@@ -42,4 +43,26 @@ export async function createTestApp(): Promise<TestApp> {
       await testDb.drop();
     },
   };
+}
+
+let signUpCounter = 0;
+
+/**
+ * Регистрирует покупателя и возвращает cookie вошедшего вместе с CSRF — для тестов модулей,
+ * где вход только предусловие. Каждая регистрация — с нового IP, чтобы не упереться в лимит.
+ */
+export async function signUp(app: App, email: string): Promise<Record<string, string>> {
+  signUpCounter += 1;
+  const response = await app.inject({
+    method: 'POST',
+    url: '/api/auth/register',
+    payload: { email, password: 'stone-and-smoke', name: 'Анна' },
+    remoteAddress: `10.250.${Math.floor(signUpCounter / 250)}.${signUpCounter % 250}`,
+    ...CSRF,
+  });
+  const token = response.cookies.find((cookie) => cookie.name === SESSION_COOKIE)?.value;
+  if (response.statusCode !== 201 || !token) {
+    throw new Error(`Регистрация ${email} не прошла: ${response.statusCode} ${response.body}`);
+  }
+  return { ...CSRF.cookies, [SESSION_COOKIE]: token };
 }

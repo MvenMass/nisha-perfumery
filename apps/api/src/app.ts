@@ -7,6 +7,7 @@ import { cookieSecure } from './config/env';
 import type { Env } from './config/env';
 import type { Database } from './database/client';
 import { authRoutes } from './modules/auth/auth.routes';
+import { cartRoutes } from './modules/cart/cart.routes';
 import { catalogRoutes } from './modules/catalog/catalog.routes';
 import { healthRoutes } from './modules/health/health.routes';
 import { homeRoutes } from './modules/home/home.routes';
@@ -58,6 +59,7 @@ export async function buildApp({ env, db }: AppDeps) {
   await app.register(homeRoutes, { prefix: '/api' });
   await app.register(storeRoutes, { prefix: '/api' });
   await app.register(stockNotificationRoutes, { prefix: '/api' });
+  await app.register(cartRoutes, { prefix: '/api' });
 
   return app;
 }

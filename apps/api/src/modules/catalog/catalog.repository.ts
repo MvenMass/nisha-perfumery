@@ -52,7 +52,8 @@ const keyNotes = sql<string[]>`ARRAY(
   LIMIT 3
 )`;
 
-const firstImage = sql<{ url: string; alt: string } | null>`(
+/** Обложка товара; нужна и корзине, поэтому экспортируется. */
+export const firstImage = sql<{ url: string; alt: string } | null>`(
   SELECT json_build_object('url', ${productImages.url}, 'alt', ${productImages.alt})
   FROM ${productImages}
   WHERE ${productImages.productId} = ${products.id}
