@@ -11,7 +11,8 @@ import { products, sessions, stockNotifications } from '../../database/schema';
 import { requireAuth, requireRole } from '../../plugins/auth';
 import { createTestApp, CSRF } from '../../shared/test-app';
 import type { TestApp } from '../../shared/test-app';
-import { hashToken, SESSION_COOKIE } from './session';
+import { hashToken } from '../../shared/token';
+import { SESSION_COOKIE } from './session';
 
 let ctx: TestApp;
 let ip = 0;

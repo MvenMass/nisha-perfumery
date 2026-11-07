@@ -1,11 +1,10 @@
-import { createHash, randomBytes } from 'node:crypto';
-
 import type { User } from '@nisha/contracts';
 import { eq } from 'drizzle-orm';
 import type { FastifyReply } from 'fastify';
 
 import type { Database } from '../../database/client';
 import { sessions, users } from '../../database/schema';
+import { hashToken, newToken } from '../../shared/token';
 
 export const SESSION_COOKIE = 'nisha_session';
 
@@ -13,11 +12,6 @@ const DAY_MS = 24 * 60 * 60 * 1000;
 const SESSION_TTL_MS = 30 * DAY_MS;
 // Продлеваем не на каждый запрос, а раз в сутки: иначе каждая страница писала бы в БД.
 const RENEW_AFTER_MS = DAY_MS;
-
-/** Токен уходит только в cookie; в БД — его SHA-256, чтобы утечка таблицы не давала рабочих сессий. */
-export function hashToken(token: string): string {
-  return createHash('sha256').update(token).digest('hex');
-}
 
 export function toPublicUser(row: typeof users.$inferSelect): User {
   return {
@@ -35,7 +29,7 @@ export async function createSession(
   userId: string,
   now = new Date(),
 ): Promise<{ token: string; expiresAt: Date }> {
-  const token = randomBytes(32).toString('base64url');
+  const token = newToken();
   const expiresAt = new Date(now.getTime() + SESSION_TTL_MS);
   await db.insert(sessions).values({
     id: hashToken(token),
