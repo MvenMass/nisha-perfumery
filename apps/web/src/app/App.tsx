@@ -5,9 +5,12 @@ import { AccountPage } from '../pages/account/AccountPage';
 import { LoginPage, RegisterPage } from '../pages/auth/AuthPages';
 import { CartPage } from '../pages/cart/CartPage';
 import { CatalogPage } from '../pages/catalog/CatalogPage';
+import { CheckoutPage } from '../pages/checkout/CheckoutPage';
 import { FavoritesPage } from '../pages/favorites/FavoritesPage';
 import { FragranceFinderPage } from '../pages/fragrance-finder/FragranceFinderPage';
 import { HomePage } from '../pages/home/HomePage';
+import { OrderDonePage } from '../pages/payment/OrderDonePage';
+import { PaymentPage } from '../pages/payment/PaymentPage';
 import { ProductPage } from '../pages/product/ProductPage';
 import { NotFoundPage } from '../widgets/not-found/NotFoundPage';
 import { RouteErrorPage } from '../widgets/not-found/RouteErrorPage';
@@ -22,6 +25,9 @@ const shopRoutes: RouteObject[] = [
   { path: 'catalog/:slug', element: <ProductPage /> },
   { path: 'fragrance-finder', element: <FragranceFinderPage /> },
   { path: 'cart', element: <CartPage /> },
+  { path: 'checkout', element: <CheckoutPage /> },
+  { path: 'checkout/payment/:orderId', element: <PaymentPage /> },
+  { path: 'checkout/done/:orderId', element: <OrderDonePage /> },
   { path: 'favorites', element: <FavoritesPage /> },
   { path: 'login', element: <LoginPage /> },
   { path: 'register', element: <RegisterPage /> },

@@ -1,0 +1,106 @@
+/* Оплата и подтверждение: узкая карточка по центру, как формы входа. */
+
+.page {
+  display: flex;
+  justify-content: center;
+  padding-top: var(--sp-40);
+  padding-bottom: var(--sp-72);
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-20);
+  width: 100%;
+  max-width: 560px;
+  padding: var(--sp-24);
+  background: var(--color-surface);
+  border: var(--border-1) solid var(--color-line-strong);
+}
+
+.label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-12);
+  color: var(--color-copper);
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: var(--fs-36);
+  font-weight: 400;
+  line-height: var(--lh-tight);
+}
+
+.amount {
+  font-size: var(--fs-32);
+  font-weight: 500;
+}
+
+.timer {
+  font-family: var(--font-mono);
+  font-size: var(--fs-13);
+  color: var(--color-text-muted);
+}
+
+.mock,
+.text {
+  font-size: var(--fs-14);
+  line-height: var(--lh-relaxed);
+  color: var(--color-text-muted);
+}
+
+.error {
+  font-size: var(--fs-13);
+  line-height: var(--lh-normal);
+  color: var(--color-copper);
+}
+
+.actions {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-12);
+}
+
+.facts {
+  font-size: var(--fs-14);
+  border-top: var(--border-1) solid var(--color-line);
+}
+
+.fact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4) var(--sp-16);
+  justify-content: space-between;
+  padding: var(--sp-12) 0;
+  border-bottom: var(--border-1) solid var(--color-line);
+}
+
+.fact dt {
+  color: var(--color-text-muted);
+}
+
+.fact dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-12);
+}
+
+@media (--md) {
+  .card {
+    padding: var(--sp-40);
+  }
+}
+
+@media (--lg) {
+  .page {
+    padding-top: var(--sp-64);
+    padding-bottom: var(--sp-120);
+  }
+}

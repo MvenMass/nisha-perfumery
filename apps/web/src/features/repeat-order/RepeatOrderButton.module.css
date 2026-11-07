@@ -1,0 +1,20 @@
+.wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+  align-items: flex-start;
+}
+
+.message {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  font-size: var(--fs-13);
+  line-height: var(--lh-normal);
+  color: var(--color-copper);
+}
+
+.list {
+  padding-left: var(--sp-16);
+  list-style: disc;
+}
