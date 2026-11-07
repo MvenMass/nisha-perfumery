@@ -8,18 +8,24 @@ import {
   uuidSchema,
 } from './common';
 
+/** Предел количества одной позиции и числа позиций — одни и те же на клиенте и сервере. */
+export const CART_MAX_QUANTITY = 99;
+export const CART_MAX_LINES = 50;
+
 // Клиент передаёт только вариант и количество: цены и итоги считает сервер (CLAUDE.md, D-007).
 export const cartItemInputSchema = z.object({
   variantId: uuidSchema,
-  quantity: z.number().int().min(1).max(99),
+  quantity: z.number().int().min(1).max(CART_MAX_QUANTITY),
 });
 export type CartItemInput = z.infer<typeof cartItemInputSchema>;
 
 /** POST /cart/merge (гостевая корзина при входе) и POST /cart/quote (расчёт гостевой корзины). */
 export const cartItemsRequestSchema = z.object({
-  items: z.array(cartItemInputSchema).max(50),
+  items: z.array(cartItemInputSchema).max(CART_MAX_LINES),
 });
 export type CartItemsRequest = z.infer<typeof cartItemsRequestSchema>;
+
+export const cartItemParamsSchema = z.object({ variantId: uuidSchema });
 
 /**
  * available — можно купить в нужном количестве;
