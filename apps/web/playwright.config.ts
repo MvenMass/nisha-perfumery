@@ -26,6 +26,8 @@ export default defineConfig({
     {
       command: 'pnpm exec tsx --env-file-if-exists=../../.env src/server.ts',
       cwd: '../api',
+      // Фронт в e2e открыт с vite preview — CSRF-проверка Origin должна ждать именно его.
+      env: { WEB_ORIGIN: 'http://localhost:4173' },
       url: 'http://localhost:3000/api/health',
       reuseExistingServer: !isCI,
     },
