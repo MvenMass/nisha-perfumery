@@ -4,6 +4,7 @@ import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import {
   addresses,
   favorites,
+  heroSlides,
   materials,
   orderItems,
   orders,
@@ -119,7 +120,25 @@ describe('миграции', () => {
     const result = await testDb.db.execute<{ count: string }>(
       sql`SELECT count(*) FROM information_schema.tables WHERE table_schema = 'public'`,
     );
-    expect(Number(result.rows[0]?.count)).toBe(22);
+    expect(Number(result.rows[0]?.count)).toBe(25);
+  });
+});
+
+describe('ограничения контента', () => {
+  it('ссылка кнопки слайда — только путь внутри сайта', async () => {
+    const slide = (ctaHref: string) =>
+      testDb.db.insert(heroSlides).values({
+        position: 0,
+        label: 'Глубина 0 м',
+        title: 'Заголовок',
+        text: 'Текст',
+        ctaLabel: 'Кнопка',
+        ctaHref,
+        imageAlt: 'Описание',
+      });
+    await expectConstraintError(slide('https://evil.test'), 'hero_slides_internal_link');
+    await expectConstraintError(slide('//evil.test'), 'hero_slides_internal_link');
+    await expect(slide('/catalog')).resolves.toBeDefined();
   });
 });
 

@@ -20,6 +20,8 @@ const TABLES = [
   'product_categories',
   'users',
   'store_settings',
+  'hero_slides',
+  'articles',
 ];
 
 let testDb: TestDatabase;

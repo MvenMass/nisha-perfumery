@@ -7,9 +7,11 @@ import { hashPassword } from '../shared/password';
 import { createDatabase } from './client';
 import type { Database } from './client';
 import {
+  articles,
   categories,
   collections,
   fragranceNotes,
+  heroSlides,
   materials,
   productCategories,
   productNotes,
@@ -18,7 +20,15 @@ import {
   storeSettings,
   users,
 } from './schema';
-import { CATEGORIES, COLLECTIONS, MATERIALS, PRODUCTS, STORE_SETTINGS } from './seed-data';
+import {
+  ARTICLES,
+  CATEGORIES,
+  COLLECTIONS,
+  HERO_SLIDES,
+  MATERIALS,
+  PRODUCTS,
+  STORE_SETTINGS,
+} from './seed-data';
 import type { SeedProduct } from './seed-data';
 
 export type SeedOptions = {
@@ -171,6 +181,26 @@ async function seedProduct(
   );
 }
 
+async function seedContent(tx: Transaction, now: Date) {
+  const [anySlide] = await tx.select({ id: heroSlides.id }).from(heroSlides).limit(1);
+  if (!anySlide) {
+    await tx
+      .insert(heroSlides)
+      .values(HERO_SLIDES.map((slide, position) => ({ ...slide, position })));
+  }
+  await tx
+    .insert(articles)
+    .values(
+      ARTICLES.map(({ body, publishedDaysAgo, ...article }) => ({
+        ...article,
+        body: body.join('\n\n'),
+        isPublished: true,
+        publishedAt: new Date(now.getTime() - publishedDaysAgo * DAY_MS),
+      })),
+    )
+    .onConflictDoNothing({ target: articles.slug });
+}
+
 async function seedAdmin(tx: Transaction, email: string, password: string) {
   const passwordHash = await hashPassword(password);
   await tx
@@ -233,6 +263,7 @@ export async function runSeed(db: Database, options: SeedOptions): Promise<void>
         ),
       );
 
+    await seedContent(tx, now);
     await seedAdmin(tx, options.adminEmail, options.adminPassword);
   });
 }

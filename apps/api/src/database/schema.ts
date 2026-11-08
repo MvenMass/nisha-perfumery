@@ -52,6 +52,7 @@ export const paymentStatus = pgEnum('payment_status', [
   'refunded',
 ]);
 export const deliveryMethod = pgEnum('delivery_method', ['courier', 'pickup_point', 'boutique']);
+export const consultationStatus = pgEnum('consultation_status', ['new', 'contacted', 'done']);
 
 // --- Пользователи ---
 
@@ -500,6 +501,77 @@ export const payments = pgTable(
     check('payments_amount_positive', sql`${t.amountKopecks} > 0`),
     index('payments_order_idx').on(t.orderId),
   ],
+);
+
+// --- Контент (этап 8) ---
+
+// Слайды первого экрана главной; порядок задаёт position.
+export const heroSlides = pgTable(
+  'hero_slides',
+  {
+    id: id(),
+    position: integer().notNull(),
+    // Подпись глубины над заголовком: «Глубина −120 м · базальт».
+    label: text().notNull(),
+    title: text().notNull(),
+    text: text().notNull(),
+    ctaLabel: text().notNull(),
+    // Только путь внутри сайта: слайд не уводит на чужие домены.
+    ctaHref: text().notNull(),
+    imageUrl: text(),
+    imageAlt: text().notNull(),
+    isPublished: boolean().notNull().default(true),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (t) => [
+    check('hero_slides_position_non_negative', sql`${t.position} >= 0`),
+    check('hero_slides_internal_link', sql`${t.ctaHref} LIKE '/%' AND ${t.ctaHref} NOT LIKE '//%'`),
+    index('hero_slides_position_idx').on(t.position),
+  ],
+);
+
+export const articles = pgTable(
+  'articles',
+  {
+    id: id(),
+    slug: text().notNull().unique(),
+    // Рубрика: «Мастерская», «Интервью», «Архитектура».
+    tag: text().notNull(),
+    title: text().notNull(),
+    lead: text().notNull(),
+    // Абзацы через пустую строку; разметки нет — текст выводится как есть, без HTML.
+    body: text().notNull(),
+    coverUrl: text(),
+    coverAlt: text(),
+    isPublished: boolean().notNull().default(false),
+    publishedAt: timestamp({ withTimezone: true }),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (t) => [
+    check('articles_published_has_date', sql`NOT ${t.isPublished} OR ${t.publishedAt} IS NOT NULL`),
+    index('articles_published_at_idx')
+      .on(t.publishedAt.desc())
+      .where(sql`${t.isPublished}`),
+  ],
+);
+
+export const consultationRequests = pgTable(
+  'consultation_requests',
+  {
+    id: id(),
+    name: text().notNull(),
+    phone: text().notNull(),
+    email: text(),
+    // Удобное время свободным текстом: «будни после 18:00».
+    preferredTime: text(),
+    comment: text(),
+    status: consultationStatus().notNull().default('new'),
+    createdAt: createdAt(),
+    updatedAt: updatedAt(),
+  },
+  (t) => [index('consultation_requests_status_idx').on(t.status, t.createdAt.desc())],
 );
 
 // --- Настройки магазина: одна строка ---
