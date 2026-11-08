@@ -16,6 +16,7 @@ import { and, eq } from 'drizzle-orm';
 import type { Database, DbExecutor } from '../../database/client';
 import { addresses, cartItems, orderItems, orders, payments, users } from '../../database/schema';
 import { AppError } from '../../shared/errors';
+import { uniqueViolation } from '../../shared/pg';
 import { hashToken, newToken } from '../../shared/token';
 import { insertAddress } from '../addresses/addresses.service';
 import { issuePasswordToken, sendSetPasswordMail } from '../auth/password-link';
@@ -121,18 +122,6 @@ function unavailableLines(lines: CartLine[]) {
       volumeMl: line.volumeMl,
       available: line.availableQuantity,
     }));
-}
-
-function isUniqueViolation(error: unknown, constraint: string): boolean {
-  const cause = error instanceof Error && 'cause' in error ? error.cause : error;
-  return (
-    typeof cause === 'object' &&
-    cause !== null &&
-    'code' in cause &&
-    cause.code === '23505' &&
-    'constraint' in cause &&
-    cause.constraint === constraint
-  );
 }
 
 type Created = { row: OrderRow; accessToken: string | null; ownerHasPassword: boolean };
@@ -258,7 +247,7 @@ export async function createOrder(
     created = await createInTransaction(deps, viewer, request);
   } catch (error) {
     // Два одинаковых запроса одновременно: второй упрётся в уникальный ключ — отдаём первый.
-    if (!isUniqueViolation(error, 'orders_user_idempotency_unique')) throw error;
+    if (uniqueViolation(error) !== 'orders_user_idempotency_unique') throw error;
     created = await createInTransaction(deps, viewer, request);
   }
 

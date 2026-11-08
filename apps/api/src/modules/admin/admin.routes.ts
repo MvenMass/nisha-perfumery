@@ -1,6 +1,7 @@
 import type { FastifyPluginAsyncZod } from 'fastify-type-provider-zod';
 
 import { requireRole } from '../../plugins/auth';
+import { adminCatalogRoutes } from './admin-catalog.routes';
 import { adminOrdersRoutes } from './admin-orders.routes';
 
 /**
@@ -10,4 +11,5 @@ import { adminOrdersRoutes } from './admin-orders.routes';
 export const adminRoutes: FastifyPluginAsyncZod = async (app) => {
   app.addHook('onRequest', requireRole('admin'));
   await app.register(adminOrdersRoutes);
+  await app.register(adminCatalogRoutes);
 };
