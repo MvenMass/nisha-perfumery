@@ -16,6 +16,8 @@ const envSchema = z.object({
   COOKIE_SECURE: z.stringbool().optional(),
   // Пока есть только мок-провайдер; ЮKassa добавится значением этого же enum.
   PAYMENT_PROVIDER: z.enum(['mock']).default('mock'),
+  // Загруженные снимки (D-021): папка на диске, в Docker — именованный том.
+  UPLOADS_DIR: z.string().min(1).default('./uploads'),
 });
 
 export type Env = z.infer<typeof envSchema>;

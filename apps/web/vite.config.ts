@@ -4,7 +4,9 @@ import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
 
 // e2e поднимает свой api на другом порту, чтобы не конфликтовать с открытым pnpm dev.
-const apiProxy = { '/api': process.env.API_PROXY_TARGET ?? 'http://localhost:3000' };
+const apiTarget = process.env.API_PROXY_TARGET ?? 'http://localhost:3000';
+// /uploads — снимки из админки, их раздаёт api.
+const apiProxy = { '/api': apiTarget, '/uploads': apiTarget };
 
 export default defineConfig({
   plugins: [react()],

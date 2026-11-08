@@ -1,3 +1,7 @@
+import { mkdtemp, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
+
 import { buildApp } from '../app';
 import type { App } from '../app';
 import { loadEnv } from '../config/env';
@@ -13,6 +17,8 @@ export type TestApp = {
   testDb: TestDatabase;
   /** Письма, «отправленные» приложением за время теста. */
   mails: Mail[];
+  /** Временная папка загрузок этого приложения. */
+  uploadsDir: string;
   close: () => Promise<void>;
 };
 
@@ -36,10 +42,12 @@ export async function createTestApp(): Promise<TestApp> {
     adminPassword: TEST_ADMIN.password,
     now: SEED_NOW,
   });
+  const uploadsDir = await mkdtemp(path.join(tmpdir(), 'nisha-uploads-'));
   const env = loadEnv({
     NODE_ENV: 'test',
     WEB_ORIGIN: 'https://nisha.test',
     DATABASE_URL: testDb.url,
+    UPLOADS_DIR: uploadsDir,
   });
   const mailer = createMemoryMailer();
   const app = await buildApp({ env, db: testDb.db, mailer });
@@ -47,9 +55,11 @@ export async function createTestApp(): Promise<TestApp> {
     app,
     testDb,
     mails: mailer.sent,
+    uploadsDir,
     close: async () => {
       await app.close();
       await testDb.drop();
+      await rm(uploadsDir, { recursive: true, force: true });
     },
   };
 }

@@ -1,4 +1,8 @@
+import { mkdir } from 'node:fs/promises';
+import path from 'node:path';
+
 import cookie from '@fastify/cookie';
+import fastifyStatic from '@fastify/static';
 import Fastify from 'fastify';
 import { serializerCompiler, validatorCompiler } from 'fastify-type-provider-zod';
 import type { ZodTypeProvider } from 'fastify-type-provider-zod';
@@ -18,6 +22,8 @@ import { homeRoutes } from './modules/home/home.routes';
 import { createConsoleMailer } from './modules/mailer/mailer';
 import type { Mailer } from './modules/mailer/mailer';
 import { ordersRoutes } from './modules/orders/orders.routes';
+import { createLocalStorage, UPLOADS_PREFIX } from './modules/storage/storage';
+import type { Storage } from './modules/storage/storage';
 import { mockPaymentRoutes } from './modules/payments/payments.routes';
 import { stockNotificationRoutes } from './modules/stock-notifications/stock-notifications.routes';
 import { storeRoutes } from './modules/store/store.routes';
@@ -32,6 +38,7 @@ declare module 'fastify' {
     db: Database;
     env: Env;
     mailer: Mailer;
+    storage: Storage;
     /** «METHOD /url» всех маршрутов: тест прав проверяет, что каждый /api/admin/* закрыт. */
     routeList: string[];
   }
@@ -61,6 +68,9 @@ export async function buildApp({ env, db, mailer }: AppDeps) {
   app.decorate('db', db);
   app.decorate('env', env);
   app.decorate('mailer', mailer ?? createConsoleMailer(app.log));
+  const uploadsDir = path.resolve(env.UPLOADS_DIR);
+  await mkdir(uploadsDir, { recursive: true });
+  app.decorate('storage', createLocalStorage(uploadsDir));
   app.decorate('routeList', []);
   app.addHook('onRoute', (route) => {
     for (const method of [route.method].flat()) {
@@ -75,6 +85,14 @@ export async function buildApp({ env, db, mailer }: AppDeps) {
   setupAuth(app, { secure: cookieSecure(env) });
   setupCsrf(app, { webOrigin: env.WEB_ORIGIN });
 
+  // Имена файлов уникальны (id снимка), поэтому их можно кешировать навсегда.
+  await app.register(fastifyStatic, {
+    root: uploadsDir,
+    prefix: UPLOADS_PREFIX,
+    decorateReply: false,
+    immutable: true,
+    maxAge: '365d',
+  });
   await app.register(healthRoutes, { prefix: '/api' });
   await app.register(authRoutes, { prefix: '/api', secure: cookieSecure(env) });
   await app.register(catalogRoutes, { prefix: '/api' });

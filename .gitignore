@@ -7,6 +7,9 @@ coverage/
 .env.*
 !.env.example
 
+# Снимки из админки (D-021): в разработке — папка api, в Docker — том.
+uploads/
+
 playwright-report/
 test-results/
 
