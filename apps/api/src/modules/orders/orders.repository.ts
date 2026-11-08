@@ -1,5 +1,5 @@
 import type { Order, OrderStatus } from '@nisha/contracts';
-import { and, asc, count, desc, eq, inArray, lt, sql } from 'drizzle-orm';
+import { and, asc, count, desc, eq, ilike, inArray, lt, or, sql } from 'drizzle-orm';
 
 import type { DbExecutor } from '../../database/client';
 import {
@@ -10,6 +10,7 @@ import {
   productVariants,
   products,
 } from '../../database/schema';
+import { likePattern } from '../../shared/sql';
 
 export type OrderRow = typeof orders.$inferSelect;
 export type OrderItemRow = typeof orderItems.$inferSelect;
@@ -184,4 +185,36 @@ export async function findHistories(db: DbExecutor, orderIds: string[]) {
     .from(orderStatusHistory)
     .where(inArray(orderStatusHistory.orderId, orderIds))
     .orderBy(asc(orderStatusHistory.createdAt));
+}
+
+/** Список для админки: фильтр по статусу, поиск по номеру, email или имени. */
+export async function findOrdersForAdmin(
+  db: DbExecutor,
+  query: {
+    status?: OrderStatus | undefined;
+    q?: string | undefined;
+    limit: number;
+    offset: number;
+  },
+) {
+  const search = query.q
+    ? /^\d+$/.test(query.q)
+      ? eq(orders.number, Number(query.q))
+      : or(
+          ilike(orders.contactEmail, likePattern(query.q)),
+          ilike(orders.contactName, likePattern(query.q)),
+        )
+    : undefined;
+  const where = and(query.status ? eq(orders.status, query.status) : undefined, search);
+  const [rows, [total]] = await Promise.all([
+    db
+      .select()
+      .from(orders)
+      .where(where)
+      .orderBy(desc(orders.createdAt))
+      .limit(query.limit)
+      .offset(query.offset),
+    db.select({ value: count() }).from(orders).where(where),
+  ]);
+  return { rows, total: total?.value ?? 0 };
 }

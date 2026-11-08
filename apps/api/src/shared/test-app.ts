@@ -3,10 +3,10 @@ import type { App } from '../app';
 import { loadEnv } from '../config/env';
 import { runSeed } from '../database/seed';
 import { createTestDatabase } from '../database/test-database';
+import type { TestDatabase } from '../database/test-database';
 import { SESSION_COOKIE } from '../modules/auth/session';
 import { createMemoryMailer } from '../modules/mailer/mailer';
 import type { Mail } from '../modules/mailer/mailer';
-import type { TestDatabase } from '../database/test-database';
 
 export type TestApp = {
   app: App;
@@ -25,12 +25,15 @@ export const CSRF = {
 /** Дата сида в тестах фиксирована: порядок «новинок» и даты публикации не плавают. */
 export const SEED_NOW = new Date('2026-11-01T12:00:00Z');
 
+/** Администратор из сида тестовой базы. */
+export const TEST_ADMIN = { email: 'admin@nisha.test', password: 'correct-horse-battery' };
+
 // Приложение на временной базе с сидом — для тестов модулей через app.inject().
 export async function createTestApp(): Promise<TestApp> {
   const testDb = await createTestDatabase();
   await runSeed(testDb.db, {
-    adminEmail: 'admin@nisha.test',
-    adminPassword: 'correct-horse-battery',
+    adminEmail: TEST_ADMIN.email,
+    adminPassword: TEST_ADMIN.password,
     now: SEED_NOW,
   });
   const env = loadEnv({
@@ -51,24 +54,48 @@ export async function createTestApp(): Promise<TestApp> {
   };
 }
 
-let signUpCounter = 0;
+let addressCounter = 0;
+
+/** Свой IP на каждый вход и регистрацию: у них лимит частоты по адресу. */
+function nextAddress(): string {
+  addressCounter += 1;
+  return `10.250.${Math.floor(addressCounter / 250)}.${addressCounter % 250}`;
+}
+
+function sessionCookies(
+  response: { statusCode: number; body: string; cookies: Array<{ name: string; value: string }> },
+  what: string,
+): Record<string, string> {
+  const token = response.cookies.find((cookie) => cookie.name === SESSION_COOKIE)?.value;
+  if (response.statusCode >= 300 || !token) {
+    throw new Error(`${what} не прошёл: ${response.statusCode} ${response.body}`);
+  }
+  return { ...CSRF.cookies, [SESSION_COOKIE]: token };
+}
 
 /**
  * Регистрирует покупателя и возвращает cookie вошедшего вместе с CSRF — для тестов модулей,
- * где вход только предусловие. Каждая регистрация — с нового IP, чтобы не упереться в лимит.
+ * где вход только предусловие.
  */
 export async function signUp(app: App, email: string): Promise<Record<string, string>> {
-  signUpCounter += 1;
   const response = await app.inject({
     method: 'POST',
     url: '/api/auth/register',
     payload: { email, password: 'stone-and-smoke', name: 'Анна' },
-    remoteAddress: `10.250.${Math.floor(signUpCounter / 250)}.${signUpCounter % 250}`,
+    remoteAddress: nextAddress(),
     ...CSRF,
   });
-  const token = response.cookies.find((cookie) => cookie.name === SESSION_COOKIE)?.value;
-  if (response.statusCode !== 201 || !token) {
-    throw new Error(`Регистрация ${email} не прошла: ${response.statusCode} ${response.body}`);
-  }
-  return { ...CSRF.cookies, [SESSION_COOKIE]: token };
+  return sessionCookies(response, `Регистрация ${email}`);
+}
+
+/** Вход администратором из сида. */
+export async function signInAdmin(app: App): Promise<Record<string, string>> {
+  const response = await app.inject({
+    method: 'POST',
+    url: '/api/auth/login',
+    payload: TEST_ADMIN,
+    remoteAddress: nextAddress(),
+    ...CSRF,
+  });
+  return sessionCookies(response, 'Вход администратора');
 }

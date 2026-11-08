@@ -29,6 +29,11 @@ export function assertTransition(from: OrderStatus, to: OrderStatus, method: Del
   }
 }
 
+/** Куда можно перевести заказ сейчас — для кнопок в админке. */
+export function allowedStatuses(from: OrderStatus, method: DeliveryMethod): OrderStatus[] {
+  return NEXT[from].filter((to) => canTransition(from, to, method));
+}
+
 /** Вкладки кабинета: активные — до «Доставлен», завершённые — доставленные и отменённые. */
 export const ACTIVE_STATUSES: readonly OrderStatus[] = [
   'pending',

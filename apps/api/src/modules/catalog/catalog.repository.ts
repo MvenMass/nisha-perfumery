@@ -3,6 +3,7 @@ import { and, asc, desc, eq, inArray, ne, sql } from 'drizzle-orm';
 import type { SQL } from 'drizzle-orm';
 
 import type { Database, DbExecutor } from '../../database/client';
+import { likePattern } from '../../shared/sql';
 import {
   categories,
   collections,
@@ -96,11 +97,6 @@ export type ListItemRow = {
   isNew: boolean;
   image: { url: string; alt: string } | null;
 };
-
-// Пользовательский ввод в ILIKE: % и _ — спецсимволы шаблона.
-function likePattern(value: string): string {
-  return `%${value.replace(/[\\%_]/g, (char) => `\\${char}`)}%`;
-}
 
 function filterConditions(query: CatalogQuery): SQL[] {
   const conditions: SQL[] = [];

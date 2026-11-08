@@ -7,6 +7,7 @@ import type {
   Order,
   OrderListQuery,
   OrderListResponse,
+  OrderStatus,
   RepeatOrderResponse,
   User,
 } from '@nisha/contracts';
@@ -282,29 +283,66 @@ export async function createOrder(
 export async function cancelLockedOrder(
   db: DbExecutor,
   row: OrderRow,
-  options: { comment: string; changedBy?: string | null; paymentFailed?: boolean },
+  options: { comment: string; changedBy?: string | null },
 ): Promise<void> {
   assertTransition(row.status, 'cancelled', row.deliveryMethod);
   for (const item of await findOrderItems(db, row.id)) {
     if (item.variantId) await changeStock(db, item.variantId, item.quantity);
   }
+  // Неоплаченный — оплата не прошла; оплаченный — деньги возвращаются (у мока возврат мгновенный,
+  // у ЮKassa здесь будет запрос возврата провайдеру).
+  const paymentStatus =
+    row.paymentStatus === 'pending'
+      ? ('failed' as const)
+      : row.paymentStatus === 'succeeded'
+        ? ('refunded' as const)
+        : row.paymentStatus;
   await db
     .update(orders)
-    .set({
-      status: 'cancelled',
-      paymentExpiresAt: null,
-      ...(row.paymentStatus === 'pending' ? { paymentStatus: 'failed' as const } : {}),
-    })
+    .set({ status: 'cancelled', paymentExpiresAt: null, paymentStatus })
     .where(eq(orders.id, row.id));
-  if (row.paymentStatus === 'pending') {
+  if (paymentStatus !== row.paymentStatus) {
     await db
       .update(payments)
-      .set({ status: 'failed' })
-      .where(and(eq(payments.orderId, row.id), eq(payments.status, 'pending')));
+      .set({ status: paymentStatus })
+      .where(and(eq(payments.orderId, row.id), eq(payments.status, row.paymentStatus)));
   }
   await addHistory(db, row.id, 'cancelled', {
     changedBy: options.changedBy ?? null,
     comment: options.comment,
+  });
+}
+
+/**
+ * Смена статуса администратором (D-043): только допустимые переходы; отмена возвращает
+ * остатки и деньги. Остальные переходы — просто запись статуса и истории с автором.
+ */
+export async function changeOrderStatus(
+  db: Database,
+  orderId: string,
+  input: { status: OrderStatus; comment?: string | undefined },
+  admin: User,
+): Promise<OrderRow> {
+  await cancelIfExpired(db, orderId);
+  return db.transaction(async (tx) => {
+    const row = await findOrderRow(tx, orderId, { forUpdate: true });
+    if (!row) throw new AppError('NOT_FOUND', 'Заказ не найден');
+    if (input.status === 'cancelled') {
+      await cancelLockedOrder(tx, row, {
+        comment: input.comment ?? 'Отменён администратором',
+        changedBy: admin.id,
+      });
+    } else {
+      assertTransition(row.status, input.status, row.deliveryMethod);
+      await tx.update(orders).set({ status: input.status }).where(eq(orders.id, row.id));
+      await addHistory(tx, row.id, input.status, {
+        changedBy: admin.id,
+        comment: input.comment ?? null,
+      });
+    }
+    const updated = await findOrderRow(tx, row.id);
+    if (!updated) throw new Error('Заказ пропал внутри транзакции');
+    return updated;
   });
 }
 

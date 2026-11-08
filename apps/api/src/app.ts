@@ -7,6 +7,7 @@ import { cookieSecure } from './config/env';
 import type { Env } from './config/env';
 import type { Database } from './database/client';
 import { addressesRoutes } from './modules/addresses/addresses.routes';
+import { adminRoutes } from './modules/admin/admin.routes';
 import { authRoutes } from './modules/auth/auth.routes';
 import { cartRoutes } from './modules/cart/cart.routes';
 import { catalogRoutes } from './modules/catalog/catalog.routes';
@@ -31,6 +32,8 @@ declare module 'fastify' {
     db: Database;
     env: Env;
     mailer: Mailer;
+    /** «METHOD /url» всех маршрутов: тест прав проверяет, что каждый /api/admin/* закрыт. */
+    routeList: string[];
   }
 }
 
@@ -58,6 +61,12 @@ export async function buildApp({ env, db, mailer }: AppDeps) {
   app.decorate('db', db);
   app.decorate('env', env);
   app.decorate('mailer', mailer ?? createConsoleMailer(app.log));
+  app.decorate('routeList', []);
+  app.addHook('onRoute', (route) => {
+    for (const method of [route.method].flat()) {
+      if (method !== 'HEAD') app.routeList.push(`${method} ${route.url}`);
+    }
+  });
 
   setupErrorHandling(app);
   await setupSecurity(app, env.WEB_ORIGIN);
@@ -77,6 +86,7 @@ export async function buildApp({ env, db, mailer }: AppDeps) {
   await app.register(checkoutRoutes, { prefix: '/api' });
   await app.register(ordersRoutes, { prefix: '/api' });
   await app.register(addressesRoutes, { prefix: '/api' });
+  await app.register(adminRoutes, { prefix: '/api/admin' });
   if (env.PAYMENT_PROVIDER === 'mock') await app.register(mockPaymentRoutes, { prefix: '/api' });
 
   return app;
