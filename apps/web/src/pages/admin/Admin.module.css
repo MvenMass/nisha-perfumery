@@ -151,6 +151,15 @@
   background: var(--color-basalt);
 }
 
+.swatch {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  margin-right: var(--sp-8);
+  vertical-align: -2px;
+  border: var(--border-1) solid var(--color-line-strong);
+}
+
 .pager {
   display: flex;
   gap: var(--sp-12);

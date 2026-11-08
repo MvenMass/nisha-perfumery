@@ -7,11 +7,8 @@ import {
 import type {
   AdminProductInput,
   AdminProductListQuery,
-  CategoryInput,
-  CollectionInput,
   DictionaryKind,
   ImagesUpdate,
-  MaterialInput,
 } from '@nisha/contracts';
 import { keepPreviousData, useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { z } from 'zod';
@@ -149,12 +146,11 @@ export function useProductImages(productId: string) {
   return { upload, update, remove };
 }
 
-type DictionaryBody = MaterialInput | CategoryInput | CollectionInput;
-
 export function useSaveDictionaryItem(kind: DictionaryKind) {
   const invalidate = useInvalidateCatalog();
   return useMutation({
-    mutationFn: ({ id, input }: { id: string | null; input: DictionaryBody }) =>
+    // Тело уже проверено схемой своего вида справочника в форме; сервер проверит его снова.
+    mutationFn: ({ id, input }: { id: string | null; input: unknown }) =>
       apiRequest(
         id ? `/api/admin/dictionaries/${kind}/${id}` : `/api/admin/dictionaries/${kind}`,
         z.undefined(),

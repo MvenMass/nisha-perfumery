@@ -47,6 +47,21 @@ const adminRoutes: RouteObject = {
       path: 'products/:productId',
       lazy: async () => ({ Component: (await loadAdmin()).ProductEditor }),
     },
+    {
+      path: 'dictionaries',
+      lazy: async () => ({ Component: (await loadAdmin()).DictionariesAdmin }),
+    },
+    { path: 'slides', lazy: async () => ({ Component: (await loadAdmin()).SlidesAdmin }) },
+    { path: 'articles', lazy: async () => ({ Component: (await loadAdmin()).ArticlesAdmin }) },
+    {
+      path: 'articles/:articleId',
+      lazy: async () => ({ Component: (await loadAdmin()).ArticleEditor }),
+    },
+    {
+      path: 'consultations',
+      lazy: async () => ({ Component: (await loadAdmin()).ConsultationsAdmin }),
+    },
+    { path: 'settings', lazy: async () => ({ Component: (await loadAdmin()).SettingsAdmin }) },
   ],
 };
 
