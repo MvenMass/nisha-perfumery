@@ -11,6 +11,14 @@ import {
 } from '../common';
 
 const requiredText = (max: number, message: string) => z.string().trim().min(1, message).max(max);
+
+/** Целое число из формы: пустое поле и «семнадцать» получают понятную ошибку, а не текст Zod. */
+const wholeNumber = (min: number, max: number) =>
+  z
+    .number({ error: 'Введите целое число' })
+    .int('Введите целое число')
+    .min(min, min > 0 ? 'Должно быть больше нуля' : 'Не меньше нуля')
+    .max(max, `Не больше ${max}`);
 const optionalText = (max: number) =>
   z
     .string()
@@ -30,14 +38,14 @@ export const materialInputSchema = z.object({
     .trim()
     .toUpperCase()
     .regex(/^#[0-9A-F]{6}$/, 'Цвет в формате #A1B2C3'),
-  position: z.number().int().min(0).max(999),
+  position: wholeNumber(0, 999),
 });
 export type MaterialInput = z.infer<typeof materialInputSchema>;
 
 export const categoryInputSchema = z.object({
   slug: slugSchema,
   name: requiredText(60, 'Укажите название'),
-  position: z.number().int().min(0).max(999),
+  position: wholeNumber(0, 999),
 });
 export type CategoryInput = z.infer<typeof categoryInputSchema>;
 
@@ -77,14 +85,14 @@ const noteNamesSchema = z
 export const adminVariantInputSchema = z.object({
   /** Есть id — правка существующего объёма, нет — новый. */
   id: uuidSchema.optional(),
-  volumeMl: z.number().int().positive().max(5000),
+  volumeMl: wholeNumber(1, 5000),
   sku: z
     .string()
     .trim()
     .toUpperCase()
     .regex(/^[A-Z0-9-]{2,40}$/, 'Латиница, цифры и дефис'),
-  priceKopecks: positiveKopecksSchema,
-  stock: z.number().int().min(0).max(100_000),
+  priceKopecks: z.number({ error: 'Цена в рублях' }).pipe(positiveKopecksSchema),
+  stock: wholeNumber(0, 100_000),
   isActive: z.boolean(),
 });
 export type AdminVariantInput = z.infer<typeof adminVariantInputSchema>;
@@ -96,7 +104,7 @@ export type AdminVariantInput = z.infer<typeof adminVariantInputSchema>;
 export const adminProductInputSchema = z
   .object({
     slug: slugSchema,
-    specimenNumber: z.number().int().positive().max(9999),
+    specimenNumber: wholeNumber(1, 9999),
     name: requiredText(80, 'Укажите название'),
     materialId: uuidSchema,
     collectionId: uuidSchema.nullable(),
@@ -104,13 +112,13 @@ export const adminProductInputSchema = z
     origin: requiredText(120, 'Укажите происхождение'),
     density: densitySchema,
     concentration: requiredText(60, 'Укажите концентрацию'),
-    longevityHours: z.number().int().positive().max(72).nullable(),
+    longevityHours: wholeNumber(1, 72).nullable(),
     description: requiredText(2000, 'Нужно описание'),
     story: optionalText(4000),
     // Время, когда слой затихает (D-048): верх раньше сердца, сердце раньше базы.
-    topMinutes: z.number().int().positive().max(10_000),
-    heartMinutes: z.number().int().positive().max(10_000),
-    baseMinutes: z.number().int().positive().max(10_000),
+    topMinutes: wholeNumber(1, 10_000),
+    heartMinutes: wholeNumber(1, 10_000),
+    baseMinutes: wholeNumber(1, 10_000),
     notes: z.object({ top: noteNamesSchema, heart: noteNamesSchema, base: noteNamesSchema }),
     variants: z.array(adminVariantInputSchema).min(1, 'Нужен хотя бы один объём').max(10),
     isBestseller: z.boolean(),

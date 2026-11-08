@@ -124,7 +124,8 @@
   white-space: nowrap;
 }
 
-.right {
+/* Через .table: иначе правило «.table td» выигрывает по специфичности. */
+.table .right {
   text-align: right;
 }
 

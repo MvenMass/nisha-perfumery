@@ -167,7 +167,7 @@ export function OrdersAdmin() {
           ))}
         </Select>
         <Input
-          label="Поиск"
+          label="Поиск заказов"
           type="search"
           placeholder="Номер, email или имя"
           value={search}

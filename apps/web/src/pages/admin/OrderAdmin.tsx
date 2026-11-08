@@ -27,7 +27,7 @@ const ACTION_LABELS: Partial<Record<OrderStatus, string>> = {
 
 function address(order: AdminOrder): string {
   const value = order.deliveryAddress;
-  if (!value) return 'бутик';
+  if (!value) return '';
   if (value.kind === 'pickup_point') return value.address;
   return `${value.city}, ${value.street}${value.apartment ? `, кв.\u00A0${value.apartment}` : ''}`;
 }
@@ -157,7 +157,8 @@ export function OrderAdmin() {
             <div className={styles.fact}>
               <dt>Доставка</dt>
               <dd>
-                {DELIVERY_LABELS[data.deliveryMethod]}: {address(data)}
+                {DELIVERY_LABELS[data.deliveryMethod]}
+                {data.deliveryAddress ? `: ${address(data)}` : ''}
               </dd>
             </div>
             {data.deliveryComment && (

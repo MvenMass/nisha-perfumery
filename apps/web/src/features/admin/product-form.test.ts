@@ -58,6 +58,7 @@ describe('validateProduct', () => {
     expect(Object.keys(result.errors)).toEqual(
       expect.arrayContaining(['specimenNumber', 'notes.top', 'variants.0.priceKopecks']),
     );
+    expect(result.errors.specimenNumber).toBe('Введите целое число');
   });
 
   it('не публикует образец без включённого объёма и следит за порядком слоёв', () => {

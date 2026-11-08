@@ -130,7 +130,11 @@ export const storeSettingsInputSchema = z.object({
     .string()
     .trim()
     .regex(/^\d+(–\d+)?$/, 'Например, 2–6'),
-  lowStockThreshold: z.number().int().min(1).max(100),
+  lowStockThreshold: z
+    .number({ error: 'Введите целое число' })
+    .int('Введите целое число')
+    .min(1, 'Не меньше 1')
+    .max(100, 'Не больше 100'),
   boutiqueAddress: requiredText(200, 'Нужен адрес бутика'),
   boutiqueHours: requiredText(120, 'Нужны часы работы'),
 });

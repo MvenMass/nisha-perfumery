@@ -125,7 +125,7 @@ export function ProductsAdmin() {
       </div>
       <div className={styles.toolbar}>
         <Input
-          label="Поиск"
+          label="Поиск образцов"
           type="search"
           placeholder="Название, адрес или номер"
           value={search}
