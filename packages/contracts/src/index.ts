@@ -1,3 +1,4 @@
+export * from './admin/content';
 export * from './admin/catalog';
 export * from './admin/orders';
 export * from './address';
@@ -5,6 +6,7 @@ export * from './auth';
 export * from './cart';
 export * from './catalog';
 export * from './common';
+export * from './content';
 export * from './delivery';
 export * from './errors';
 export * from './favorites';
