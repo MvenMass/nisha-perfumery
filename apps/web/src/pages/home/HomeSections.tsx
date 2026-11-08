@@ -1,9 +1,10 @@
-import type { ProductDetail, ProductListItem, StoreInfo } from '@nisha/contracts';
+import type { ArticlePreview, ProductDetail, ProductListItem, StoreInfo } from '@nisha/contracts';
 import { Link } from 'react-router';
 
 import { formatSpecimenNumber, productHref } from '../../entities/product/lib/format';
 import { cx } from '../../shared/lib/cx';
 import { formatPrice } from '../../shared/lib/money';
+import { typograph } from '../../shared/lib/typograph';
 import { ButtonLink } from '../../shared/ui/Button/Button';
 import { Container } from '../../shared/ui/Container/Container';
 import { Icon } from '../../shared/ui/Icon/Icon';
@@ -11,7 +12,7 @@ import { SectionLabel } from '../../shared/ui/SectionLabel/SectionLabel';
 import { Skeleton } from '../../shared/ui/Skeleton/Skeleton';
 import { NotesPyramid } from '../../widgets/notes-pyramid/NotesPyramid';
 import { ShopProductCard } from '../../widgets/product-card/ShopProductCard';
-import { CATEGORY_TILES, JOURNAL_PREVIEW, PROCESS_STEPS } from './home-content';
+import { CATEGORY_TILES, PROCESS_STEPS } from './home-content';
 import styles from './HomePage.module.css';
 
 export function Advantages({ store }: { store: StoreInfo | undefined }) {
@@ -226,18 +227,29 @@ export function Materials() {
   );
 }
 
-export function Journal() {
+/** Превью журнала: три последние статьи из БД; пока статей нет, секции нет. */
+export function Journal({ articles }: { articles: ArticlePreview[] }) {
+  if (articles.length === 0) return null;
   return (
     <section id="journal" aria-labelledby="journal-title" className={styles.journal}>
       <Container className={styles.sectionInner}>
-        <h2 id="journal-title" className={styles.sectionTitle}>
-          Искусство, скрытое в&nbsp;деталях
-        </h2>
+        <div className={styles.sectionHead}>
+          <h2 id="journal-title" className={styles.sectionTitle}>
+            Искусство, скрытое в&nbsp;деталях
+          </h2>
+          <Link to="/journal" className={styles.headLink}>
+            Весь журнал
+          </Link>
+        </div>
         <ul className={styles.articles}>
-          {JOURNAL_PREVIEW.map((article) => (
-            <li key={article.title} className={styles.article}>
+          {articles.map((article) => (
+            <li key={article.slug} className={styles.article}>
               <SectionLabel tone="muted">{article.tag}</SectionLabel>
-              <h3 className={styles.articleTitle}>{article.title}</h3>
+              <h3 className={styles.articleTitle}>
+                <Link to={`/journal/${article.slug}`} className={styles.articleLink}>
+                  {typograph(article.title)}
+                </Link>
+              </h3>
             </li>
           ))}
         </ul>
@@ -267,8 +279,8 @@ export function Boutique({ store }: { store: StoreInfo | undefined }) {
               </li>
             </ul>
           )}
-          <ButtonLink to="/catalog" variant="outline" className={styles.boutiqueCta}>
-            Выбрать образец
+          <ButtonLink to="/consultation" variant="outline" className={styles.boutiqueCta}>
+            Записаться на&nbsp;консультацию
           </ButtonLink>
         </div>
         <div

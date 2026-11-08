@@ -47,7 +47,8 @@ export async function findPublishedSlides(db: Database): Promise<HeroSlide[]> {
     text: row.text,
     ctaLabel: row.ctaLabel,
     ctaHref: row.ctaHref,
-    image: image(row.imageUrl, row.imageAlt),
+    imageUrl: row.imageUrl,
+    imageAlt: row.imageAlt,
   }));
 }
 

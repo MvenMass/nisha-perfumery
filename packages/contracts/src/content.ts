@@ -18,7 +18,9 @@ export const heroSlideSchema = z.object({
   text: z.string(),
   ctaLabel: z.string(),
   ctaHref: z.string(),
-  image: imageSchema.nullable(),
+  /** null — снимка ещё нет: витрина показывает фон, а imageAlt описывает будущий кадр. */
+  imageUrl: z.string().nullable(),
+  imageAlt: z.string(),
 });
 export type HeroSlide = z.infer<typeof heroSlideSchema>;
 

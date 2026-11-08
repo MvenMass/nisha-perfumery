@@ -10,12 +10,17 @@ import { LoginPage, RegisterPage, SetPasswordPage } from '../pages/auth/AuthPage
 import { CartPage } from '../pages/cart/CartPage';
 import { CatalogPage } from '../pages/catalog/CatalogPage';
 import { CheckoutPage } from '../pages/checkout/CheckoutPage';
+import { ConsultationPage } from '../pages/consultation/ConsultationPage';
 import { FavoritesPage } from '../pages/favorites/FavoritesPage';
 import { FragranceFinderPage } from '../pages/fragrance-finder/FragranceFinderPage';
 import { HomePage } from '../pages/home/HomePage';
+import { ArticlePage, JournalPage } from '../pages/journal/JournalPages';
 import { OrderDonePage } from '../pages/payment/OrderDonePage';
 import { PaymentPage } from '../pages/payment/PaymentPage';
 import { ProductPage } from '../pages/product/ProductPage';
+import { StaticPage } from '../pages/static/StaticPage';
+import { STATIC_PAGES } from '../pages/static/static-content';
+import type { StaticPageKey } from '../pages/static/static-content';
 import { NotFoundPage } from '../widgets/not-found/NotFoundPage';
 import { RouteErrorPage } from '../widgets/not-found/RouteErrorPage';
 
@@ -70,6 +75,13 @@ const shopRoutes: RouteObject[] = [
   { path: 'catalog', element: <CatalogPage /> },
   { path: 'catalog/:slug', element: <ProductPage /> },
   { path: 'fragrance-finder', element: <FragranceFinderPage /> },
+  { path: 'journal', element: <JournalPage /> },
+  { path: 'journal/:slug', element: <ArticlePage /> },
+  { path: 'consultation', element: <ConsultationPage /> },
+  ...(Object.keys(STATIC_PAGES) as StaticPageKey[]).map((page) => ({
+    path: page,
+    element: <StaticPage page={page} />,
+  })),
   { path: 'cart', element: <CartPage /> },
   { path: 'checkout', element: <CheckoutPage /> },
   { path: 'checkout/payment/:orderId', element: <PaymentPage /> },

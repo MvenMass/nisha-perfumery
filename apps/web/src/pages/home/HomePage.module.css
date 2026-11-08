@@ -355,6 +355,10 @@
   line-height: 1.2;
 }
 
+.articleLink:hover {
+  color: var(--color-copper);
+}
+
 /* --- Бутик --- */
 .boutique {
   padding: var(--sp-48) 0 var(--sp-56);

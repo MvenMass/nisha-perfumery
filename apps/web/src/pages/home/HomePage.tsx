@@ -29,7 +29,7 @@ function Strata({ kind, surface }: { kind: keyof typeof STRATA; surface?: boolea
   );
 }
 
-// Главная по home.html / home-mobile.html. Из API — бестселлеры, «Срез» и данные бутика; тексты — в коде.
+// Главная по home.html / home-mobile.html. Из API — слайды, бестселлеры, «Срез», журнал и бутик; остальные тексты — в коде.
 export function HomePage() {
   useMeta(
     'Парфюмерный дом',
@@ -40,7 +40,7 @@ export function HomePage() {
 
   return (
     <>
-      <HeroCarousel />
+      <HeroCarousel slides={home.data?.slides} pending={home.isPending} />
       <Advantages store={store.data} />
       <Strata kind="limestone" />
       <Categories />
@@ -52,7 +52,7 @@ export function HomePage() {
       <Process />
       <Strata kind="travertine" />
       <Materials />
-      <Journal />
+      <Journal articles={home.data?.articles ?? []} />
       <Boutique store={store.data} />
     </>
   );

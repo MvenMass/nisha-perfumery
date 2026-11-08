@@ -1,5 +1,6 @@
 import type { Address, CheckoutQuote, DeliveryMethod, StoreInfo, User } from '@nisha/contracts';
 import type { FormEvent, ReactNode } from 'react';
+import { Link } from 'react-router';
 
 import { formatPrice } from '../../shared/lib/money';
 import { plural } from '../../shared/lib/plural';
@@ -241,7 +242,11 @@ export function CheckoutForm({
           {submitting ? 'Оформляем…' : 'Перейти к\u00A0оплате'}
         </Button>
         <p className={styles.terms}>
-          Нажимая кнопку, вы&nbsp;соглашаетесь с&nbsp;условиями продажи.
+          Нажимая кнопку, вы&nbsp;соглашаетесь с&nbsp;
+          <Link to="/terms" className={styles.termsLink}>
+            условиями продажи
+          </Link>
+          .
         </p>
       </div>
     </form>
