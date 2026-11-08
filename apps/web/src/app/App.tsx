@@ -42,6 +42,11 @@ const adminRoutes: RouteObject = {
     { index: true, element: <Navigate to="/admin/orders" replace /> },
     { path: 'orders', lazy: async () => ({ Component: (await loadAdmin()).OrdersAdmin }) },
     { path: 'orders/:orderId', lazy: async () => ({ Component: (await loadAdmin()).OrderAdmin }) },
+    { path: 'products', lazy: async () => ({ Component: (await loadAdmin()).ProductsAdmin }) },
+    {
+      path: 'products/:productId',
+      lazy: async () => ({ Component: (await loadAdmin()).ProductEditor }),
+    },
   ],
 };
 

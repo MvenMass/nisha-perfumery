@@ -1,0 +1,34 @@
+.list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: var(--sp-16);
+}
+
+.item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-10);
+}
+
+.preview {
+  width: 100%;
+  height: 220px;
+  object-fit: cover;
+  background: var(--color-basalt);
+}
+
+.file {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-8);
+  font-size: var(--fs-12);
+  color: var(--color-text-muted);
+}
+
+.file input {
+  min-height: var(--control-52);
+  padding: var(--sp-12);
+  font: inherit;
+  color: var(--color-text);
+  border: var(--border-1) dashed var(--color-line-strong);
+}
