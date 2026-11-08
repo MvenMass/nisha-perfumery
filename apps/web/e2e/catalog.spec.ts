@@ -6,11 +6,14 @@ import type { Page } from '@playwright/test';
 /** Выбрать материал: на широком экране — в боковой панели, на телефоне — через шторку фильтров. */
 async function pickMaterial(page: Page, name: string) {
   const aside = page.getByRole('complementary', { name: 'Фильтры' });
+  const sheetButton = page.getByRole('button', { name: /^Фильтры/ });
+  // isVisible() не ждёт: сначала дожидаемся, пока каталог отрисует один из вариантов фильтров.
+  await expect(aside.or(sheetButton).first()).toBeVisible();
   if (await aside.isVisible()) {
     await aside.getByRole('button', { name }).click();
     return;
   }
-  await page.getByRole('button', { name: /^Фильтры/ }).click();
+  await sheetButton.click();
   const sheet = page.getByRole('dialog', { name: 'Фильтры' });
   await sheet.getByRole('button', { name }).click();
   await sheet.getByRole('button', { name: /^Показать/ }).click();
