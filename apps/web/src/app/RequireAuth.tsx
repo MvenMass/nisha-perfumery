@@ -12,11 +12,11 @@ import { NotFoundPage } from '../widgets/not-found/NotFoundPage';
 type RequireAuthProps = {
   children: ReactNode;
   /** Нужна роль (админка, этап 8). Сервер проверяет права сам; здесь — только удобство. */
-  role?: UserRole | undefined;
+  requiredRole?: UserRole | undefined;
 };
 
 /** Защищённый маршрут: гостя отправляем на вход с возвратом на исходную страницу. */
-export function RequireAuth({ children, role }: RequireAuthProps) {
+export function RequireAuth({ children, requiredRole }: RequireAuthProps) {
   const me = useMe();
   const location = useLocation();
 
@@ -54,7 +54,7 @@ export function RequireAuth({ children, role }: RequireAuthProps) {
   }
 
   // Чужой роли не показываем даже факт существования раздела.
-  if (role && me.data.role !== role) return <NotFoundPage />;
+  if (requiredRole && me.data.role !== requiredRole) return <NotFoundPage />;
 
   return children;
 }

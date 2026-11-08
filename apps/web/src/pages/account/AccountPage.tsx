@@ -1,6 +1,6 @@
 import { Link, NavLink, Outlet, useNavigate } from 'react-router';
 
-import { useMe } from '../../entities/user/queries';
+import { isAdmin, useMe } from '../../entities/user/queries';
 import { useLogout } from '../../features/auth/mutations';
 import { cx } from '../../shared/lib/cx';
 import { Container } from '../../shared/ui/Container/Container';
@@ -51,6 +51,14 @@ export function AccountPage() {
               Избранное
             </Link>
           </li>
+          {isAdmin(user) && (
+            <li>
+              <Link to="/admin" className={styles.menuItem}>
+                <Icon name="shield" size={18} />
+                Админка
+              </Link>
+            </li>
+          )}
           <li>
             <button
               type="button"

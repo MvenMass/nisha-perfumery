@@ -35,7 +35,7 @@ function renderAt(path: string, role?: 'admin') {
           <Route
             path="*"
             element={
-              <RequireAuth role={role}>
+              <RequireAuth requiredRole={role}>
                 <p>Секрет</p>
               </RequireAuth>
             }

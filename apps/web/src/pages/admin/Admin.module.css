@@ -1,0 +1,266 @@
+/* Админка: та же дизайн-система, плотнее и утилитарнее (D-033). Макета нет. */
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-24);
+  padding-top: var(--sp-24);
+  padding-bottom: var(--sp-72);
+}
+
+.nav {
+  display: flex;
+  gap: var(--sp-4);
+  padding-bottom: var(--sp-4);
+  overflow-x: auto;
+  border-bottom: var(--border-1) solid var(--color-line);
+}
+
+.navLabel {
+  display: none;
+}
+
+.navLink {
+  display: flex;
+  flex: none;
+  align-items: center;
+  min-height: var(--control-44);
+  padding: 0 var(--sp-12);
+  font-size: var(--fs-14);
+  color: var(--color-text-muted);
+  white-space: nowrap;
+}
+
+.navLink:hover {
+  color: var(--color-text);
+}
+
+.navLinkActive {
+  color: var(--color-text);
+  box-shadow: inset 0 calc(-1 * var(--border-2)) 0 var(--color-copper);
+}
+
+.main {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-24);
+  min-width: 0;
+}
+
+.head {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-12) var(--sp-24);
+  align-items: flex-end;
+  justify-content: space-between;
+}
+
+.title {
+  font-family: var(--font-serif);
+  font-size: var(--fs-36);
+  font-weight: 400;
+  line-height: var(--lh-tight);
+}
+
+.subtitle {
+  font-family: var(--font-serif);
+  font-size: var(--fs-24);
+  font-weight: 400;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-12);
+  align-items: flex-end;
+}
+
+.toolbar > * {
+  flex: 1 1 200px;
+  max-width: 320px;
+}
+
+/* Таблицы прокручиваются внутри своего блока: страница на 360 не уезжает вбок. */
+.tableWrap {
+  overflow-x: auto;
+  border: var(--border-1) solid var(--color-line-strong);
+}
+
+.table {
+  width: 100%;
+  min-width: 720px;
+  font-size: var(--fs-14);
+  border-collapse: collapse;
+}
+
+.table caption {
+  padding: 0;
+}
+
+.table th,
+.table td {
+  padding: var(--sp-10) var(--sp-14);
+  text-align: left;
+  vertical-align: middle;
+  border-bottom: var(--border-1) solid var(--color-line);
+}
+
+.table th {
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
+  font-weight: 400;
+  text-transform: uppercase;
+  letter-spacing: var(--ls-10);
+  color: var(--color-text-muted);
+  background: var(--color-surface);
+}
+
+.table tbody tr:hover {
+  background: var(--color-surface);
+}
+
+.num {
+  font-family: var(--font-mono);
+  white-space: nowrap;
+}
+
+.right {
+  text-align: right;
+}
+
+.link {
+  color: var(--color-text);
+  text-decoration: underline;
+  text-decoration-color: var(--color-line-strong);
+  text-underline-offset: 3px;
+}
+
+.link:hover {
+  color: var(--color-copper);
+}
+
+.muted {
+  color: var(--color-text-muted);
+}
+
+.thumb {
+  display: block;
+  width: 40px;
+  height: 50px;
+  object-fit: cover;
+  background: var(--color-basalt);
+}
+
+.pager {
+  display: flex;
+  gap: var(--sp-12);
+  align-items: center;
+  justify-content: space-between;
+  font-size: var(--fs-13);
+  color: var(--color-text-muted);
+}
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-16);
+  padding: var(--sp-20);
+  border: var(--border-1) solid var(--color-line-strong);
+}
+
+.panelTitle {
+  font-family: var(--font-mono);
+  font-size: var(--fs-11);
+  text-transform: uppercase;
+  letter-spacing: var(--ls-12);
+  color: var(--color-copper);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: var(--sp-16);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-12);
+  align-items: center;
+}
+
+.error {
+  font-size: var(--fs-13);
+  line-height: var(--lh-normal);
+  color: var(--color-copper);
+}
+
+.ok {
+  font-size: var(--fs-13);
+  color: var(--color-text-muted);
+}
+
+.facts {
+  font-size: var(--fs-14);
+}
+
+.fact {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-4) var(--sp-16);
+  justify-content: space-between;
+  padding: var(--sp-8) 0;
+  border-bottom: var(--border-1) solid var(--color-line);
+}
+
+.fact dt {
+  color: var(--color-text-muted);
+}
+
+.fact dd {
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+@media (--lg) {
+  .page {
+    flex-direction: row;
+    gap: var(--sp-40);
+    align-items: flex-start;
+    padding-top: var(--sp-40);
+  }
+
+  .nav {
+    position: sticky;
+    top: calc(var(--header-h-wide) + var(--sp-24));
+    flex: 0 0 200px;
+    flex-direction: column;
+    gap: 0;
+    overflow: visible;
+    border-bottom: 0;
+  }
+
+  .navLabel {
+    display: block;
+    margin-bottom: var(--sp-12);
+    font-family: var(--font-mono);
+    font-size: var(--fs-11);
+    text-transform: uppercase;
+    letter-spacing: var(--ls-10);
+    color: var(--color-copper);
+  }
+
+  .navLink {
+    padding: 0;
+    border-bottom: var(--border-1) solid var(--color-line);
+  }
+
+  .navLinkActive {
+    padding-left: var(--sp-12);
+    box-shadow: inset var(--border-2) 0 0 var(--color-copper);
+  }
+
+  .main {
+    flex: 1 1 auto;
+  }
+}

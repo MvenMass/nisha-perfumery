@@ -1,4 +1,4 @@
-import { createBrowserRouter, RouterProvider } from 'react-router';
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router';
 import type { RouteObject } from 'react-router';
 
 import { AccountPage } from '../pages/account/AccountPage';
@@ -22,6 +22,28 @@ import { RouteErrorPage } from '../widgets/not-found/RouteErrorPage';
 import { AppLayout } from './AppLayout';
 import { Providers } from './providers';
 import { RequireAuth } from './RequireAuth';
+
+// Админка — отдельный чанк: покупатель её код не скачивает.
+const loadAdmin = () => import('../pages/admin');
+
+const adminRoutes: RouteObject = {
+  path: 'admin',
+  lazy: async () => {
+    const { AdminLayout } = await loadAdmin();
+    return {
+      element: (
+        <RequireAuth requiredRole="admin">
+          <AdminLayout />
+        </RequireAuth>
+      ),
+    };
+  },
+  children: [
+    { index: true, element: <Navigate to="/admin/orders" replace /> },
+    { path: 'orders', lazy: async () => ({ Component: (await loadAdmin()).OrdersAdmin }) },
+    { path: 'orders/:orderId', lazy: async () => ({ Component: (await loadAdmin()).OrderAdmin }) },
+  ],
+};
 
 const shopRoutes: RouteObject[] = [
   { index: true, element: <HomePage /> },
@@ -50,6 +72,7 @@ const shopRoutes: RouteObject[] = [
     ],
   },
   { path: 'set-password', element: <SetPasswordPage /> },
+  adminRoutes,
   { path: '*', element: <NotFoundPage /> },
 ];
 
