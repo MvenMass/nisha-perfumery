@@ -27,13 +27,13 @@ export async function quoteCheckout(
   items: CartItemInput[],
   method: DeliveryMethod,
 ): Promise<CheckoutQuote> {
-  const [variants, settings] = await Promise.all([
-    findVariants(
-      db,
-      items.map((item) => item.variantId),
-    ),
-    findStoreSettings(db),
-  ]);
+  // По очереди, не через Promise.all: функция работает и внутри транзакции заказа,
+  // а у транзакции одно соединение — параллельные запросы в нём pg запрещает.
+  const variants = await findVariants(
+    db,
+    items.map((item) => item.variantId),
+  );
+  const settings = await findStoreSettings(db);
   const cart = buildCart(items, variants);
   const delivery = deliveryPrice(method, cart.summary.itemsTotalKopecks, settings);
   return {

@@ -109,29 +109,28 @@ export async function getAdminProduct(db: DbExecutor, id: string): Promise<Admin
   const [product] = await db.select().from(products).where(eq(products.id, id));
   if (!product) throw new AppError('NOT_FOUND', 'Образец не найден');
 
-  const [categoryRows, noteRows, variantRows, imageRows, ordered] = await Promise.all([
-    db
-      .select({ id: productCategories.categoryId })
-      .from(productCategories)
-      .where(eq(productCategories.productId, id)),
-    db
-      .select({ level: productNotes.level, name: fragranceNotes.name })
-      .from(productNotes)
-      .innerJoin(fragranceNotes, eq(fragranceNotes.id, productNotes.noteId))
-      .where(eq(productNotes.productId, id))
-      .orderBy(asc(productNotes.level), asc(productNotes.position)),
-    db
-      .select()
-      .from(productVariants)
-      .where(eq(productVariants.productId, id))
-      .orderBy(asc(productVariants.volumeMl)),
-    db
-      .select()
-      .from(productImages)
-      .where(eq(productImages.productId, id))
-      .orderBy(asc(productImages.position)),
-    hasOrders(db, id),
-  ]);
+  // По очереди: функцию вызывают и внутри транзакции сохранения, где соединение одно.
+  const categoryRows = await db
+    .select({ id: productCategories.categoryId })
+    .from(productCategories)
+    .where(eq(productCategories.productId, id));
+  const noteRows = await db
+    .select({ level: productNotes.level, name: fragranceNotes.name })
+    .from(productNotes)
+    .innerJoin(fragranceNotes, eq(fragranceNotes.id, productNotes.noteId))
+    .where(eq(productNotes.productId, id))
+    .orderBy(asc(productNotes.level), asc(productNotes.position));
+  const variantRows = await db
+    .select()
+    .from(productVariants)
+    .where(eq(productVariants.productId, id))
+    .orderBy(asc(productVariants.volumeMl));
+  const imageRows = await db
+    .select()
+    .from(productImages)
+    .where(eq(productImages.productId, id))
+    .orderBy(asc(productImages.position));
+  const ordered = await hasOrders(db, id);
 
   const notes = { top: [] as string[], heart: [] as string[], base: [] as string[] };
   for (const note of noteRows) notes[note.level].push(note.name);

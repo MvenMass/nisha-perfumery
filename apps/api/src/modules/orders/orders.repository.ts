@@ -84,14 +84,13 @@ export async function addHistory(
 
 /** Заказ целиком для покупателя: позиции и история статусов. */
 export async function loadOrder(db: DbExecutor, row: OrderRow): Promise<Order> {
-  const [items, history] = await Promise.all([
-    findOrderItems(db, row.id),
-    db
-      .select({ status: orderStatusHistory.status, at: orderStatusHistory.createdAt })
-      .from(orderStatusHistory)
-      .where(eq(orderStatusHistory.orderId, row.id))
-      .orderBy(asc(orderStatusHistory.createdAt)),
-  ]);
+  // По очереди: loadOrder получает и транзакцию, а в ней соединение одно.
+  const items = await findOrderItems(db, row.id);
+  const history = await db
+    .select({ status: orderStatusHistory.status, at: orderStatusHistory.createdAt })
+    .from(orderStatusHistory)
+    .where(eq(orderStatusHistory.orderId, row.id))
+    .orderBy(asc(orderStatusHistory.createdAt));
   return {
     id: row.id,
     number: row.number,
