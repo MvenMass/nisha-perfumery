@@ -6,6 +6,7 @@ import { useReveal } from '../../shared/lib/motion/useReveal';
 import { useMeta } from '../../shared/lib/useMeta';
 import { Container } from '../../shared/ui/Container/Container';
 import { StrataDivider } from '../../shared/ui/StrataDivider/StrataDivider';
+import { DepthGauge } from './DepthGauge';
 import { HeroCarousel } from './HeroCarousel';
 import { STRATA } from './home-content';
 import {
@@ -42,10 +43,12 @@ export function HomePage() {
   const store = useStoreInfo();
   const pageRef = useRef<HTMLDivElement>(null);
   // «Срез» и журнал появляются с данными — тогда и пересобираем раскрытия.
-  useReveal(pageRef, [home.isPending, store.isPending]);
+  const loaded = [home.isPending, store.isPending];
+  useReveal(pageRef, loaded);
 
   return (
     <div ref={pageRef}>
+      <DepthGauge pageRef={pageRef} deps={loaded} />
       <HeroCarousel slides={home.data?.slides} pending={home.isPending} />
       <Advantages store={store.data} />
       <Strata kind="limestone" />

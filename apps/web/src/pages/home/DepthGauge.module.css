@@ -1,0 +1,75 @@
+/* Шкала живёт в левом поле страницы (от 1024 px оно не уже 40 px) и не перекрывает контент. */
+.gauge {
+  position: fixed;
+  top: 50%;
+  left: var(--sp-12);
+  z-index: var(--z-header);
+  display: none;
+  flex-direction: column;
+  gap: var(--sp-12);
+  align-items: center;
+  font-family: var(--font-mono);
+  font-size: var(--fs-10);
+  letter-spacing: var(--ls-10);
+  pointer-events: none;
+  transform: translateY(-50%);
+}
+
+/* Подписи идут снизу вверх, как на керне. */
+.label,
+.value {
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
+  white-space: nowrap;
+}
+
+.label {
+  color: var(--color-copper);
+}
+
+.value {
+  min-height: 6ch;
+  color: var(--color-text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.track {
+  position: relative;
+  width: var(--sp-12);
+  height: 28vh;
+}
+
+/* Ось и пройденная часть — тонкие вертикальные линии по центру. */
+.track::before,
+.fill {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  width: 1px;
+  height: 100%;
+}
+
+.track::before {
+  content: '';
+  background: var(--color-line-strong);
+}
+
+.fill {
+  background: var(--color-copper);
+  transform: scaleY(0);
+  transform-origin: top center;
+}
+
+.tick {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: var(--color-line-strong);
+}
+
+@media (--lg) {
+  .gauge {
+    display: flex;
+  }
+}

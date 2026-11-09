@@ -66,7 +66,14 @@ export function StrataDivider({ depth, label, layers, className }: StrataDivider
   );
 
   return (
-    <div ref={rootRef} aria-hidden="true" className={cx(styles.divider, className)}>
+    <div
+      ref={rootRef}
+      aria-hidden="true"
+      className={cx(styles.divider, className)}
+      // Опорные точки для шкалы глубины на главной.
+      data-depth={depth}
+      data-label={label}
+    >
       <span ref={depthRef} className={styles.depth}>
         {depth}
       </span>
