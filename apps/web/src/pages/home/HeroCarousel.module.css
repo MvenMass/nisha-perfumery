@@ -50,6 +50,16 @@
   width: 100%;
 }
 
+/* Место под слайд, пока он грузится: та же разметка, но невидимая. */
+.placeholder {
+  visibility: hidden;
+}
+
+.ctaPlaceholder {
+  display: block;
+  height: var(--control-56);
+}
+
 .controls {
   display: flex;
   gap: var(--sp-8);
@@ -135,6 +145,54 @@
 @media (hover: none) {
   .shade {
     animation: drift 14s ease-in-out infinite alternate;
+  }
+}
+
+/* --- Появление слайда: флакон проявляется, текст поднимается по строчкам --- */
+@media (--motion-ok) {
+  .enter > * {
+    animation: rise var(--dur-enter) var(--ease-out) both;
+  }
+
+  .enter > :nth-child(2) {
+    animation-delay: 90ms;
+  }
+
+  .enter > :nth-child(3) {
+    animation-delay: 180ms;
+  }
+
+  .enter > :nth-child(4) {
+    animation-delay: 270ms;
+  }
+
+  .photo {
+    animation: develop var(--dur-develop) var(--ease-out) both;
+  }
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 16px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* Флакон «проявляется» из темноты, как снимок: прозрачность и лёгкое приближение. */
+@keyframes develop {
+  from {
+    opacity: 0;
+    transform: scale(1.04);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
   }
 }
 

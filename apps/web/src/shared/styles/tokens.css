@@ -135,5 +135,8 @@
   --dur-fast: 150ms;
   --dur-base: 250ms;
   --dur-slow: 400ms;
+  /* Появление крупных блоков (этап 9): текст первого экрана, сцены по скроллу. */
+  --dur-enter: 700ms;
+  --dur-develop: 1100ms;
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
