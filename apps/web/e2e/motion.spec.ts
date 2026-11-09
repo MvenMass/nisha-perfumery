@@ -1,11 +1,13 @@
 import { expect, test } from '@playwright/test';
 import type { Page } from '@playwright/test';
 
-/** Прокрутить страницу до конца шагами, чтобы сработали все сцены ScrollTrigger. */
+/**
+ * Прокрутить страницу до конца шагами, чтобы сработали все сцены ScrollTrigger.
+ * Высота читается на каждом шаге: страница дорастает, пока приходят данные.
+ */
 async function scrollThrough(page: Page) {
   await page.evaluate(async () => {
-    const total = document.documentElement.scrollHeight;
-    for (let y = 0; y <= total; y += 250) {
+    for (let y = 0; y <= document.documentElement.scrollHeight; y += 250) {
       window.scrollTo(0, y);
       await new Promise((resolve) => setTimeout(resolve, 50));
     }
@@ -62,6 +64,7 @@ test('после прокрутки все сцены дошли до конца
   await expect.poll(() => unfinished(page), { timeout: 5000 }).toEqual([]);
 
   await page.goto('/catalog/basalt');
+  await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
   await scrollThrough(page);
   await expect.poll(() => unfinished(page), { timeout: 5000 }).toEqual([]);
 });
