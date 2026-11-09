@@ -7,10 +7,12 @@ import { SearchSheet } from '../features/search/SearchSheet';
 import { Footer } from '../widgets/footer/Footer';
 import { Header } from '../widgets/header/Header';
 import styles from './AppLayout.module.css';
+import { useSmoothScroll } from './useSmoothScroll';
 
 export function AppLayout() {
   const [searchOpen, setSearchOpen] = useState(false);
   const { pathname } = useLocation();
+  useSmoothScroll();
   // Флаконы, которые можно купить, — то же число, что «Товары, N шт.» в итоге корзины (D-028).
   const loadedCount = useCart(useViewer()).data?.summary.bottlesCount;
   const cartCount = loadedCount ?? 0;

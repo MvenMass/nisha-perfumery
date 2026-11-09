@@ -1,13 +1,11 @@
 import type { gsap as GsapInstance } from 'gsap';
 import type { Flip as FlipPlugin } from 'gsap/Flip';
-import type { ScrollSmoother as ScrollSmootherPlugin } from 'gsap/ScrollSmoother';
 import type { ScrollTrigger as ScrollTriggerPlugin } from 'gsap/ScrollTrigger';
 import type { SplitText as SplitTextPlugin } from 'gsap/SplitText';
 
 export type Gsap = typeof GsapInstance;
 export type ScrollTriggerType = typeof ScrollTriggerPlugin;
 export type SplitTextType = typeof SplitTextPlugin;
-export type ScrollSmootherType = typeof ScrollSmootherPlugin;
 export type FlipType = typeof FlipPlugin;
 export type Motion = { gsap: Gsap; ScrollTrigger: ScrollTriggerType };
 
@@ -67,12 +65,6 @@ function plugin<K extends string, P extends object>(
 export const loadSplitText = plugin(
   'SplitText',
   async () => (await import('gsap/SplitText')).SplitText,
-);
-
-/** Инерционный скролл на витринных страницах десктопа. */
-export const loadSmoother = plugin(
-  'ScrollSmoother',
-  async () => (await import('gsap/ScrollSmoother')).ScrollSmoother,
 );
 
 /** Перелёт флакона в корзину. */

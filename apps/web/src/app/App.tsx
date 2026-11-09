@@ -70,17 +70,22 @@ const adminRoutes: RouteObject = {
   ],
 };
 
+// Витринные страницы: на десктопе прокрутка инерционная (этап 9.1, useSmoothScroll).
+// Где есть sticky-блоки и формы (корзина, оформление, кабинет) — обычная.
+const smooth = { smooth: true };
+
 const shopRoutes: RouteObject[] = [
-  { index: true, element: <HomePage /> },
-  { path: 'catalog', element: <CatalogPage /> },
-  { path: 'catalog/:slug', element: <ProductPage /> },
+  { index: true, element: <HomePage />, handle: smooth },
+  { path: 'catalog', element: <CatalogPage />, handle: smooth },
+  { path: 'catalog/:slug', element: <ProductPage />, handle: smooth },
   { path: 'fragrance-finder', element: <FragranceFinderPage /> },
-  { path: 'journal', element: <JournalPage /> },
-  { path: 'journal/:slug', element: <ArticlePage /> },
+  { path: 'journal', element: <JournalPage />, handle: smooth },
+  { path: 'journal/:slug', element: <ArticlePage />, handle: smooth },
   { path: 'consultation', element: <ConsultationPage /> },
   ...(Object.keys(STATIC_PAGES) as StaticPageKey[]).map((page) => ({
     path: page,
     element: <StaticPage page={page} />,
+    handle: smooth,
   })),
   { path: 'cart', element: <CartPage /> },
   { path: 'checkout', element: <CheckoutPage /> },

@@ -4,6 +4,7 @@ import { createPortal } from 'react-dom';
 
 import { cx } from '../../lib/cx';
 import { IconButton } from '../IconButton/IconButton';
+import { getSmoothScroll } from '../../lib/motion/smooth-scroll';
 import styles from './Sheet.module.css';
 
 /** Чуть дольше анимации ухода (--dur-slow). */
@@ -35,6 +36,9 @@ type SheetProps = {
 // iOS Safari игнорирует overflow: hidden на body, поэтому фиксируем body
 // и восстанавливаем прокрутку после закрытия.
 function lockScroll(): () => void {
+  // Инерционная прокрутка тоже замирает: колесо над фоном не должно копить смещение.
+  const smooth = getSmoothScroll();
+  smooth?.paused(true);
   const { scrollY } = window;
   const { style } = document.body;
   const previous = { position: style.position, top: style.top, width: style.width };
@@ -44,6 +48,7 @@ function lockScroll(): () => void {
   return () => {
     Object.assign(style, previous);
     window.scrollTo(0, scrollY);
+    smooth?.paused(false);
   };
 }
 
