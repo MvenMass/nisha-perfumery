@@ -1,5 +1,6 @@
 import { catalogSortSchema } from '@nisha/contracts';
 import type { CatalogSort } from '@nisha/contracts';
+import { useRef } from 'react';
 
 import { useCatalogFilters, useInfiniteProducts } from '../../entities/product/api/queries';
 import { specimensCount } from '../../entities/product/lib/format';
@@ -7,6 +8,7 @@ import { activeFilterChips } from '../../features/catalog-filters/active-filters
 import { FiltersForm } from '../../features/catalog-filters/FiltersForm';
 import { MobileFilters } from '../../features/catalog-filters/MobileFilters';
 import { useCatalogFilterState } from '../../features/catalog-filters/useCatalogFilters';
+import { useCascade } from '../../shared/lib/motion/useCascade';
 import { useMeta } from '../../shared/lib/useMeta';
 import { Breadcrumbs } from '../../shared/ui/Breadcrumbs/Breadcrumbs';
 import { Button } from '../../shared/ui/Button/Button';
@@ -50,6 +52,9 @@ export function CatalogPage() {
   const products = useInfiniteProducts(filters);
 
   const items = products.data?.pages.flatMap((page) => page.items) ?? [];
+  const gridRef = useRef<HTMLUListElement>(null);
+  // Новые карточки (догрузка, другие фильтры) — каскадом; уже показанные не трогаем.
+  useCascade(gridRef, [items.map((item) => item.id).join()]);
   const total = products.data?.pages[0]?.total;
   const chips = activeFilterChips(filters, facets.data);
   const shownPercent = total ? Math.round((items.length / total) * 100) : 0;
@@ -85,7 +90,11 @@ export function CatalogPage() {
   } else {
     body = (
       <>
-        <ul className={styles.grid} aria-busy={products.isFetching && !products.isFetchingNextPage}>
+        <ul
+          ref={gridRef}
+          className={styles.grid}
+          aria-busy={products.isFetching && !products.isFetchingNextPage}
+        >
           {items.map((item) => (
             <li key={item.id}>
               <ShopProductCard item={item} headingLevel="h2" />

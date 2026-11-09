@@ -6,6 +6,7 @@ import { formatSpecimenNumber, productHref } from '../../entities/product/lib/fo
 import { cx } from '../../shared/lib/cx';
 import { formatPrice } from '../../shared/lib/money';
 import { useDesktopMotion } from '../../shared/lib/motion/useDesktopMotion';
+import { useCascade } from '../../shared/lib/motion/useCascade';
 import { useGsap } from '../../shared/lib/motion/useGsap';
 import { typograph } from '../../shared/lib/typograph';
 import { ButtonLink } from '../../shared/ui/Button/Button';
@@ -80,21 +81,7 @@ export function Categories() {
 export function Specimens({ items, pending }: { items: ProductListItem[]; pending: boolean }) {
   const rowRef = useRef<HTMLUListElement>(null);
   // Сцена строится, когда вместо скелетонов пришли карточки.
-  useGsap(
-    rowRef,
-    ({ gsap }, row) => {
-      if (pending) return;
-      gsap.from(row.children, {
-        opacity: 0,
-        y: 24,
-        duration: 0.6,
-        ease: 'power2.out',
-        stagger: 0.08,
-        scrollTrigger: { trigger: row, start: 'top 85%', once: true },
-      });
-    },
-    [pending],
-  );
+  useCascade(rowRef, [pending]);
 
   return (
     <section id="specimens" aria-labelledby="specimens-title" className={styles.specimens}>

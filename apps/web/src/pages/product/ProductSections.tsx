@@ -1,9 +1,11 @@
 import type { ProductDetail } from '@nisha/contracts';
+import { useRef } from 'react';
 import { Link } from 'react-router';
 
 import { useRelatedProducts } from '../../entities/product/api/queries';
 import { formatSpecimenNumber, productHref } from '../../entities/product/lib/format';
 import { formatPrice } from '../../shared/lib/money';
+import { useCascade } from '../../shared/lib/motion/useCascade';
 import { typograph } from '../../shared/lib/typograph';
 import { Container } from '../../shared/ui/Container/Container';
 import { SectionLabel } from '../../shared/ui/SectionLabel/SectionLabel';
@@ -67,6 +69,8 @@ export function StorySection({ product }: { product: ProductDetail }) {
 
 export function RelatedSection({ slug }: { slug: string }) {
   const related = useRelatedProducts(slug);
+  const gridRef = useRef<HTMLUListElement>(null);
+  useCascade(gridRef, [related.data]);
   if (related.isError || (related.data && related.data.length === 0)) return null;
 
   return (
@@ -80,7 +84,7 @@ export function RelatedSection({ slug }: { slug: string }) {
             Весь каталог
           </Link>
         </div>
-        <ul className={styles.relatedGrid} aria-busy={related.isPending}>
+        <ul ref={gridRef} className={styles.relatedGrid} aria-busy={related.isPending}>
           {related.isPending
             ? Array.from({ length: 4 }, (_, index) => (
                 <li key={index}>
@@ -90,12 +94,16 @@ export function RelatedSection({ slug }: { slug: string }) {
             : related.data.map((item) => (
                 <li key={item.id}>
                   <Link to={productHref(item.slug)} className={styles.relatedCard}>
-                    <span aria-hidden="true" className={styles.relatedPhoto} />
-                    <span className={styles.relatedNumber}>
+                    <span aria-hidden="true" className={styles.relatedPhoto}>
+                      <span data-cascade-media className={styles.relatedFill} />
+                    </span>
+                    <span data-cascade-body className={styles.relatedNumber}>
                       Образец №&nbsp;{formatSpecimenNumber(item.specimenNumber)}
                     </span>
-                    <span className={styles.relatedName}>{item.name}</span>
-                    <span className={styles.muted}>
+                    <span data-cascade-body className={styles.relatedName}>
+                      {item.name}
+                    </span>
+                    <span data-cascade-body className={styles.muted}>
                       от&nbsp;{formatPrice(item.priceFromKopecks)}
                     </span>
                   </Link>

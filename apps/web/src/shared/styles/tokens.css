@@ -35,6 +35,9 @@
   --color-shade-soft: rgb(20 19 18 / 50%);
   --color-shade-deep: rgb(20 19 18 / 93%);
 
+  /* Тёплое пятно «света-лампы» на снимке карточки — медь с прозрачностью. */
+  --color-lamp: rgb(194 126 84 / 22%);
+
   /* --- Шрифты --- */
   --font-serif: 'Cormorant Garamond', 'Times New Roman', serif;
   --font-sans: 'Manrope', system-ui, -apple-system, 'Segoe UI', roboto, sans-serif;

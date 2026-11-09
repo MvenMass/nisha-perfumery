@@ -1,8 +1,10 @@
+import { useRef } from 'react';
 import { Link } from 'react-router';
 
 import { useFavorites } from '../../entities/favorite/queries';
 import { specimensCount } from '../../entities/product/lib/format';
 import { useViewer } from '../../entities/user/queries';
+import { useCascade } from '../../shared/lib/motion/useCascade';
 import { useMeta } from '../../shared/lib/useMeta';
 import { Button, ButtonLink } from '../../shared/ui/Button/Button';
 import { Container } from '../../shared/ui/Container/Container';
@@ -16,6 +18,8 @@ export function FavoritesPage() {
   useMeta('Избранное');
   const viewer = useViewer();
   const favorites = useFavorites(viewer);
+  const gridRef = useRef<HTMLUListElement>(null);
+  useCascade(gridRef, [favorites.data?.items.length]);
 
   let content;
   if (favorites.isPending) {
@@ -56,7 +60,7 @@ export function FavoritesPage() {
     );
   } else {
     content = (
-      <ul className={styles.grid}>
+      <ul ref={gridRef} className={styles.grid}>
         {favorites.data.items.map((item) => (
           <li key={item.id}>
             <ShopProductCard item={item} withFavorite headingLevel="h2" />

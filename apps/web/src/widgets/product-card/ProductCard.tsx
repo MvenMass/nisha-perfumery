@@ -1,3 +1,5 @@
+import { useRef } from 'react';
+import type { PointerEvent } from 'react';
 import { Link } from 'react-router';
 
 import { cx } from '../../shared/lib/cx';
@@ -56,9 +58,19 @@ export function ProductCard({
   headingLevel = 'h3',
 }: ProductCardProps) {
   const { href, name, inStock, image, badge } = product;
+  const lampRef = useRef<HTMLSpanElement>(null);
+  // «Свет-лампа» по снимку за курсором — тот же приём, что на первом экране. Только мышь:
+  // на тач-экране hover нет, а CSS прячет пятно без (hover: hover).
+  const moveLamp = (event: PointerEvent<HTMLElement>) => {
+    const lamp = lampRef.current;
+    const media = lamp?.parentElement;
+    if (event.pointerType !== 'mouse' || !lamp || !media) return;
+    const rect = media.getBoundingClientRect();
+    lamp.style.transform = `translate3d(${event.clientX - rect.left}px, ${event.clientY - rect.top}px, 0)`;
+  };
 
   return (
-    <article className={cx(styles.card, !inStock && styles.unavailable)}>
+    <article className={cx(styles.card, !inStock && styles.unavailable)} onPointerMove={moveLamp}>
       <div className={styles.media}>
         {/* Снимок декоративный: название рядом, а ссылкой работает вся карточка. */}
         {image ? (
@@ -67,10 +79,15 @@ export function ProductCard({
             alt=""
             sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 100vw"
             className={styles.photo}
+            data-cascade-media
           />
         ) : (
-          <span className={cx(styles.photo, styles[product.placeholder ?? 'basalt'])} />
+          <span
+            className={cx(styles.photo, styles[product.placeholder ?? 'basalt'])}
+            data-cascade-media
+          />
         )}
+        <span ref={lampRef} aria-hidden="true" className={styles.lamp} />
         {!inStock ? (
           <Badge tone="outline" className={styles.badge}>
             Нет в&nbsp;наличии
@@ -94,7 +111,7 @@ export function ProductCard({
         )}
       </div>
 
-      <div className={styles.body}>
+      <div className={styles.body} data-cascade-body>
         <SpecimenLabel
           number={product.number}
           meta={product.materialName}

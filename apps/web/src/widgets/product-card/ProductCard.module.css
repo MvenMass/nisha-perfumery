@@ -123,6 +123,33 @@
   }
 
   .card:hover .photo {
-    transform: scale(1.03);
+    transform: scale(1.04);
+    transition: transform var(--dur-develop) var(--ease-out);
+  }
+}
+
+/* Пятно света: центр — в точке курсора (translate задаёт скрипт), догоняет его с задержкой. */
+.lamp {
+  --lamp-radius: 160px;
+
+  position: absolute;
+  top: calc(-1 * var(--lamp-radius));
+  left: calc(-1 * var(--lamp-radius));
+  width: calc(2 * var(--lamp-radius));
+  height: calc(2 * var(--lamp-radius));
+  pointer-events: none;
+  background: radial-gradient(circle, var(--color-lamp) 0%, transparent 70%);
+  opacity: 0;
+}
+
+@media (hover: hover) and (pointer: fine) and (--motion-ok) {
+  .lamp {
+    transition:
+      opacity var(--dur-slow) var(--ease-out),
+      transform var(--dur-slow) var(--ease-out);
+  }
+
+  .card:hover .lamp {
+    opacity: 1;
   }
 }
