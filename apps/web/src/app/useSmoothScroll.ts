@@ -3,7 +3,6 @@ import { useLocation, useMatches } from 'react-router';
 
 import { loadGsap } from '../shared/lib/motion/load-gsap';
 import { getSmoothScroll, setSmoothScroll } from '../shared/lib/motion/smooth-scroll';
-import { createSmoothWheel } from '../shared/lib/motion/smooth-wheel';
 import { useDesktopMotion } from '../shared/lib/motion/useDesktopMotion';
 
 /** Маршрут с `handle: { smooth: true }` — витрина, где прокрутка инерционная. */
@@ -16,8 +15,9 @@ function isSmoothHandle(handle: unknown): boolean {
 /**
  * Инерционная прокрутка колесом на витринных страницах десктопа с мышью (этап 9.1, D-074).
  * На телефоне и при reduced motion — обычная, GSAP ради неё не грузится.
+ * Возвращает, десктоп ли это с мышью: от этого зависят и другие десктопные сцены (шторка).
  */
-export function useSmoothScroll(): void {
+export function useSmoothScroll(): boolean {
   const desktop = useDesktopMotion();
   const showcase = useMatches().some((match) => isSmoothHandle(match.handle));
   const { pathname, hash } = useLocation();
@@ -27,8 +27,8 @@ export function useSmoothScroll(): void {
     if (!active) return undefined;
     let cancelled = false;
     let kill: (() => void) | undefined;
-    loadGsap().then(
-      ({ gsap }) => {
+    Promise.all([loadGsap(), import('../shared/lib/motion/smooth-wheel')]).then(
+      ([{ gsap }, { createSmoothWheel }]) => {
         if (cancelled) return;
         const smooth = createSmoothWheel(gsap);
         setSmoothScroll(smooth);
@@ -56,4 +56,6 @@ export function useSmoothScroll(): void {
     const target = document.getElementById(decodeURIComponent(hash.slice(1)));
     if (target) getSmoothScroll()?.glideTo(target);
   }, [pathname, hash]);
+
+  return desktop;
 }

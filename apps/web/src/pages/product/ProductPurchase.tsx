@@ -13,7 +13,6 @@ import { Button } from '../../shared/ui/Button/Button';
 import { Icon } from '../../shared/ui/Icon/Icon';
 import { IconButton } from '../../shared/ui/IconButton/IconButton';
 import { QuantityStepper } from '../../shared/ui/QuantityStepper/QuantityStepper';
-import { flyToCart } from '../../shared/lib/motion/fly-to-cart';
 import styles from './ProductPage.module.css';
 
 // По умолчанию — 50 мл, как в product.html; если его нет в наличии — первый доступный объём.
@@ -125,7 +124,12 @@ export function ProductPurchase({ product }: { product: ProductDetail }) {
                   {
                     onSuccess: () => {
                       setJustAdded(true);
-                      flyToCart(document.querySelector('[data-fly-source]'));
+                      // Модуль полёта — по требованию: в основной бандл не входит.
+                      import('../../shared/lib/motion/fly-to-cart').then(
+                        ({ flyToCart }) => flyToCart(document.querySelector('[data-fly-source]')),
+                        (error: unknown) =>
+                          console.warn('Анимация добавления не загрузилась', error),
+                      );
                     },
                   },
                 )
