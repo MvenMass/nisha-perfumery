@@ -4,6 +4,7 @@ import { useParams } from 'react-router';
 import { useProduct } from '../../entities/product/api/queries';
 import { DENSITY_LABELS, formatSpecimenNumber } from '../../entities/product/lib/format';
 import { ApiError } from '../../shared/api/http';
+import { cx } from '../../shared/lib/cx';
 import { typograph } from '../../shared/lib/typograph';
 import { useReveal } from '../../shared/lib/motion/useReveal';
 import { useMeta } from '../../shared/lib/useMeta';
@@ -21,7 +22,7 @@ import { PyramidSection, RelatedSection, StorySection } from './ProductSections'
 
 function ProductSkeleton() {
   return (
-    <Container className={styles.top}>
+    <Container className={cx(styles.top, styles.skeletonPage)}>
       <div className={styles.main} role="status" aria-busy="true" aria-label="Загружаем образец">
         <div className={styles.gallery}>
           <Skeleton height={480} />
