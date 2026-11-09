@@ -28,6 +28,8 @@ const ROUTES = {
 type HeaderProps = {
   /** Сколько товаров в корзине — с сервера (D-028). */
   cartCount: number;
+  /** Растёт, когда в корзину положили флакон: значок коротко «подпрыгивает». */
+  cartBump?: number | undefined;
   onSearch?: (() => void) | undefined;
 };
 
@@ -36,7 +38,7 @@ function cartLabel(count: number): string {
   return `Корзина, ${count} ${plural(count, ['товар', 'товара', 'товаров'])}`;
 }
 
-export function Header({ cartCount, onSearch }: HeaderProps) {
+export function Header({ cartCount, cartBump = 0, onSearch }: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const { pathname } = useLocation();
   const closeMenu = () => setMenuOpen(false);
@@ -82,13 +84,16 @@ export function Header({ cartCount, onSearch }: HeaderProps) {
             current={pathname === ROUTES.favorites}
             className={styles.wideOnly}
           />
-          <IconLink
-            icon="bag"
-            label={cartLabel(cartCount)}
-            to={ROUTES.cart}
-            badge={cartCount}
-            current={pathname === ROUTES.cart}
-          />
+          {/* key — анимация заново при каждом толчке. */}
+          <span key={cartBump} className={cartBump > 0 ? styles.bump : styles.bumpIdle}>
+            <IconLink
+              icon="bag"
+              label={cartLabel(cartCount)}
+              to={ROUTES.cart}
+              badge={cartCount}
+              current={pathname === ROUTES.cart}
+            />
+          </span>
           <IconButton
             icon="menu"
             label="Открыть меню"

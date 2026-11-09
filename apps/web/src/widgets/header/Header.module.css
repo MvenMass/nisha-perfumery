@@ -137,3 +137,20 @@
     gap: var(--sp-40);
   }
 }
+
+.bump,
+.bumpIdle {
+  display: inline-flex;
+}
+
+@media (--motion-ok) {
+  .bump {
+    animation: bump var(--dur-slow) var(--ease-out);
+  }
+}
+
+@keyframes bump {
+  40% {
+    transform: scale(1.18);
+  }
+}

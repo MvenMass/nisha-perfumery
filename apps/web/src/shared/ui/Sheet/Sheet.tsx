@@ -1,10 +1,13 @@
-import { useEffect, useId, useRef } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 import type { ReactNode } from 'react';
 import { createPortal } from 'react-dom';
 
 import { cx } from '../../lib/cx';
 import { IconButton } from '../IconButton/IconButton';
 import styles from './Sheet.module.css';
+
+/** Чуть дольше анимации ухода (--dur-slow). */
+const CLOSE_FALLBACK_MS = 450;
 
 const FOCUSABLE = [
   'a[href]',
@@ -55,6 +58,20 @@ export function Sheet({
 }: SheetProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   const titleId = useId();
+  // После закрытия шторка ещё на миг в DOM — проигрывает анимацию ухода (этап 9).
+  const [rendered, setRendered] = useState(open);
+  const [wasOpen, setWasOpen] = useState(open);
+  if (open !== wasOpen) {
+    setWasOpen(open);
+    if (open) setRendered(true);
+  }
+  const closing = rendered && !open;
+  useEffect(() => {
+    if (!closing) return undefined;
+    // Запасной выход: при reduced motion или скрытой вкладке animationend может не прийти.
+    const timer = window.setTimeout(() => setRendered(false), CLOSE_FALLBACK_MS);
+    return () => window.clearTimeout(timer);
+  }, [closing]);
   // Свежий onClose без перезапуска эффекта: иначе при каждом рендере родителя
   // фокус возвращался бы на кнопку открытия.
   const onCloseRef = useRef(onClose);
@@ -101,18 +118,27 @@ export function Sheet({
     };
   }, [open]);
 
-  if (!open) return null;
+  if (!rendered) return null;
 
   return createPortal(
     <>
-      <div className={styles.backdrop} aria-hidden="true" onClick={onClose} />
+      <div
+        className={cx(styles.backdrop, closing && styles.backdropClosing)}
+        aria-hidden="true"
+        onClick={closing ? undefined : onClose}
+      />
       <div
         ref={panelRef}
-        role="dialog"
-        aria-modal="true"
+        // Уходящая шторка — уже не диалог: скринридер не должен её находить.
+        role={closing ? undefined : 'dialog'}
+        aria-modal={closing ? undefined : true}
+        aria-hidden={closing || undefined}
         aria-labelledby={titleId}
         tabIndex={-1}
-        className={cx(styles.panel, styles[side])}
+        className={cx(styles.panel, styles[side], closing && styles.closing)}
+        onAnimationEnd={(event) => {
+          if (closing && event.target === event.currentTarget) setRendered(false);
+        }}
       >
         <div className={styles.header}>
           <h2 id={titleId} className={styles.title}>

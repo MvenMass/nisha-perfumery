@@ -77,6 +77,43 @@
   .right {
     animation: slide-left var(--dur-slow) var(--ease-out);
   }
+
+  /* Уход — те же движения в обратную сторону. */
+  .backdropClosing {
+    animation: fade-out var(--dur-slow) var(--ease-out) forwards;
+  }
+
+  .bottom.closing {
+    animation: slide-down var(--dur-slow) var(--ease-out) forwards;
+  }
+
+  .right.closing {
+    animation: slide-right var(--dur-slow) var(--ease-out) forwards;
+  }
+}
+
+/* Пока шторка уходит, она уже не принимает нажатий. */
+.closing,
+.backdropClosing {
+  pointer-events: none;
+}
+
+@keyframes fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes slide-down {
+  to {
+    transform: translateY(100%);
+  }
+}
+
+@keyframes slide-right {
+  to {
+    transform: translateX(100%);
+  }
 }
 
 @keyframes fade-in {

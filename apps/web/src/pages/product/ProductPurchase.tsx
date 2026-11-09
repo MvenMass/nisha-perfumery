@@ -1,5 +1,5 @@
 import type { ProductDetail, ProductVariant } from '@nisha/contracts';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Link, useLocation } from 'react-router';
 
 import { bottlesLeft, formatVolume } from '../../entities/product/lib/format';
@@ -51,6 +51,13 @@ export function ProductPurchase({ product }: { product: ProductDetail }) {
   const [quantity, setQuantity] = useState(1);
   const store = useStoreInfo();
   const change = useChangeCart();
+  // «Добавлено ✓» держится полторы секунды после успешного добавления, как в product.html.
+  const [justAdded, setJustAdded] = useState(false);
+  useEffect(() => {
+    if (!justAdded) return undefined;
+    const timer = window.setTimeout(() => setJustAdded(false), 1500);
+    return () => window.clearTimeout(timer);
+  }, [justAdded]);
   const favorite = useToggleFavorite(product.id);
   const variant = product.variants.find((item) => item.id === selectedId);
 
@@ -112,15 +119,17 @@ export function ProductPurchase({ product }: { product: ProductDetail }) {
               fullWidth
               disabled={change.isPending}
               onClick={() =>
-                change.mutate({
-                  type: 'add',
-                  variantId: variant.id,
-                  quantity,
-                  stock: variant.stock,
-                })
+                change.mutate(
+                  { type: 'add', variantId: variant.id, quantity, stock: variant.stock },
+                  { onSuccess: () => setJustAdded(true) },
+                )
               }
             >
-              {change.isPending ? 'Добавляем…' : 'Добавить в\u00A0корзину'}
+              {change.isPending
+                ? 'Добавляем…'
+                : justAdded
+                  ? 'Добавлено ✓'
+                  : 'Добавить в\u00A0корзину'}
             </Button>
             <IconButton
               icon="heart"
