@@ -13,26 +13,42 @@ type NotesPyramidProps = {
   notes: ProductDetail['notes'];
   layers: ProductDetail['layers'];
   className?: string | undefined;
+  /**
+   * Своё раскрытие при прокрутке. false — сценой управляет страница (закреплённый «Срез»
+   * на главной): она находит слои и шкалу по data-pyramid-layer / data-pyramid-tick.
+   */
+  revealOnScroll?: boolean | undefined;
 };
 
 /**
  * Пирамида нот как срез породы: сверху лёгкие ноты, внизу — база, толщина слоя — время звучания.
  * При прокрутке слои раскрываются по очереди сверху вниз — так, как аромат звучит на коже.
  */
-export function NotesPyramid({ name, notes, layers, className }: NotesPyramidProps) {
+export function NotesPyramid({
+  name,
+  notes,
+  layers,
+  className,
+  revealOnScroll = true,
+}: NotesPyramidProps) {
   const rootRef = useRef<HTMLDivElement>(null);
   const pyramid = buildPyramid(notes, layers);
 
-  useGsap(rootRef, ({ gsap }, root) => {
-    gsap.from(`.${styles.layer}, .${styles.bedrock}`, {
-      opacity: 0,
-      y: -14,
-      duration: 0.7,
-      ease: 'power2.out',
-      stagger: 0.22,
-      scrollTrigger: { trigger: root, start: 'top 80%', once: true },
-    });
-  });
+  useGsap(
+    rootRef,
+    ({ gsap }, root) => {
+      if (!revealOnScroll) return;
+      gsap.from(`.${styles.layer}, .${styles.bedrock}`, {
+        opacity: 0,
+        y: -14,
+        duration: 0.7,
+        ease: 'power2.out',
+        stagger: 0.22,
+        scrollTrigger: { trigger: root, start: 'top 80%', once: true },
+      });
+    },
+    [revealOnScroll],
+  );
   const lastEnd = pyramid[pyramid.length - 1]?.to ?? 0;
   const ticks = ['0', ...pyramid.map((layer) => String(layer.to))].map((value, index, all) => {
     const minutes = Number(value);
@@ -49,7 +65,9 @@ export function NotesPyramid({ name, notes, layers, className }: NotesPyramidPro
     >
       <div aria-hidden="true" className={styles.scale}>
         {ticks.map((tick) => (
-          <span key={tick}>{tick}</span>
+          <span key={tick} data-pyramid-tick>
+            {tick}
+          </span>
         ))}
       </div>
       <div aria-hidden="true" className={styles.layers}>
@@ -58,6 +76,7 @@ export function NotesPyramid({ name, notes, layers, className }: NotesPyramidPro
             {index === 1 && <div className={styles.seam} />}
             {index === 2 && <div className={styles.seamWide} />}
             <div
+              data-pyramid-layer
               className={cx(styles.layer, styles[layer.level])}
               style={{ '--thickness': layer.thickness } as CSSProperties}
             >
@@ -72,7 +91,7 @@ export function NotesPyramid({ name, notes, layers, className }: NotesPyramidPro
             </div>
           </Fragment>
         ))}
-        <div className={styles.bedrock} />
+        <div data-pyramid-layer className={styles.bedrock} />
       </div>
     </div>
   );

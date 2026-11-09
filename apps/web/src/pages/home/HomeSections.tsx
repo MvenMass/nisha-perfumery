@@ -5,6 +5,7 @@ import { Link } from 'react-router';
 import { formatSpecimenNumber, productHref } from '../../entities/product/lib/format';
 import { cx } from '../../shared/lib/cx';
 import { formatPrice } from '../../shared/lib/money';
+import { useDesktopMotion } from '../../shared/lib/motion/useDesktopMotion';
 import { useGsap } from '../../shared/lib/motion/useGsap';
 import { typograph } from '../../shared/lib/typograph';
 import { ButtonLink } from '../../shared/ui/Button/Button';
@@ -127,9 +128,43 @@ export function Specimens({ items, pending }: { items: ProductListItem[]; pendin
   );
 }
 
+/** Сцена закрепляется по центру экрана; если секция выше окна — от верхнего края. */
+function pinStart(section: HTMLElement): string {
+  return section.offsetHeight > window.innerHeight ? 'top top' : 'center center';
+}
+
 export function CrossSection({ product }: { product: ProductDetail }) {
+  const sectionRef = useRef<HTMLElement>(null);
+  const desktop = useDesktopMotion();
+  // Десктоп: секция закрепляется, и прокрутка «бурит» керн — слои раскрываются по одному,
+  // а шкала времени отсчитывает, когда звучит каждый. На телефоне — раскрытие пирамиды.
+  useGsap(
+    sectionRef,
+    ({ gsap, ScrollTrigger }, section) => {
+      if (!desktop) return;
+      const layers = section.querySelectorAll('[data-pyramid-layer]');
+      const ticks = section.querySelectorAll('[data-pyramid-tick]');
+      const timeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: () => pinStart(section),
+          end: '+=120%',
+          pin: true,
+          scrub: 0.8,
+          invalidateOnRefresh: true,
+        },
+      });
+      timeline
+        .from(layers, { opacity: 0, yPercent: -40, duration: 1, stagger: 1, ease: 'power2.out' }, 0)
+        .from(ticks, { opacity: 0.15, duration: 0.4, stagger: 1 }, 0);
+      // Закрепление добавляет высоту: сцены ниже должны пересчитаться после него.
+      ScrollTrigger.sort();
+    },
+    [desktop],
+  );
+
   return (
-    <section aria-labelledby="cross-title" className={styles.cross}>
+    <section ref={sectionRef} aria-labelledby="cross-title" className={styles.cross}>
       <Container className={styles.split}>
         <div className={styles.splitText}>
           <SectionLabel>
@@ -151,6 +186,7 @@ export function CrossSection({ product }: { product: ProductDetail }) {
           name={product.name}
           notes={product.notes}
           layers={product.layers}
+          revealOnScroll={!desktop}
           className={styles.splitWide}
         />
       </Container>
@@ -185,31 +221,73 @@ export function About() {
 }
 
 export function Process() {
+  const sectionRef = useRef<HTMLElement>(null);
   const stepsRef = useRef<HTMLDivElement>(null);
-  useGsap(stepsRef, ({ gsap }, wrap) => {
-    const progress = wrap.querySelector(`.${styles.stepsProgress}`);
-    const steps = wrap.querySelectorAll(`.${styles.step}`);
-    if (!progress) return;
-    const media = gsap.matchMedia();
-    // Ось линии зависит от раскладки: вертикальная на телефоне, горизонтальная с 1024 px.
-    for (const [query, axis] of [
-      ['(max-width: 1023px)', 'scaleY'],
-      ['(min-width: 1024px)', 'scaleX'],
-    ] as const) {
-      media.add(query, () => {
-        const timeline = gsap.timeline({
-          scrollTrigger: { trigger: wrap, start: 'top 75%', end: 'bottom 60%', scrub: 0.6 },
-        });
-        timeline.from(progress, { [axis]: 0, ease: 'none', duration: steps.length });
-        steps.forEach((step, index) => {
-          timeline.from(step, { opacity: 0, y: 16, duration: 0.6 }, index);
-        });
+  const desktop = useDesktopMotion();
+
+  // Десктоп: секция закрепляется, линия идёт от этапа к этапу, каждый проявляется, когда
+  // линия до него дошла, а его точка «загорается».
+  useGsap(
+    sectionRef,
+    ({ gsap, ScrollTrigger }, section) => {
+      const wrap = stepsRef.current;
+      const progress = wrap?.querySelector(`.${styles.stepsProgress}`);
+      if (!desktop || !wrap || !progress) return;
+      const steps = wrap.querySelectorAll(`.${styles.step}`);
+      const dots = wrap.querySelectorAll(`.${styles.stepDot}`);
+      const timeline = gsap.timeline({
+        scrollTrigger: {
+          trigger: section,
+          start: () => pinStart(section),
+          end: '+=110%',
+          pin: true,
+          scrub: 0.8,
+          invalidateOnRefresh: true,
+        },
       });
-    }
-  });
+      timeline
+        .from(progress, { scaleX: 0, ease: 'none', duration: steps.length }, 0)
+        .from(steps, { opacity: 0, y: 28, duration: 0.6, stagger: 1, ease: 'power2.out' }, 0)
+        .from(dots, { scale: 0, duration: 0.3, stagger: 1, ease: 'back.out(3)' }, 0.2);
+      ScrollTrigger.sort();
+    },
+    [desktop],
+  );
+
+  // Телефон и планшет: линия заполняется по прокрутке, без закрепления.
+  useGsap(
+    stepsRef,
+    ({ gsap }, wrap) => {
+      const progress = wrap.querySelector(`.${styles.stepsProgress}`);
+      const steps = wrap.querySelectorAll(`.${styles.step}`);
+      if (desktop || !progress) return;
+      const media = gsap.matchMedia();
+      // Ось линии зависит от раскладки: вертикальная на телефоне, горизонтальная с 1024 px.
+      for (const [query, axis] of [
+        ['(max-width: 1023px)', 'scaleY'],
+        ['(min-width: 1024px)', 'scaleX'],
+      ] as const) {
+        media.add(query, () => {
+          const timeline = gsap.timeline({
+            scrollTrigger: { trigger: wrap, start: 'top 75%', end: 'bottom 60%', scrub: 0.6 },
+          });
+          timeline.from(progress, { [axis]: 0, ease: 'none', duration: steps.length });
+          steps.forEach((step, index) => {
+            timeline.from(step, { opacity: 0, y: 16, duration: 0.6 }, index);
+          });
+        });
+      }
+    },
+    [desktop],
+  );
 
   return (
-    <section id="process" aria-labelledby="process-title" className={styles.process}>
+    <section
+      ref={sectionRef}
+      id="process"
+      aria-labelledby="process-title"
+      className={styles.process}
+    >
       <Container className={styles.sectionInner}>
         <div className={styles.sectionHead}>
           <div className={styles.headText}>
