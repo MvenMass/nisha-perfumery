@@ -13,6 +13,7 @@ import { Button } from '../../shared/ui/Button/Button';
 import { Icon } from '../../shared/ui/Icon/Icon';
 import { IconButton } from '../../shared/ui/IconButton/IconButton';
 import { QuantityStepper } from '../../shared/ui/QuantityStepper/QuantityStepper';
+import { flyToCart } from '../../shared/lib/motion/fly-to-cart';
 import styles from './ProductPage.module.css';
 
 // По умолчанию — 50 мл, как в product.html; если его нет в наличии — первый доступный объём.
@@ -121,7 +122,12 @@ export function ProductPurchase({ product }: { product: ProductDetail }) {
               onClick={() =>
                 change.mutate(
                   { type: 'add', variantId: variant.id, quantity, stock: variant.stock },
-                  { onSuccess: () => setJustAdded(true) },
+                  {
+                    onSuccess: () => {
+                      setJustAdded(true);
+                      flyToCart(document.querySelector('[data-fly-source]'));
+                    },
+                  },
                 )
               }
             >

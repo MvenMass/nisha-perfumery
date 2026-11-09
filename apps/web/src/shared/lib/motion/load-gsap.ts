@@ -1,12 +1,10 @@
 import type { gsap as GsapInstance } from 'gsap';
-import type { Flip as FlipPlugin } from 'gsap/Flip';
 import type { ScrollTrigger as ScrollTriggerPlugin } from 'gsap/ScrollTrigger';
 import type { SplitText as SplitTextPlugin } from 'gsap/SplitText';
 
 export type Gsap = typeof GsapInstance;
 export type ScrollTriggerType = typeof ScrollTriggerPlugin;
 export type SplitTextType = typeof SplitTextPlugin;
-export type FlipType = typeof FlipPlugin;
 export type Motion = { gsap: Gsap; ScrollTrigger: ScrollTriggerType };
 
 let loading: Promise<Motion> | undefined;
@@ -66,6 +64,3 @@ export const loadSplitText = plugin(
   'SplitText',
   async () => (await import('gsap/SplitText')).SplitText,
 );
-
-/** Перелёт флакона в корзину. */
-export const loadFlip = plugin('Flip', async () => (await import('gsap/Flip')).Flip);

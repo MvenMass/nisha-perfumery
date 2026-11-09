@@ -1,0 +1,37 @@
+/* Слой базальта на весь экран; по кромкам — срез пород, как у разделителей. */
+.curtain {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-sheet);
+  visibility: hidden;
+  background: var(--color-basalt);
+}
+
+.edge {
+  position: absolute;
+  right: 0;
+  left: 0;
+  height: var(--sp-12);
+}
+
+.edge:first-child {
+  top: 0;
+  background: linear-gradient(
+    to bottom,
+    var(--color-line-strong) 0 1px,
+    var(--color-walnut) 1px 6px,
+    var(--color-stone) 6px 8px,
+    var(--color-copper-dark) 8px 12px
+  );
+}
+
+.edge:last-child {
+  bottom: 0;
+  background: linear-gradient(
+    to top,
+    var(--color-line-strong) 0 1px,
+    var(--color-walnut) 1px 6px,
+    var(--color-stone) 6px 8px,
+    var(--color-copper-dark) 8px 12px
+  );
+}

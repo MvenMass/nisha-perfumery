@@ -22,8 +22,12 @@ export function useCascade(listRef: RefObject<HTMLElement | null>, deps: Depende
       const parts = (batch: Element[], selector: string) =>
         batch.flatMap((item) => [...item.querySelectorAll(selector)]);
 
-      gsap.set(parts(items, '[data-cascade-media]'), { yPercent: 101 });
-      gsap.set(parts(items, '[data-cascade-body]'), { opacity: 0, y: 24 });
+      const media = parts(items, '[data-cascade-media]');
+      const bodies = parts(items, '[data-cascade-body]');
+      // Скелетоны пока грузятся: анимировать нечего, а пустой список GSAP считает ошибкой.
+      if (media.length === 0 && bodies.length === 0) return;
+      gsap.set(media, { yPercent: 101 });
+      gsap.set(bodies, { opacity: 0, y: 24 });
       ScrollTrigger.batch(items, {
         start: 'top 92%',
         once: true,

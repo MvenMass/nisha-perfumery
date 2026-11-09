@@ -85,7 +85,12 @@ export function Header({ cartCount, cartBump = 0, onSearch }: HeaderProps) {
             className={styles.wideOnly}
           />
           {/* key — анимация заново при каждом толчке. */}
-          <span key={cartBump} className={cartBump > 0 ? styles.bump : styles.bumpIdle}>
+          <span
+            key={cartBump}
+            className={cartBump > 0 ? styles.bump : styles.bumpIdle}
+            // Сюда «прилетает» флакон при добавлении в корзину со страницы товара.
+            data-cart-target
+          >
             <IconLink
               icon="bag"
               label={cartLabel(cartCount)}

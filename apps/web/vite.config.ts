@@ -23,7 +23,7 @@ export default defineConfig({
   // Плагины GSAP грузятся динамически, и dev-сервер находил их только в браузере: пересобирал
   // зависимости на лету, а открытая вкладка получала 504 «Outdated Optimize Dep».
   optimizeDeps: {
-    include: ['gsap', 'gsap/ScrollTrigger', 'gsap/SplitText', 'gsap/Flip'],
+    include: ['gsap', 'gsap/ScrollTrigger', 'gsap/SplitText'],
   },
   server: { port: 5173, strictPort: true, proxy: apiProxy },
   preview: { port: 4173, strictPort: true, proxy: apiProxy },

@@ -28,6 +28,7 @@ export function ProductGallery({ images, placeholderAlt }: ProductGalleryProps) 
           role="img"
           aria-label={placeholderAlt}
           className={cx(styles.photo, styles.placeholder)}
+          data-fly-source
         />
       </div>
     );
@@ -52,7 +53,7 @@ export function ProductGallery({ images, placeholderAlt }: ProductGalleryProps) 
           ))}
         </ul>
       )}
-      <figure className={styles.photo} data-reveal="media">
+      <figure className={styles.photo} data-reveal="media" data-fly-source>
         <Picture
           src={current.url}
           alt={current.alt}
