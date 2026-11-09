@@ -150,24 +150,27 @@
 
 /* --- Появление слайда: флакон проявляется, текст поднимается по строчкам --- */
 @media (--motion-ok) {
+  /* --intro-delay ставит заставка: первый экран появляется, когда расходятся её слои. */
   .enter > * {
     animation: rise var(--dur-enter) var(--ease-out) both;
+    animation-delay: var(--intro-delay, 0ms);
   }
 
   .enter > :nth-child(2) {
-    animation-delay: 90ms;
+    animation-delay: calc(var(--intro-delay, 0ms) + 90ms);
   }
 
   .enter > :nth-child(3) {
-    animation-delay: 180ms;
+    animation-delay: calc(var(--intro-delay, 0ms) + 180ms);
   }
 
   .enter > :nth-child(4) {
-    animation-delay: 270ms;
+    animation-delay: calc(var(--intro-delay, 0ms) + 270ms);
   }
 
   .photo {
     animation: develop var(--dur-develop) var(--ease-out) both;
+    animation-delay: var(--intro-delay, 0ms);
   }
 }
 

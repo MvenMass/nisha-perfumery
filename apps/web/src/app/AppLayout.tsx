@@ -7,6 +7,7 @@ import { SearchSheet } from '../features/search/SearchSheet';
 import { Footer } from '../widgets/footer/Footer';
 import { Header } from '../widgets/header/Header';
 import styles from './AppLayout.module.css';
+import { Intro } from './Intro';
 import { PageCurtain } from './PageCurtain';
 import { useSmoothScroll } from './useSmoothScroll';
 
@@ -41,6 +42,7 @@ export function AppLayout() {
       </main>
       <Footer />
       <PageCurtain />
+      <Intro />
       <ScrollRestoration />
     </div>
   );
