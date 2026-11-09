@@ -14,6 +14,7 @@ import { SectionLabel } from '../../shared/ui/SectionLabel/SectionLabel';
 import { Skeleton } from '../../shared/ui/Skeleton/Skeleton';
 import { NotFoundPage } from '../../widgets/not-found/NotFoundPage';
 import styles from './Journal.module.css';
+import { Picture } from '../../shared/ui/Picture/Picture';
 
 /** Журнал: статьи о материалах, мастерской и людях дома. Тексты — из админки. */
 export function JournalPage() {
@@ -51,7 +52,12 @@ export function JournalPage() {
         {articles.data.items.map((article) => (
           <li key={article.slug} className={styles.card}>
             {article.cover ? (
-              <img src={article.cover.url} alt="" loading="lazy" className={styles.cover} />
+              <Picture
+                src={article.cover.url}
+                alt=""
+                sizes="(min-width: 768px) 33vw, 100vw"
+                className={styles.cover}
+              />
             ) : (
               <span aria-hidden="true" className={styles.cover} />
             )}
@@ -133,7 +139,13 @@ export function ArticlePage() {
         <p className={styles.articleLead}>{typograph(data.lead)}</p>
       </header>
       {data.cover && (
-        <img src={data.cover.url} alt={data.cover.alt} className={styles.articleCover} />
+        <Picture
+          src={data.cover.url}
+          alt={data.cover.alt}
+          sizes="(min-width: 1100px) 1040px, 100vw"
+          priority
+          className={styles.articleCover}
+        />
       )}
       <Prose>
         {data.paragraphs.map((paragraph, index) => (

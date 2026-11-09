@@ -5,6 +5,7 @@ import { cx } from '../../shared/lib/cx';
 import { IconButton } from '../../shared/ui/IconButton/IconButton';
 import { Sheet } from '../../shared/ui/Sheet/Sheet';
 import styles from './ProductPage.module.css';
+import { Picture } from '../../shared/ui/Picture/Picture';
 
 type ProductGalleryProps = {
   images: Image[];
@@ -45,14 +46,20 @@ export function ProductGallery({ images, placeholderAlt }: ProductGalleryProps) 
                 aria-pressed={imageIndex === index}
                 onClick={() => setIndex(imageIndex)}
               >
-                <img src={image.url} alt="" loading="lazy" />
+                <Picture src={image.url} alt="" sizes="80px" />
               </button>
             </li>
           ))}
         </ul>
       )}
       <figure className={styles.photo}>
-        <img src={current.url} alt={current.alt} className={styles.photoImage} />
+        <Picture
+          src={current.url}
+          alt={current.alt}
+          sizes="(min-width: 1024px) 50vw, 100vw"
+          priority
+          className={styles.photoImage}
+        />
         {images.length > 1 && (
           <span className={styles.counter} aria-hidden="true">
             {pad(index + 1)} / {pad(images.length)}
@@ -67,7 +74,7 @@ export function ProductGallery({ images, placeholderAlt }: ProductGalleryProps) 
         />
       </figure>
       <Sheet open={zoomed} onClose={() => setZoomed(false)} title="Фото" side="bottom">
-        <img src={current.url} alt={current.alt} className={styles.zoomImage} />
+        <Picture src={current.url} alt={current.alt} sizes="100vw" className={styles.zoomImage} />
       </Sheet>
     </div>
   );

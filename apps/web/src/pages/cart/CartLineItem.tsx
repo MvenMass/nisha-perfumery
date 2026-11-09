@@ -17,6 +17,7 @@ import { Icon } from '../../shared/ui/Icon/Icon';
 import { IconButton } from '../../shared/ui/IconButton/IconButton';
 import { QuantityStepper } from '../../shared/ui/QuantityStepper/QuantityStepper';
 import styles from './CartPage.module.css';
+import { Picture } from '../../shared/ui/Picture/Picture';
 
 type CartLineItemProps = {
   line: CartLine;
@@ -48,7 +49,9 @@ export function CartLineItem({ line, error, onQuantity, onRemove }: CartLineItem
         aria-hidden="true"
         className={cx(styles.media, missing && styles.mediaMissing)}
       >
-        {line.image && <img src={line.image.url} alt="" loading="lazy" className={styles.photo} />}
+        {line.image && (
+          <Picture src={line.image.url} alt="" sizes="120px" className={styles.photo} />
+        )}
       </Link>
 
       <div className={styles.info}>

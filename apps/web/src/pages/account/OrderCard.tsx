@@ -17,6 +17,7 @@ import { Icon } from '../../shared/ui/Icon/Icon';
 import { StatusBadge } from '../../shared/ui/Badge/Badge';
 import { Stepper } from '../../shared/ui/Stepper/Stepper';
 import styles from './Orders.module.css';
+import { Picture } from '../../shared/ui/Picture/Picture';
 
 export const formatOrderNumber = (number: number) => String(number).padStart(4, '0');
 
@@ -72,7 +73,7 @@ export function OrderCard({ order, viewer }: { order: OrderListItem; viewer: Use
             {(order.images.length > 0 ? order.images : order.productNames.slice(0, 3)).map(
               (image, index) => (
                 <span key={index} aria-hidden="true" className={styles.thumb}>
-                  {typeof image !== 'string' && <img src={image.url} alt="" loading="lazy" />}
+                  {typeof image !== 'string' && <Picture src={image.url} alt="" sizes="52px" />}
                 </span>
               ),
             )}

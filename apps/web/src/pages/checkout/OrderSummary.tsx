@@ -3,6 +3,7 @@ import type { CheckoutQuote, DeliveryMethod } from '@nisha/contracts';
 import { formatVolume } from '../../entities/product/lib/format';
 import { formatPrice } from '../../shared/lib/money';
 import styles from './CheckoutPage.module.css';
+import { Picture } from '../../shared/ui/Picture/Picture';
 
 const DELIVERY_ROW: Record<DeliveryMethod, string> = {
   courier: 'Доставка курьером',
@@ -28,7 +29,7 @@ export function OrderSummary({
         {lines.map((line) => (
           <li key={line.variantId} className={styles.summaryLine}>
             <span aria-hidden="true" className={styles.summaryPhoto}>
-              {line.image && <img src={line.image.url} alt="" loading="lazy" />}
+              {line.image && <Picture src={line.image.url} alt="" sizes="56px" />}
             </span>
             <span className={styles.summaryText}>
               <span className={styles.summaryName}>{line.productName}</span>

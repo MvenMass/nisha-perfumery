@@ -8,6 +8,7 @@ import { IconButton } from '../../shared/ui/IconButton/IconButton';
 import { Skeleton } from '../../shared/ui/Skeleton/Skeleton';
 import { FALLBACK_SLIDE } from './home-content';
 import styles from './HeroCarousel.module.css';
+import { Picture } from '../../shared/ui/Picture/Picture';
 
 const pad = (value: number) => String(value).padStart(2, '0');
 
@@ -82,7 +83,13 @@ export function HeroCarousel({
 
         <figure className={styles.figure} onPointerMove={moveLight}>
           {slide.imageUrl ? (
-            <img src={slide.imageUrl} alt={slide.imageAlt} className={styles.photo} />
+            <Picture
+              src={slide.imageUrl}
+              alt={slide.imageAlt}
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              priority
+              className={styles.photo}
+            />
           ) : (
             <div role="img" aria-label={slide.imageAlt} className={styles.photo} />
           )}

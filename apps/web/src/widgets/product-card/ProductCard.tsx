@@ -7,6 +7,7 @@ import { Button, ButtonLink } from '../../shared/ui/Button/Button';
 import { IconButton, IconLink } from '../../shared/ui/IconButton/IconButton';
 import { SpecimenLabel } from '../../shared/ui/SpecimenLabel/SpecimenLabel';
 import styles from './ProductCard.module.css';
+import { Picture } from '../../shared/ui/Picture/Picture';
 
 // Модель отображения карточки. Из ответа API её собирает toProductCard.
 export type ProductCardData = {
@@ -61,7 +62,12 @@ export function ProductCard({
       <div className={styles.media}>
         {/* Снимок декоративный: название рядом, а ссылкой работает вся карточка. */}
         {image ? (
-          <img src={image.src} alt="" loading="lazy" className={styles.photo} />
+          <Picture
+            src={image.src}
+            alt=""
+            sizes="(min-width: 1024px) 25vw, (min-width: 768px) 33vw, 100vw"
+            className={styles.photo}
+          />
         ) : (
           <span className={cx(styles.photo, styles[product.placeholder ?? 'basalt'])} />
         )}
