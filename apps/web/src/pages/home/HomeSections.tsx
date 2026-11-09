@@ -1,9 +1,11 @@
 import type { ArticlePreview, ProductDetail, ProductListItem, StoreInfo } from '@nisha/contracts';
+import { useRef } from 'react';
 import { Link } from 'react-router';
 
 import { formatSpecimenNumber, productHref } from '../../entities/product/lib/format';
 import { cx } from '../../shared/lib/cx';
 import { formatPrice } from '../../shared/lib/money';
+import { useGsap } from '../../shared/lib/motion/useGsap';
 import { typograph } from '../../shared/lib/typograph';
 import { ButtonLink } from '../../shared/ui/Button/Button';
 import { Container } from '../../shared/ui/Container/Container';
@@ -75,6 +77,24 @@ export function Categories() {
 }
 
 export function Specimens({ items, pending }: { items: ProductListItem[]; pending: boolean }) {
+  const rowRef = useRef<HTMLUListElement>(null);
+  // Сцена строится, когда вместо скелетонов пришли карточки.
+  useGsap(
+    rowRef,
+    ({ gsap }, row) => {
+      if (pending) return;
+      gsap.from(row.children, {
+        opacity: 0,
+        y: 24,
+        duration: 0.6,
+        ease: 'power2.out',
+        stagger: 0.08,
+        scrollTrigger: { trigger: row, start: 'top 85%', once: true },
+      });
+    },
+    [pending],
+  );
+
   return (
     <section id="specimens" aria-labelledby="specimens-title" className={styles.specimens}>
       <Container className={styles.sectionInner}>
@@ -89,7 +109,7 @@ export function Specimens({ items, pending }: { items: ProductListItem[]; pendin
             Весь каталог
           </Link>
         </div>
-        <ul className={styles.specimenRow} aria-busy={pending}>
+        <ul ref={rowRef} className={styles.specimenRow} aria-busy={pending}>
           {pending
             ? Array.from({ length: 4 }, (_, index) => (
                 <li key={index}>
@@ -165,6 +185,29 @@ export function About() {
 }
 
 export function Process() {
+  const stepsRef = useRef<HTMLDivElement>(null);
+  useGsap(stepsRef, ({ gsap }, wrap) => {
+    const progress = wrap.querySelector(`.${styles.stepsProgress}`);
+    const steps = wrap.querySelectorAll(`.${styles.step}`);
+    if (!progress) return;
+    const media = gsap.matchMedia();
+    // Ось линии зависит от раскладки: вертикальная на телефоне, горизонтальная с 1024 px.
+    for (const [query, axis] of [
+      ['(max-width: 1023px)', 'scaleY'],
+      ['(min-width: 1024px)', 'scaleX'],
+    ] as const) {
+      media.add(query, () => {
+        const timeline = gsap.timeline({
+          scrollTrigger: { trigger: wrap, start: 'top 75%', end: 'bottom 60%', scrub: 0.6 },
+        });
+        timeline.from(progress, { [axis]: 0, ease: 'none', duration: steps.length });
+        steps.forEach((step, index) => {
+          timeline.from(step, { opacity: 0, y: 16, duration: 0.6 }, index);
+        });
+      });
+    }
+  });
+
   return (
     <section id="process" aria-labelledby="process-title" className={styles.process}>
       <Container className={styles.sectionInner}>
@@ -180,20 +223,23 @@ export function Process() {
             и&nbsp;несколько месяцев работы.
           </p>
         </div>
-        <ol className={styles.steps}>
-          {PROCESS_STEPS.map((step, index) => (
-            <li key={step.title} className={styles.step}>
-              <span aria-hidden="true" className={styles.stepDot} />
-              <Icon name={step.icon} size={40} className={styles.stepIcon} />
-              <span className={styles.stepNumber}>
-                {String(index + 1).padStart(2, '0')} /{' '}
-                {String(PROCESS_STEPS.length).padStart(2, '0')}
-              </span>
-              <h3 className={styles.stepTitle}>{step.title}</h3>
-              <p className={styles.stepText}>{step.text}</p>
-            </li>
-          ))}
-        </ol>
+        <div ref={stepsRef} className={styles.stepsWrap}>
+          <span aria-hidden="true" className={styles.stepsProgress} />
+          <ol className={styles.steps}>
+            {PROCESS_STEPS.map((step, index) => (
+              <li key={step.title} className={styles.step}>
+                <span aria-hidden="true" className={styles.stepDot} />
+                <Icon name={step.icon} size={40} className={styles.stepIcon} />
+                <span className={styles.stepNumber}>
+                  {String(index + 1).padStart(2, '0')} /{' '}
+                  {String(PROCESS_STEPS.length).padStart(2, '0')}
+                </span>
+                <h3 className={styles.stepTitle}>{step.title}</h3>
+                <p className={styles.stepText}>{step.text}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
       </Container>
     </section>
   );

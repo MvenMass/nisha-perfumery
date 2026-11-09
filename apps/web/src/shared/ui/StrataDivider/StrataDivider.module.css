@@ -9,6 +9,12 @@
   color: var(--color-text-muted);
 }
 
+/* Ширина под «−000 м» не меняется, пока счётчик бежит: слои рядом не дёргаются. */
+.depth {
+  min-width: 6ch;
+  font-variant-numeric: tabular-nums;
+}
+
 .layers {
   display: flex;
   flex: 1 1 auto;

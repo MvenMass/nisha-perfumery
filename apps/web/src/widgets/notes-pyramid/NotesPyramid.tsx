@@ -1,8 +1,9 @@
 import type { ProductDetail } from '@nisha/contracts';
 import type { CSSProperties } from 'react';
-import { Fragment } from 'react';
+import { Fragment, useRef } from 'react';
 
 import { cx } from '../../shared/lib/cx';
+import { useGsap } from '../../shared/lib/motion/useGsap';
 import { typograph } from '../../shared/lib/typograph';
 import { buildPyramid, formatDuration, formatLayerRange, pyramidDescription } from './pyramid';
 import styles from './NotesPyramid.module.css';
@@ -14,9 +15,24 @@ type NotesPyramidProps = {
   className?: string | undefined;
 };
 
-// Пирамида нот как срез породы: сверху лёгкие ноты, внизу — база, толщина слоя — время звучания.
+/**
+ * Пирамида нот как срез породы: сверху лёгкие ноты, внизу — база, толщина слоя — время звучания.
+ * При прокрутке слои раскрываются по очереди сверху вниз — так, как аромат звучит на коже.
+ */
 export function NotesPyramid({ name, notes, layers, className }: NotesPyramidProps) {
+  const rootRef = useRef<HTMLDivElement>(null);
   const pyramid = buildPyramid(notes, layers);
+
+  useGsap(rootRef, ({ gsap }, root) => {
+    gsap.from(`.${styles.layer}, .${styles.bedrock}`, {
+      opacity: 0,
+      y: -14,
+      duration: 0.7,
+      ease: 'power2.out',
+      stagger: 0.22,
+      scrollTrigger: { trigger: root, start: 'top 80%', once: true },
+    });
+  });
   const lastEnd = pyramid[pyramid.length - 1]?.to ?? 0;
   const ticks = ['0', ...pyramid.map((layer) => String(layer.to))].map((value, index, all) => {
     const minutes = Number(value);
@@ -26,6 +42,7 @@ export function NotesPyramid({ name, notes, layers, className }: NotesPyramidPro
 
   return (
     <div
+      ref={rootRef}
       role="img"
       aria-label={pyramidDescription(name, pyramid)}
       className={cx(styles.pyramid, className)}

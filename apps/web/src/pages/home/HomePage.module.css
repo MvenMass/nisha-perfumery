@@ -251,6 +251,21 @@
   padding: var(--sp-56) 0;
 }
 
+/* Прогресс поверх линии этапов: та же линия медью, растёт при прокрутке (этап 9). */
+.stepsWrap {
+  position: relative;
+}
+
+.stepsProgress {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: var(--border-1);
+  background: var(--color-copper);
+  transform-origin: top center;
+}
+
 .steps {
   display: flex;
   flex-direction: column;
@@ -515,6 +530,14 @@
   }
 
   /* Этапы — по горизонтали, точки сидят на общей линии сверху. */
+  .stepsProgress {
+    right: 0;
+    bottom: auto;
+    width: auto;
+    height: var(--border-1);
+    transform-origin: left center;
+  }
+
   .steps {
     display: grid;
     grid-template-columns: repeat(5, minmax(0, 1fr));
