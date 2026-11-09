@@ -143,7 +143,7 @@ export function CrossSection({ product }: { product: ProductDetail }) {
       });
       timeline
         .from(layers, { opacity: 0, yPercent: -40, duration: 1, stagger: 1, ease: 'power2.out' }, 0)
-        .from(ticks, { opacity: 0.15, duration: 0.4, stagger: 1 }, 0);
+        .from(ticks, { opacity: 0, duration: 0.4, stagger: 1 }, 0);
       // Закрепление добавляет высоту: сцены ниже должны пересчитаться после него.
       ScrollTrigger.sort();
     },
