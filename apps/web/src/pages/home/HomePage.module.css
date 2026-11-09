@@ -326,9 +326,20 @@
   flex-direction: column;
 }
 
+/* Рамка снимка; сам «снимок» — слой внутри: его раскрывает шторка и двигает параллакс. */
 .materialsPhoto {
+  position: relative;
   min-height: 320px;
   margin: 0 calc(-1 * var(--gutter));
+}
+
+.materialsFill,
+.boutiqueFill {
+  position: absolute;
+  inset: 0;
+}
+
+.materialsFill {
   background: linear-gradient(140deg, var(--color-stone) 0%, var(--color-basalt) 100%);
 }
 
@@ -399,7 +410,11 @@
 }
 
 .boutiquePhoto {
+  position: relative;
   min-height: 280px;
+}
+
+.boutiqueFill {
   background: linear-gradient(
     115deg,
     var(--color-bg) 0%,

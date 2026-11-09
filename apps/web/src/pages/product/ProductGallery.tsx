@@ -52,7 +52,7 @@ export function ProductGallery({ images, placeholderAlt }: ProductGalleryProps) 
           ))}
         </ul>
       )}
-      <figure className={styles.photo}>
+      <figure className={styles.photo} data-reveal="media">
         <Picture
           src={current.url}
           alt={current.alt}

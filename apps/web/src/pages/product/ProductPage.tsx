@@ -1,9 +1,11 @@
+import { useRef } from 'react';
 import { useParams } from 'react-router';
 
 import { useProduct } from '../../entities/product/api/queries';
 import { DENSITY_LABELS, formatSpecimenNumber } from '../../entities/product/lib/format';
 import { ApiError } from '../../shared/api/http';
 import { typograph } from '../../shared/lib/typograph';
+import { useReveal } from '../../shared/lib/motion/useReveal';
 import { useMeta } from '../../shared/lib/useMeta';
 import { Breadcrumbs } from '../../shared/ui/Breadcrumbs/Breadcrumbs';
 import { Button } from '../../shared/ui/Button/Button';
@@ -39,6 +41,8 @@ export function ProductPage() {
   const { slug = '' } = useParams();
   const product = useProduct(slug);
   const data = product.data;
+  const pageRef = useRef<HTMLDivElement>(null);
+  useReveal(pageRef, [data?.id]);
 
   useMeta(
     data ? `${data.name}, образец № ${formatSpecimenNumber(data.specimenNumber)}` : undefined,
@@ -78,7 +82,7 @@ export function ProductPage() {
   ].filter((fact): fact is [string, string] => fact[1] !== null);
 
   return (
-    <>
+    <div ref={pageRef}>
       <Container className={styles.top}>
         <Breadcrumbs
           items={[
@@ -98,7 +102,9 @@ export function ProductPage() {
                 Образец №&nbsp;{formatSpecimenNumber(data.specimenNumber)}
                 {data.collection && ` · Коллекция «${data.collection.name}»`}
               </p>
-              <h1 className={styles.name}>{data.name}</h1>
+              <h1 className={styles.name} data-reveal="text">
+                {data.name}
+              </h1>
               <p className={styles.description}>{typograph(data.description)}</p>
             </div>
             <dl className={styles.facts}>
@@ -131,6 +137,6 @@ export function ProductPage() {
       <PyramidSection product={data} />
       <StorySection product={data} />
       <RelatedSection slug={data.slug} />
-    </>
+    </div>
   );
 }

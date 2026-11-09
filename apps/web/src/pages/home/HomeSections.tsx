@@ -101,7 +101,7 @@ export function Specimens({ items, pending }: { items: ProductListItem[]; pendin
         <div className={styles.sectionHead}>
           <div className={styles.headText}>
             <SectionLabel>Коллекция образцов · бестселлеры</SectionLabel>
-            <h2 id="specimens-title" className={styles.sectionTitle}>
+            <h2 id="specimens-title" className={styles.sectionTitle} data-reveal="text">
               Образцы породы
             </h2>
           </div>
@@ -135,7 +135,7 @@ export function CrossSection({ product }: { product: ProductDetail }) {
           <SectionLabel>
             Срез аромата · образец №&nbsp;{formatSpecimenNumber(product.specimenNumber)}
           </SectionLabel>
-          <h2 id="cross-title" className={styles.sectionTitle}>
+          <h2 id="cross-title" className={styles.sectionTitle} data-reveal="text">
             {product.name} в&nbsp;разрезе
           </h2>
           <p className={styles.muted}>
@@ -165,7 +165,7 @@ export function About() {
         <SectionLabel>
           <span id="about-title">О&nbsp;доме</span>
         </SectionLabel>
-        <p className={styles.aboutQuote}>
+        <p className={styles.aboutQuote} data-reveal="text">
           Камень помнит всё, что с&nbsp;ним случилось: воду, давление, время. Мы&nbsp;хотим, чтобы
           аромат помнил так&nbsp;же.
         </p>
@@ -214,7 +214,7 @@ export function Process() {
         <div className={styles.sectionHead}>
           <div className={styles.headText}>
             <SectionLabel>Мастерская</SectionLabel>
-            <h2 id="process-title" className={styles.sectionTitle}>
+            <h2 id="process-title" className={styles.sectionTitle} data-reveal="text">
               Как рождается аромат
             </h2>
           </div>
@@ -253,10 +253,14 @@ export function Materials() {
           role="img"
           aria-label="Крупный план приглушённого травертина: поры, естественные неровности, тень от флакона"
           className={styles.materialsPhoto}
-        />
+          data-reveal="media"
+          data-parallax
+        >
+          <span data-reveal-layer className={styles.materialsFill} />
+        </div>
         <div className={styles.materialsText}>
           <SectionLabel>Материалы</SectionLabel>
-          <h2 id="materials-title" className={styles.sectionTitle}>
+          <h2 id="materials-title" className={styles.sectionTitle} data-reveal="text">
             Травертин: камень с&nbsp;дыханием
           </h2>
           <p className={styles.onWalnut}>
@@ -280,7 +284,7 @@ export function Journal({ articles }: { articles: ArticlePreview[] }) {
     <section id="journal" aria-labelledby="journal-title" className={styles.journal}>
       <Container className={styles.sectionInner}>
         <div className={styles.sectionHead}>
-          <h2 id="journal-title" className={styles.sectionTitle}>
+          <h2 id="journal-title" className={styles.sectionTitle} data-reveal="text">
             Искусство, скрытое в&nbsp;деталях
           </h2>
           <Link to="/journal" className={styles.headLink}>
@@ -310,7 +314,7 @@ export function Boutique({ store }: { store: StoreInfo | undefined }) {
       <Container className={styles.split}>
         <div className={styles.splitText}>
           <SectionLabel>Бутик</SectionLabel>
-          <h2 id="boutique-title" className={styles.sectionTitle}>
+          <h2 id="boutique-title" className={styles.sectionTitle} data-reveal="text">
             Знакомьтесь с&nbsp;ароматами вживую
           </h2>
           {store && (
@@ -333,7 +337,11 @@ export function Boutique({ store }: { store: StoreInfo | undefined }) {
           role="img"
           aria-label="Интерьер бутика: матовые чёрные стены, ореховые полки, каменный стол, тёплый оранжевый свет"
           className={cx(styles.splitWide, styles.boutiquePhoto)}
-        />
+          data-reveal="media"
+          data-parallax
+        >
+          <span data-reveal-layer className={styles.boutiqueFill} />
+        </div>
       </Container>
     </section>
   );

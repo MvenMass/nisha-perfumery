@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useLayoutEffect, useRef } from 'react';
 import type { DependencyList, RefObject } from 'react';
 
 import { loadGsap } from './load-gsap';
@@ -32,7 +32,9 @@ export function useGsap<M extends Motion = Motion>(
     loadRef.current = load;
   });
 
-  useEffect(() => {
+  // Layout effect: если GSAP уже загружен, исходное «до» встаёт до первой отрисовки —
+  // без кадра, где заголовок уже виден, а потом пропадает, чтобы выехать.
+  useLayoutEffect(() => {
     if (reduced) return undefined;
     let revert: (() => void) | undefined;
     let cancelled = false;

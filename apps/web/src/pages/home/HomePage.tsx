@@ -1,5 +1,8 @@
+import { useRef } from 'react';
+
 import { useHome } from '../../entities/product/api/queries';
 import { useStoreInfo } from '../../entities/store/queries';
+import { useReveal } from '../../shared/lib/motion/useReveal';
 import { useMeta } from '../../shared/lib/useMeta';
 import { Container } from '../../shared/ui/Container/Container';
 import { StrataDivider } from '../../shared/ui/StrataDivider/StrataDivider';
@@ -37,9 +40,12 @@ export function HomePage() {
   );
   const home = useHome();
   const store = useStoreInfo();
+  const pageRef = useRef<HTMLDivElement>(null);
+  // «Срез» и журнал появляются с данными — тогда и пересобираем раскрытия.
+  useReveal(pageRef, [home.isPending, store.isPending]);
 
   return (
-    <>
+    <div ref={pageRef}>
       <HeroCarousel slides={home.data?.slides} pending={home.isPending} />
       <Advantages store={store.data} />
       <Strata kind="limestone" />
@@ -54,6 +60,6 @@ export function HomePage() {
       <Materials />
       <Journal articles={home.data?.articles ?? []} />
       <Boutique store={store.data} />
-    </>
+    </div>
   );
 }
