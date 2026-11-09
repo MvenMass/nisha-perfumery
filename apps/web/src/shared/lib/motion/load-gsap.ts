@@ -1,8 +1,14 @@
 import type { gsap as GsapInstance } from 'gsap';
+import type { Flip as FlipPlugin } from 'gsap/Flip';
+import type { ScrollSmoother as ScrollSmootherPlugin } from 'gsap/ScrollSmoother';
 import type { ScrollTrigger as ScrollTriggerPlugin } from 'gsap/ScrollTrigger';
+import type { SplitText as SplitTextPlugin } from 'gsap/SplitText';
 
 export type Gsap = typeof GsapInstance;
 export type ScrollTriggerType = typeof ScrollTriggerPlugin;
+export type SplitTextType = typeof SplitTextPlugin;
+export type ScrollSmootherType = typeof ScrollSmootherPlugin;
+export type FlipType = typeof FlipPlugin;
 export type Motion = { gsap: Gsap; ScrollTrigger: ScrollTriggerType };
 
 let loading: Promise<Motion> | undefined;
@@ -41,3 +47,33 @@ export function loadGsap(): Promise<Motion> {
   );
   return loading;
 }
+
+/** Плагин отдельным чанком: грузится вместе с ядром и регистрируется один раз. */
+function plugin<K extends string, P extends object>(
+  key: K,
+  load: () => Promise<P>,
+): () => Promise<Motion & Record<K, P>> {
+  let promise: Promise<Motion & Record<K, P>> | undefined;
+  return () => {
+    promise ??= Promise.all([loadGsap(), load()]).then(([motion, loaded]) => {
+      motion.gsap.registerPlugin(loaded);
+      return { ...motion, [key]: loaded } as Motion & Record<K, P>;
+    });
+    return promise;
+  };
+}
+
+/** Заголовки строками из-под маски (этап 9.1). */
+export const loadSplitText = plugin(
+  'SplitText',
+  async () => (await import('gsap/SplitText')).SplitText,
+);
+
+/** Инерционный скролл на витринных страницах десктопа. */
+export const loadSmoother = plugin(
+  'ScrollSmoother',
+  async () => (await import('gsap/ScrollSmoother')).ScrollSmoother,
+);
+
+/** Перелёт флакона в корзину. */
+export const loadFlip = plugin('Flip', async () => (await import('gsap/Flip')).Flip);
