@@ -52,7 +52,11 @@ export function SearchSheet({ open, onClose }: SearchSheetProps) {
   } else if (search.isError) {
     results = <p className={styles.hint}>Поиск сейчас не отвечает. Попробуйте ещё раз.</p>;
   } else if (search.data && search.data.total === 0) {
-    results = <p className={styles.hint}>По&nbsp;запросу «{query}» ничего не&nbsp;нашли.</p>;
+    results = (
+      <p className={styles.hint}>
+        По&nbsp;запросу «{query}» образцов нет. Попробуйте ноту: «ирис», «дым» или&nbsp;«кедр».
+      </p>
+    );
   } else if (search.data) {
     results = (
       <>

@@ -166,7 +166,7 @@ export function CrossSection({ product }: { product: ProductDetail }) {
             Срез аромата · образец №&nbsp;{formatSpecimenNumber(product.specimenNumber)}
           </SectionLabel>
           <h2 id="cross-title" className={styles.sectionTitle} data-reveal="text">
-            {product.name} в&nbsp;разрезе
+            «{product.name}» в&nbsp;разрезе
           </h2>
           <p className={styles.muted}>
             Аромат раскрывается слоями, как порода в&nbsp;керне. Сначала лёгкая поверхность, потом

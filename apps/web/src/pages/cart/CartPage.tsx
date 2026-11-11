@@ -122,6 +122,7 @@ export function CartPage() {
     content = (
       <EmptyState
         title="Здесь пока ни&nbsp;одного образца"
+        description="Начните с&nbsp;бестселлеров&nbsp;— их&nbsp;чаще всего берут первыми. Или с&nbsp;пробников, чтобы выбрать без спешки."
         action={
           <ButtonLink to="/catalog" size="md">
             В&nbsp;каталог
