@@ -60,7 +60,7 @@ test.describe('с «уменьшением движения»', () => {
     expect(motionChunks).toEqual([]);
   });
 
-  test('переходы без шторки, якорь и «назад» работают', async ({ page, isMobile }) => {
+  test('якорь и «назад» работают', async ({ page, isMobile }) => {
     test.skip(isMobile, 'пункты меню на телефоне — в шторке меню');
     await page.goto('/catalog');
     await page.getByRole('navigation').getByRole('link', { name: 'Мастерская' }).click();
@@ -68,7 +68,6 @@ test.describe('с «уменьшением движения»', () => {
     await expect(page.locator('#process')).toBeInViewport();
     await page.goBack();
     await expect(page).toHaveURL(/\/catalog$/);
-    await expect(page.locator('[class*="curtain"]')).toHaveCount(0);
   });
 });
 
@@ -99,7 +98,7 @@ test('заголовки под маской читаются целиком, п
 test.describe('десктоп', () => {
   test.skip(({ isMobile }) => isMobile, 'сцены только для мыши и ширины от 1024 px');
 
-  test('закреплённые сцены отпускают страницу: подвал достижим', async ({ page }) => {
+  test('после сцен подвал достижим', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
     await scrollThrough(page);
@@ -115,13 +114,14 @@ test.describe('десктоп', () => {
     await expect(page.locator('#process')).toBeInViewport({ ratio: 0.99 });
   });
 
-  test('шторка закрывает старую страницу и уходит с новой', async ({ page }) => {
+  test('закреплённые сцены держат прокрутку один раз', async ({ page }) => {
     await page.goto('/');
     await expect(page.getByRole('heading', { level: 1 })).toBeVisible();
-    await page.getByRole('navigation').getByRole('link', { name: 'Каталог' }).click();
-    await expect(page).toHaveURL(/\/catalog$/);
-    await expect(page.getByRole('heading', { level: 1, name: 'Каталог образцов' })).toBeVisible();
-    // Шторка не перекрывает новую страницу: клик по карточке доходит до неё.
-    await expect(page.locator('[class*="curtain"]')).toBeHidden();
+    await expect.poll(() => page.locator('.pin-spacer').count()).toBe(2);
+    await scrollThrough(page);
+    // Прокрутили — закрепления сняты: обратно вверх страница едет без остановок.
+    await expect.poll(() => page.locator('.pin-spacer').count()).toBe(0);
+    // Сцены остались в конечном виде.
+    await expect(page.locator('#process li').first()).toHaveCSS('opacity', '1');
   });
 });
