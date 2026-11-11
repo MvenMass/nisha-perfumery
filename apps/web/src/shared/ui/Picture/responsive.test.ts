@@ -10,6 +10,12 @@ describe('responsiveSources', () => {
     });
   });
 
+  it('так же нарезанную статику витрины', () => {
+    expect(responsiveSources('/images/boutique-960.jpg')?.webp).toBe(
+      '/images/boutique-480.webp 480w, /images/boutique-960.webp 960w, /images/boutique-1600.webp 1600w',
+    );
+  });
+
   it('прочие адреса оставляет без srcset', () => {
     expect(responsiveSources('https://cdn.test/photo.jpg')).toBeUndefined();
     expect(responsiveSources('/uploads/products/p1/i1-480.jpg')).toBeUndefined();
