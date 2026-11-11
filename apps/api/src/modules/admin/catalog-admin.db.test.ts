@@ -208,14 +208,19 @@ describe('«Снова в наличии»', () => {
     };
     expect((await call('PUT', `/api/admin/products/${id}`, restocked)).statusCode).toBe(200);
 
-    await vi.waitFor(() => {
-      expect(ctx.mails.filter((mail) => mail.to === 'waiting@nisha.test')).toHaveLength(1);
-    });
-    const [subscription] = await ctx.testDb.db
-      .select()
-      .from(stockNotifications)
-      .where(eq(stockNotifications.email, 'waiting@nisha.test'));
-    expect(subscription?.notifiedAt).not.toBeNull();
+    // Письмо и отметка о нём пишутся уже после ответа (D-071): под нагрузкой полного прогона
+    // на это уходит больше секунды по умолчанию, и отметка появляется позже письма.
+    await vi.waitFor(
+      async () => {
+        expect(ctx.mails.filter((mail) => mail.to === 'waiting@nisha.test')).toHaveLength(1);
+        const [subscription] = await ctx.testDb.db
+          .select()
+          .from(stockNotifications)
+          .where(eq(stockNotifications.email, 'waiting@nisha.test'));
+        expect(subscription?.notifiedAt).not.toBeNull();
+      },
+      { timeout: 5000 },
+    );
 
     // Остаток N → M не повод писать снова.
     const more = {
