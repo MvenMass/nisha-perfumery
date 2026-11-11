@@ -1,11 +1,16 @@
+import path from 'node:path';
+
 import { emailSchema, passwordSchema } from '@nisha/contracts';
-import { and, eq, inArray, ne, sql } from 'drizzle-orm';
+import { and, eq, inArray, isNull, ne, sql } from 'drizzle-orm';
 import { z } from 'zod';
 
 import { loadDatabaseEnv } from '../config/env';
 import { hashPassword } from '../shared/password';
+import { createLocalStorage } from '../modules/storage/storage';
 import { createDatabase } from './client';
 import type { Database } from './client';
+import { seedPhoto } from './seed-photos';
+import type { SeedPhotos } from './seed-photos';
 import {
   articles,
   categories,
@@ -14,6 +19,7 @@ import {
   heroSlides,
   materials,
   productCategories,
+  productImages,
   productNotes,
   productVariants,
   products,
@@ -25,6 +31,7 @@ import {
   CATEGORIES,
   COLLECTIONS,
   HERO_SLIDES,
+  MATERIAL_PHOTOS,
   MATERIALS,
   PRODUCTS,
   STORE_SETTINGS,
@@ -36,7 +43,41 @@ export type SeedOptions = {
   adminPassword: string;
   /** Точка отсчёта для дат публикации — в тестах фиксируется. */
   now?: Date;
+  /** Снимки из assets/photos. Без них (тесты) товары и контент остаются без картинок. */
+  photos?: SeedPhotos | undefined;
 };
+
+/** Адреса нарезанных снимков: готовятся до транзакции — сжатие долгое, базу не держим. */
+type PhotoUrls = {
+  products: Map<string, string>;
+  materials: Map<string, string>;
+  slides: string[];
+  articles: Map<string, string>;
+};
+
+async function preparePhotos(photos: SeedPhotos): Promise<PhotoUrls> {
+  const urls: PhotoUrls = {
+    products: new Map(),
+    materials: new Map(),
+    slides: [],
+    articles: new Map(),
+  };
+  for (const product of PRODUCTS) {
+    const url = await seedPhoto(photos, product.photo, `products/${product.slug}`);
+    urls.products.set(product.slug, url);
+  }
+  for (const [slug, texture] of Object.entries(MATERIAL_PHOTOS)) {
+    urls.materials.set(slug, await seedPhoto(photos, texture.photo, `textures/${slug}`));
+  }
+  for (const [index, slide] of HERO_SLIDES.entries()) {
+    urls.slides.push(await seedPhoto(photos, slide.photo, `hero/hero-${index + 1}`));
+  }
+  for (const article of ARTICLES) {
+    const url = await seedPhoto(photos, article.photo, `journal/${article.slug}`);
+    urls.articles.set(article.slug, url);
+  }
+  return urls;
+}
 
 type Transaction = Parameters<Parameters<Database['transaction']>[0]>[0];
 
@@ -113,6 +154,7 @@ async function seedProduct(
     notes: Map<string, string>;
   },
   now: Date,
+  photos: PhotoUrls | undefined,
 ) {
   const isPublished = product.publishedDaysAgo !== null;
   const values = {
@@ -172,6 +214,28 @@ async function seedProduct(
     ),
   );
 
+  // Снимки — только товару без снимков: сделанное в админке сид не трогает.
+  const main = photos?.products.get(product.slug);
+  if (main) {
+    const [anyImage] = await tx
+      .select({ id: productImages.id })
+      .from(productImages)
+      .where(eq(productImages.productId, row.id))
+      .limit(1);
+    const texture = photos?.materials.get(product.material);
+    const textureAlt = MATERIAL_PHOTOS[product.material]?.alt;
+    if (!anyImage) {
+      await tx
+        .insert(productImages)
+        .values([
+          { productId: row.id, url: main, alt: product.photoAlt, position: 0 },
+          ...(texture && textureAlt
+            ? [{ productId: row.id, url: texture, alt: textureAlt, position: 1 }]
+            : []),
+        ]);
+    }
+  }
+
   await tx.delete(productCategories).where(eq(productCategories.productId, row.id));
   await tx.insert(productCategories).values(
     product.categories.map((slug) => ({
@@ -181,24 +245,46 @@ async function seedProduct(
   );
 }
 
-async function seedContent(tx: Transaction, now: Date) {
+async function seedContent(tx: Transaction, now: Date, photos: PhotoUrls | undefined) {
   const [anySlide] = await tx.select({ id: heroSlides.id }).from(heroSlides).limit(1);
   if (!anySlide) {
-    await tx
-      .insert(heroSlides)
-      .values(HERO_SLIDES.map((slide, position) => ({ ...slide, position })));
+    await tx.insert(heroSlides).values(
+      HERO_SLIDES.map(({ photo: _photo, ...slide }, position) => ({
+        ...slide,
+        imageUrl: photos?.slides[position] ?? null,
+        position,
+      })),
+    );
   }
   await tx
     .insert(articles)
     .values(
-      ARTICLES.map(({ body, publishedDaysAgo, ...article }) => ({
+      ARTICLES.map(({ body, publishedDaysAgo, photo: _photo, ...article }) => ({
         ...article,
         body: body.join('\n\n'),
+        coverUrl: photos?.articles.get(article.slug) ?? null,
         isPublished: true,
         publishedAt: new Date(now.getTime() - publishedDaysAgo * DAY_MS),
       })),
     )
     .onConflictDoNothing({ target: articles.slug });
+
+  if (!photos) return;
+  // В базе, засеянной до снимков, дозаполняем пустые места; заполненное в админке не трогаем.
+  for (const [position, url] of photos.slides.entries()) {
+    await tx
+      .update(heroSlides)
+      .set({ imageUrl: url })
+      .where(and(eq(heroSlides.position, position), isNull(heroSlides.imageUrl)));
+  }
+  for (const article of ARTICLES) {
+    const url = photos.articles.get(article.slug);
+    if (!url) continue;
+    await tx
+      .update(articles)
+      .set({ coverUrl: url, coverAlt: article.coverAlt })
+      .where(and(eq(articles.slug, article.slug), isNull(articles.coverUrl)));
+  }
 }
 
 async function seedAdmin(tx: Transaction, email: string, password: string) {
@@ -211,6 +297,7 @@ async function seedAdmin(tx: Transaction, email: string, password: string) {
 
 export async function runSeed(db: Database, options: SeedOptions): Promise<void> {
   const now = options.now ?? new Date();
+  const photos = options.photos ? await preparePhotos(options.photos) : undefined;
   await db.transaction(async (tx) => {
     await seedDictionaries(tx);
 
@@ -237,7 +324,7 @@ export async function runSeed(db: Database, options: SeedOptions): Promise<void>
       );
 
     for (const product of PRODUCTS) {
-      await seedProduct(tx, product, refs, now);
+      await seedProduct(tx, product, refs, now, photos);
     }
 
     // Объём, убранный из данных сида, выключаем, а не удаляем: на него могут ссылаться заказы.
@@ -263,9 +350,15 @@ export async function runSeed(db: Database, options: SeedOptions): Promise<void>
         ),
       );
 
-    await seedContent(tx, now);
+    await seedContent(tx, now, photos);
     await seedAdmin(tx, options.adminEmail, options.adminPassword);
   });
+}
+
+/** Хранилище снимков то же, что раздаёт api: UPLOADS_DIR относительно apps/api. */
+export function seedPhotosFromEnv(): SeedPhotos {
+  const uploadsDir = path.resolve(process.env.UPLOADS_DIR ?? './uploads');
+  return { storage: createLocalStorage(uploadsDir), uploadsDir };
 }
 
 const seedEnvSchema = z.object({
@@ -273,20 +366,28 @@ const seedEnvSchema = z.object({
   ADMIN_PASSWORD: passwordSchema,
 });
 
-// Запуск как скрипта: pnpm db:seed.
-if (import.meta.main) {
-  const { DATABASE_URL } = loadDatabaseEnv();
+/** Сид из .env: администратор и снимки — для pnpm db:seed и pnpm db:reset. */
+export async function seedFromEnv(url: string): Promise<void> {
   const env = seedEnvSchema.safeParse(process.env);
   if (!env.success) {
     throw new Error(
       `Для сида нужны ADMIN_EMAIL и ADMIN_PASSWORD (см. .env.example):\n${z.prettifyError(env.error)}`,
     );
   }
-  const { db, pool } = createDatabase(DATABASE_URL);
+  const { db, pool } = createDatabase(url);
   try {
-    await runSeed(db, { adminEmail: env.data.ADMIN_EMAIL, adminPassword: env.data.ADMIN_PASSWORD });
+    await runSeed(db, {
+      adminEmail: env.data.ADMIN_EMAIL,
+      adminPassword: env.data.ADMIN_PASSWORD,
+      photos: seedPhotosFromEnv(),
+    });
     console.info(`Сид применён: ${PRODUCTS.length} товаров, администратор ${env.data.ADMIN_EMAIL}`);
   } finally {
     await pool.end();
   }
+}
+
+// Запуск как скрипта: pnpm db:seed.
+if (import.meta.main) {
+  await seedFromEnv(loadDatabaseEnv().DATABASE_URL);
 }

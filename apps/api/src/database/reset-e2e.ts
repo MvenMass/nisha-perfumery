@@ -1,9 +1,7 @@
-import { Pool } from 'pg';
-
 import { loadDatabaseEnv } from '../config/env';
 import { createDatabase } from './client';
-import { runMigrations } from './migrate';
-import { runSeed } from './seed';
+import { recreateDatabase } from './recreate';
+import { runSeed, seedPhotosFromEnv } from './seed';
 
 /*
  * Пересоздаёт базу для e2e перед каждым прогоном: заказы меняют остатки, и без этого
@@ -20,20 +18,14 @@ export async function resetE2eDatabase(url: string): Promise<void> {
     throw new Error(`Отказ: база «${name}» не похожа на e2e (ожидается имя *_e2e)`);
   }
 
-  const maintenance = new URL(url);
-  maintenance.pathname = '/postgres';
-  const admin = new Pool({ connectionString: maintenance.toString(), max: 1 });
-  try {
-    await admin.query(`DROP DATABASE IF EXISTS ${name} WITH (FORCE)`);
-    await admin.query(`CREATE DATABASE ${name}`);
-  } finally {
-    await admin.end();
-  }
-
-  await runMigrations(url);
+  await recreateDatabase(url);
   const { db, pool } = createDatabase(url);
   try {
-    await runSeed(db, { adminEmail: E2E_ADMIN.email, adminPassword: E2E_ADMIN.password });
+    await runSeed(db, {
+      adminEmail: E2E_ADMIN.email,
+      adminPassword: E2E_ADMIN.password,
+      photos: seedPhotosFromEnv(),
+    });
   } finally {
     await pool.end();
   }

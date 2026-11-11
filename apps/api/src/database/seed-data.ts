@@ -28,6 +28,9 @@ export type SeedProduct = {
   isNew?: boolean;
   isFeatured?: boolean;
   popularity: number;
+  /** Главный снимок — образ аромата; файл в assets/photos. */
+  photo: string;
+  photoAlt: string;
 };
 
 export const MATERIALS = [
@@ -37,6 +40,15 @@ export const MATERIALS = [
   { slug: 'walnut', name: 'Орех', swatchColor: '#5A3A28' },
   { slug: 'amber', name: 'Янтарь', swatchColor: '#A85A32' },
 ];
+
+/** Фактура материала — второй снимок каждого товара и фон «Истории образца». */
+export const MATERIAL_PHOTOS: Record<string, { photo: string; alt: string }> = {
+  limestone: { photo: 'textures/limestone.jpg', alt: 'Фактура известняка крупным планом' },
+  travertine: { photo: 'textures/travertine.jpg', alt: 'Фактура травертина крупным планом' },
+  basalt: { photo: 'textures/basalt.jpg', alt: 'Слоистый базальт крупным планом' },
+  walnut: { photo: 'textures/walnut.jpg', alt: 'Тёмная древесина ореха крупным планом' },
+  amber: { photo: 'textures/amber.jpg', alt: 'Отполированный янтарь с включениями' },
+};
 
 export const CATEGORIES = [
   { slug: 'women', name: 'Женские ароматы' },
@@ -103,6 +115,8 @@ export const PRODUCTS: SeedProduct[] = [
     publishedDaysAgo: 120,
     isBestseller: true,
     popularity: 80,
+    photo: 'products/limestone.jpg',
+    photoAlt: 'Светлый известняк крупным планом',
   },
   {
     slug: 'travertine',
@@ -128,6 +142,8 @@ export const PRODUCTS: SeedProduct[] = [
     publishedDaysAgo: 110,
     isBestseller: true,
     popularity: 70,
+    photo: 'products/travertine.jpg',
+    photoAlt: 'Колонны из травертина в тёплом свете',
   },
   {
     slug: 'basalt',
@@ -156,6 +172,8 @@ export const PRODUCTS: SeedProduct[] = [
     isBestseller: true,
     isFeatured: true,
     popularity: 120,
+    photo: 'products/basalt.jpg',
+    photoAlt: 'Тёмные сколы базальта в полутьме',
   },
   {
     slug: 'walnut',
@@ -177,6 +195,8 @@ export const PRODUCTS: SeedProduct[] = [
     publishedDaysAgo: 95,
     isBestseller: true,
     popularity: 95,
+    photo: 'products/walnut.jpg',
+    photoAlt: 'Тёмная древесина ореха с крупным рисунком',
   },
   {
     slug: 'amber',
@@ -197,6 +217,8 @@ export const PRODUCTS: SeedProduct[] = [
     variants: perfumeVolumes(710_000, [4, 6, 3]),
     publishedDaysAgo: 90,
     popularity: 60,
+    photo: 'products/amber.jpg',
+    photoAlt: 'Капля янтарной смолы на коре',
   },
   {
     slug: 'chalk',
@@ -221,6 +243,8 @@ export const PRODUCTS: SeedProduct[] = [
     variants: perfumeVolumes(560_000, [9, 11, 6]),
     publishedDaysAgo: 80,
     popularity: 35,
+    photo: 'products/chalk.jpg',
+    photoAlt: 'Меловые скалы над морем в сумерках',
   },
   {
     slug: 'ash',
@@ -240,6 +264,8 @@ export const PRODUCTS: SeedProduct[] = [
     variants: perfumeVolumes(640_000, [5, 6, 2]),
     publishedDaysAgo: 70,
     popularity: 50,
+    photo: 'products/ash.jpg',
+    photoAlt: 'Серая зола и угли на тёмной земле',
   },
   {
     slug: 'spring',
@@ -260,6 +286,8 @@ export const PRODUCTS: SeedProduct[] = [
     variants: perfumeVolumes(580_000, [7, 8, 5]),
     publishedDaysAgo: 60,
     popularity: 30,
+    photo: 'products/spring.jpg',
+    photoAlt: 'Травертиновые террасы горячего источника',
   },
   {
     slug: 'workshop',
@@ -279,6 +307,8 @@ export const PRODUCTS: SeedProduct[] = [
     variants: perfumeVolumes(670_000, [6, 5, 3]),
     publishedDaysAgo: 50,
     popularity: 45,
+    photo: 'products/workshop.jpg',
+    photoAlt: 'Стружка на старом верстаке',
   },
   {
     // Черновик: в каталоге не виден — проверка фильтра «только опубликованные».
@@ -299,6 +329,8 @@ export const PRODUCTS: SeedProduct[] = [
     variants: perfumeVolumes(700_000, [4, 4, 2]),
     publishedDaysAgo: null,
     popularity: 0,
+    photo: 'products/resin.jpg',
+    photoAlt: 'Капля смолы на тёмной коре',
   },
   {
     // Нет в наличии ни одного объёма — карточка «Сообщить» из catalog.html.
@@ -320,6 +352,8 @@ export const PRODUCTS: SeedProduct[] = [
     publishedDaysAgo: 40,
     isBestseller: true,
     popularity: 85,
+    photo: 'products/obsidian.jpg',
+    photoAlt: 'Чёрный камень на чёрном фоне',
   },
   {
     slug: 'cut',
@@ -341,6 +375,8 @@ export const PRODUCTS: SeedProduct[] = [
     publishedDaysAgo: 5,
     isNew: true,
     popularity: 20,
+    photo: 'products/cut.jpg',
+    photoAlt: 'Спил дерева с годовыми кольцами',
   },
   {
     slug: 'courtyard-after-rain',
@@ -363,6 +399,8 @@ export const PRODUCTS: SeedProduct[] = [
     ],
     publishedDaysAgo: 30,
     popularity: 15,
+    photo: 'products/courtyard-after-rain.jpg',
+    photoAlt: 'Капли дождя на мокром бетоне',
   },
   {
     slug: 'hearth',
@@ -382,6 +420,8 @@ export const PRODUCTS: SeedProduct[] = [
     variants: [{ volumeMl: 200, priceKopecks: 480_000, stock: 8 }],
     publishedDaysAgo: 25,
     popularity: 12,
+    photo: 'products/hearth.jpg',
+    photoAlt: 'Огонь в каменном очаге',
   },
   {
     slug: 'specimen-set',
@@ -401,6 +441,8 @@ export const PRODUCTS: SeedProduct[] = [
     variants: [{ volumeMl: 50, priceKopecks: 890_000, stock: 5 }],
     publishedDaysAgo: 20,
     popularity: 40,
+    photo: 'products/specimen-set.jpg',
+    photoAlt: 'Тёмная порода с тонкими слоями',
   },
   {
     slug: 'sample-set',
@@ -420,6 +462,8 @@ export const PRODUCTS: SeedProduct[] = [
     variants: [{ volumeMl: 12, priceKopecks: 190_000, stock: 30 }],
     publishedDaysAgo: 15,
     popularity: 25,
+    photo: 'products/sample-set.jpg',
+    photoAlt: 'Пробирки с янтарной жидкостью',
   },
 ];
 
@@ -436,6 +480,7 @@ export const HERO_SLIDES = [
     ctaHref: '/catalog',
     imageAlt:
       'Флакон из янтарного стекла на базальтовом постаменте, коряга тёмного ореха; снимок в полутьме',
+    photo: 'hero/hero-1.jpg',
   },
   {
     label: 'Глубина −120\u00A0м · базальт',
@@ -444,6 +489,7 @@ export const HERO_SLIDES = [
     ctaLabel: 'Открыть образец',
     ctaHref: '/catalog/basalt',
     imageAlt: 'Чёрный флакон на срезе базальта в боковом оранжевом свете',
+    photo: 'hero/hero-2.jpg',
   },
   {
     label: 'Глубина −180\u00A0м · травертин',
@@ -452,6 +498,7 @@ export const HERO_SLIDES = [
     ctaLabel: 'Подобрать аромат',
     ctaHref: '/fragrance-finder',
     imageAlt: 'Флаконы коллекции на ореховой полке, тёплый свет из глубины бутика',
+    photo: 'hero/hero-3.jpg',
   },
 ];
 
@@ -467,6 +514,8 @@ export const ARTICLES = [
       'Так появился «Двор после дождя»\u00A0— образец для дома, который мы собирали дольше всех.',
     ],
     publishedDaysAgo: 20,
+    photo: 'journal/concrete-courtyard.jpg',
+    coverAlt: 'Мокрый двор после дождя, мох на камне',
   },
   {
     slug: 'amber-glass',
@@ -478,6 +527,8 @@ export const ARTICLES = [
       'Мы не\u00A0отбраковываем такие флаконы. Номер образца на\u00A0этикетке и\u00A0неровность стекла вместе делают каждый экземпляр единственным.',
     ],
     publishedDaysAgo: 35,
+    photo: 'journal/amber-glass.jpg',
+    coverAlt: 'Стекло в пламени горелки',
   },
   {
     slug: 'perfumer-interview',
@@ -489,5 +540,7 @@ export const ARTICLES = [
       '\u00A0— А\u00A0потом?\u00A0— Потом ищу ноты, которые дают тот же характер. Базальту нужен дым и\u00A0перец, известняку\u00A0— мел и\u00A0пудровый ирис. Камень не\u00A0пахнет сам по\u00A0себе\u00A0— он подсказывает настроение.',
     ],
     publishedDaysAgo: 50,
+    photo: 'journal/perfumer-interview.jpg',
+    coverAlt: 'Пипетка над флаконом с янтарной жидкостью',
   },
 ];

@@ -16,6 +16,7 @@
     "db:generate": "pnpm --filter @nisha/api db:generate",
     "db:migrate": "pnpm --filter @nisha/api db:migrate",
     "db:seed": "pnpm --filter @nisha/api db:seed",
+    "db:reset": "pnpm --filter @nisha/api db:reset",
     "format": "prettier --write .",
     "format:check": "prettier --check ."
   },

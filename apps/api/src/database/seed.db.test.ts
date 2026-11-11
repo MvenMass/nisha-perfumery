@@ -1,8 +1,13 @@
+import { mkdtemp, rm, stat } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import path from 'node:path';
+
 import { eq, sql } from 'drizzle-orm';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
+import { createLocalStorage } from '../modules/storage/storage';
 import { verifyPassword } from '../shared/password';
-import { productVariants, products, users } from './schema';
+import { articles, heroSlides, productImages, productVariants, products, users } from './schema';
 import { runSeed } from './seed';
 import { PRODUCTS } from './seed-data';
 import { createTestDatabase } from './test-database';
@@ -84,4 +89,34 @@ describe('сид', () => {
     const [draft] = await testDb.db.select().from(products).where(eq(products.slug, 'resin'));
     expect(draft).toMatchObject({ isPublished: false, publishedAt: null });
   });
+});
+
+describe('сид со снимками', () => {
+  it('у каждого товара образ и фактура, у слайдов и статей — снимки; повтор не пережимает', async () => {
+    const uploadsDir = await mkdtemp(path.join(tmpdir(), 'nisha-seed-'));
+    try {
+      const photos = { storage: createLocalStorage(uploadsDir), uploadsDir };
+      await runSeed(testDb.db, { ...options, photos });
+
+      const images = await testDb.db
+        .select({ productId: productImages.productId, url: productImages.url })
+        .from(productImages);
+      expect(images).toHaveLength(PRODUCTS.length * 2);
+      expect(images.every((image) => /^\/uploads\/seed\/.+-960\.jpg$/.test(image.url))).toBe(true);
+
+      const slides = await testDb.db.select({ url: heroSlides.imageUrl }).from(heroSlides);
+      expect(slides.every((slide) => slide.url?.startsWith('/uploads/seed/hero/'))).toBe(true);
+      const covers = await testDb.db.select({ url: articles.coverUrl }).from(articles);
+      expect(covers.every((cover) => cover.url?.startsWith('/uploads/seed/journal/'))).toBe(true);
+
+      // Повторный сид: файлы уже нарезаны (время изменения то же), снимки не дублируются.
+      const probe = path.join(uploadsDir, 'seed/products/basalt-960.jpg');
+      const before = (await stat(probe)).mtimeMs;
+      await runSeed(testDb.db, { ...options, photos });
+      expect((await stat(probe)).mtimeMs).toBe(before);
+      expect(await testDb.db.select().from(productImages)).toHaveLength(PRODUCTS.length * 2);
+    } finally {
+      await rm(uploadsDir, { recursive: true, force: true });
+    }
+  }, 180_000);
 });
