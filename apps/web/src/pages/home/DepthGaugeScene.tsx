@@ -39,6 +39,7 @@ export function DepthGaugeScene({ pageRef, deps }: DepthGaugeProps) {
       let anchors: DepthAnchor[] = [];
       let visible = false;
       let shownLabel = '';
+      let shownValue = '';
 
       const measure = () => {
         anchors = dividers.map((divider) => ({
@@ -50,7 +51,13 @@ export function DepthGaugeScene({ pageRef, deps }: DepthGaugeProps) {
       const update = (progress: number) => {
         // Глубина — по середине экрана: там, куда смотрит читатель.
         const current = depthAt(window.scrollY + window.innerHeight / 2, anchors);
-        value.textContent = format(current.depth);
+        // Текст — только когда число сменилось: перерисовка вертикальной подписи на каждом
+        // кадре прокрутки стоила половину бюджета кадра на главной со снимками (этап 10).
+        const text = format(current.depth);
+        if (text !== shownValue) {
+          shownValue = text;
+          value.textContent = text;
+        }
         gsap.set(fill, { scaleY: progress });
         if (current.label !== shownLabel) {
           shownLabel = current.label;
