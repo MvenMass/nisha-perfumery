@@ -32,7 +32,7 @@ export async function notifyRestock(
       await deps.mailer.send({
         to: subscriber.email,
         subject: `«${product.name}» снова в наличии`,
-        text: `Образец «${product.name}», о котором вы просили напомнить, снова можно заказать:\n${deps.webOrigin}/catalog/${product.slug}`,
+        text: `Образец «${product.name}», о котором вы просили напомнить, снова можно заказать. Партии у нас небольшие, поэтому лучше не откладывать:\n${deps.webOrigin}/catalog/${product.slug}`,
       });
     } catch (error) {
       result.failed.push({ email: subscriber.email, error });

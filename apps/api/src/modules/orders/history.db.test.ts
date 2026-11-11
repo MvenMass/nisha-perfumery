@@ -79,7 +79,7 @@ describe('история заказов', () => {
     const all = orderListResponseSchema.parse((await request('GET', '/api/orders', user)).json());
     expect(all.total).toBe(2);
     expect(all.items.map((item) => item.id)).toEqual([second.id, first.id]);
-    expect(all.items[0]).toMatchObject({ productNames: ['Орех', 'Янтарь'], bottlesCount: 2 });
+    expect(all.items[0]).toMatchObject({ productNames: ['Старый орех', 'Свет янтаря'], bottlesCount: 2 });
     expect(all.items[0]?.history.map((event) => event.status)).toEqual(['pending']);
 
     const active = orderListResponseSchema.parse(
@@ -127,8 +127,8 @@ describe('«Повторить заказ»', () => {
       [travertine, 2],
     ]);
     expect(body.unavailable).toEqual([
-      { productName: 'Мел', volumeMl: 50, reason: 'out_of_stock' },
-      { productName: 'Пепел', volumeMl: 50, reason: 'unpublished' },
+      { productName: 'Меловые скалы', volumeMl: 50, reason: 'out_of_stock' },
+      { productName: 'Пепел костра', volumeMl: 50, reason: 'unpublished' },
     ]);
   });
 

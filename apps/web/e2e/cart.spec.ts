@@ -30,7 +30,7 @@ test('гость: товар → корзина → «+» → итог совп�
   await page.goto('/cart');
   await expect(page.getByRole('heading', { name: /ни.одного образца/ })).toBeVisible();
 
-  // «Базальт» 50 мл выбран по умолчанию, остаток 3.
+  // «Дым базальта» 50 мл выбран по умолчанию, остаток 3.
   await page.goto('/catalog/basalt');
   await page.getByRole('button', { name: /Добавить в.корзину/ }).click();
   await expect(page.getByRole('status').filter({ hasText: 'в корзине' })).toBeVisible();
@@ -38,19 +38,19 @@ test('гость: товар → корзина → «+» → итог совп�
 
   await page.getByRole('link', { name: 'Перейти в корзину' }).click();
   await expect(page).toHaveURL(/\/cart$/);
-  await expect(page.getByRole('link', { name: 'Базальт' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Дым базальта' })).toBeVisible();
   const single = await pageTotalRubles(page);
 
-  await page.getByRole('button', { name: 'Увеличить: Базальт' }).click();
+  await page.getByRole('button', { name: 'Увеличить: Дым базальта' }).click();
   await expect(page.getByText('2 флакона')).toBeVisible();
   await expect.poll(() => pageTotalRubles(page)).toBe(single * 2);
   expect(await pageTotalRubles(page)).toBe(await serverQuoteRubles(page));
 
   // Больше остатка не положить: «+» выключается на трёх.
-  await page.getByRole('button', { name: 'Увеличить: Базальт' }).click();
-  await expect(page.getByRole('button', { name: 'Увеличить: Базальт' })).toBeDisabled();
+  await page.getByRole('button', { name: 'Увеличить: Дым базальта' }).click();
+  await expect(page.getByRole('button', { name: 'Увеличить: Дым базальта' })).toBeDisabled();
 
-  await page.getByRole('button', { name: 'Удалить: Базальт' }).click();
+  await page.getByRole('button', { name: 'Удалить: Дым базальта' }).click();
   await expect(page.getByRole('heading', { name: /ни.одного образца/ })).toBeVisible();
 });
 
@@ -61,15 +61,15 @@ test('гостевые корзина и избранное переезжают
   test.skip(testInfo.project.name !== 'chromium', 'Слияние проверяется в одном браузере');
 
   await page.goto('/catalog');
-  await page.getByRole('button', { name: 'В корзину: Известняк' }).click();
+  await page.getByRole('button', { name: 'В корзину: Известняк после дождя' }).click();
   const dialog = page.getByRole('dialog');
   await dialog.getByRole('button', { name: 'В корзину' }).click();
   await expect(dialog.getByRole('status')).toContainText('в корзине');
   await dialog.getByRole('button', { name: 'Продолжить покупки' }).click();
 
   await page.goto('/');
-  await page.getByRole('button', { name: 'В избранное: Известняк' }).click();
-  await expect(page.getByRole('button', { name: 'В избранное: Известняк' })).toHaveAttribute(
+  await page.getByRole('button', { name: 'В избранное: Известняк после дождя' }).click();
+  await expect(page.getByRole('button', { name: 'В избранное: Известняк после дождя' })).toHaveAttribute(
     'aria-pressed',
     'true',
   );
@@ -81,11 +81,11 @@ test('гостевые корзина и избранное переезжают
   await page.getByRole('button', { name: 'Создать аккаунт' }).click();
 
   await expect(page).toHaveURL(/\/cart$/);
-  await expect(page.getByRole('link', { name: 'Известняк' })).toBeVisible();
+  await expect(page.getByRole('link', { name: 'Известняк после дождя' })).toBeVisible();
   await expect(page.getByRole('link', { name: 'Корзина, 1 товар' })).toBeVisible();
 
   await page.goto('/favorites');
-  await expect(page.getByRole('heading', { level: 2, name: 'Известняк' })).toBeVisible();
+  await expect(page.getByRole('heading', { level: 2, name: 'Известняк после дождя' })).toBeVisible();
   // Гостевой список очищен: данные теперь в аккаунте.
   expect(await page.evaluate(() => window.localStorage.getItem('nisha-favorites'))).toContain(
     '"productIds":[]',

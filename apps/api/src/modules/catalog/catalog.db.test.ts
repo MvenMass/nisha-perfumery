@@ -31,7 +31,7 @@ const slugs = (result: { items: Array<{ slug: string }> }) => result.items.map((
 describe('GET /api/products', () => {
   it('показывает только опубликованные товары', async () => {
     const result = await list('limit=48');
-    expect(result.total).toBe(15);
+    expect(result.total).toBe(18);
     expect(slugs(result)).not.toContain('resin');
   });
 
@@ -51,11 +51,11 @@ describe('GET /api/products', () => {
   });
 
   it('фильтрует по категории, материалу и плотности', async () => {
-    expect((await list('category=women&limit=48')).total).toBe(7);
+    expect((await list('category=women&limit=48')).total).toBe(9);
     expect(slugs(await list('material=basalt&limit=48')).sort()).toEqual(
-      ['ash', 'basalt', 'obsidian', 'specimen-set'].sort(),
+      ['ash', 'basalt', 'obsidian', 'specimen-set', 'slate'].sort(),
     );
-    expect((await list('density=high&limit=48')).total).toBe(5);
+    expect((await list('density=high&limit=48')).total).toBe(6);
     expect(slugs(await list('category=women&material=walnut'))).toEqual(['workshop', 'cut']);
   });
 
@@ -63,25 +63,25 @@ describe('GET /api/products', () => {
     // У «Известняка» до 5 000 ₽ только 30 мл, поэтому «50 мл до 5 000 ₽» его не находит.
     expect((await list('volume=50&priceMax=5000')).total).toBe(0);
     expect(slugs(await list('volume=30&priceMax=5000&limit=48'))).toContain('limestone');
-    expect((await list('volume=30&priceMax=5000&limit=48')).total).toBe(6);
+    expect((await list('volume=30&priceMax=5000&limit=48')).total).toBe(8);
   });
 
   it('сортирует по цене и новизне', async () => {
     expect((await list('sort=price_asc&limit=1')).items[0]?.slug).toBe('sample-set');
     expect((await list('sort=price_desc&limit=1')).items[0]?.slug).toBe('specimen-set');
-    expect((await list('sort=new&limit=1')).items[0]?.slug).toBe('cut');
+    expect((await list('sort=new&limit=1')).items[0]?.slug).toBe('oak-bark');
   });
 
   it('пагинирует и сообщает общее число', async () => {
     const page = await list('limit=4&offset=12');
-    expect(page).toMatchObject({ total: 15, limit: 4, offset: 12 });
-    expect(page.items).toHaveLength(3);
-    expect(await list('limit=4&offset=40')).toMatchObject({ total: 15, items: [] });
+    expect(page).toMatchObject({ total: 18, limit: 4, offset: 12 });
+    expect(page.items).toHaveLength(4);
+    expect(await list('limit=4&offset=40')).toMatchObject({ total: 18, items: [] });
   });
 
   it('ищет по нотам, названию, материалу и номеру образца', async () => {
     expect(slugs(await list('q=ладан')).sort()).toEqual(['ash', 'basalt', 'specimen-set'].sort());
-    expect(slugs(await list('q=обсид'))).toEqual(['obsidian']);
+    expect(slugs(await list('q=стекл'))).toEqual(['obsidian']);
     expect(slugs(await list('q=03'))).toEqual(['basalt']);
     // % в запросе — обычный символ, а не шаблон «что угодно».
     expect((await list('q=%25%25')).total).toBe(0);
@@ -99,17 +99,17 @@ describe('GET /api/catalog/filters', () => {
     const response = await ctx.app.inject({ method: 'GET', url: '/api/catalog/filters' });
     const filters = catalogFiltersResponseSchema.parse(response.json());
 
-    expect(filters.categories.find((c) => c.slug === 'women')?.count).toBe(7);
+    expect(filters.categories.find((c) => c.slug === 'women')?.count).toBe(9);
     expect(filters.materials.find((m) => m.slug === 'basalt')).toMatchObject({
-      count: 4,
+      count: 5,
       swatchColor: '#292725',
     });
     expect(filters.densities).toEqual([
-      { value: 'light', count: 5 },
-      { value: 'medium', count: 5 },
-      { value: 'high', count: 5 },
+      { value: 'light', count: 6 },
+      { value: 'medium', count: 6 },
+      { value: 'high', count: 6 },
     ]);
-    expect(filters.volumes.find((v) => v.volumeMl === 30)?.count).toBe(11);
+    expect(filters.volumes.find((v) => v.volumeMl === 30)?.count).toBe(14);
     expect(filters.price).toEqual({ minKopecks: 190_000, maxKopecks: 1_150_000 });
   });
 });
@@ -146,6 +146,6 @@ describe('GET /api/products/:slug/related', () => {
   it('сначала в наличии и того же материала, затем той же плотности', async () => {
     const response = await ctx.app.inject({ method: 'GET', url: '/api/products/basalt/related' });
     const related = relatedProductsResponseSchema.parse(response.json());
-    expect(slugs(related)).toEqual(['ash', 'specimen-set', 'walnut', 'amber']);
+    expect(slugs(related)).toEqual(['ash', 'slate', 'specimen-set', 'walnut']);
   });
 });

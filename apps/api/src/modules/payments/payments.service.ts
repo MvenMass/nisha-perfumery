@@ -90,7 +90,8 @@ export async function notifyMockPayment(
     await deps.mailer.send({
       to: order.contact.email,
       subject: `Заказ № ${order.number} оплачен`,
-      text: `Спасибо! Мы получили оплату ${formatRubles(order.totalKopecks)} и уже собираем заказ.`,
+      text: `Спасибо! Мы получили оплату ${formatRubles(order.totalKopecks)} и уже собираем заказ.
+Упакуем его вручную и напишем, когда передадим в доставку.`,
     });
   }
   return order;

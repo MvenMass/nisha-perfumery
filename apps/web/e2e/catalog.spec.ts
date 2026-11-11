@@ -22,41 +22,41 @@ async function pickMaterial(page: Page, name: string) {
 test.describe('каталог', () => {
   test('фильтр попадает в адрес и переживает перезагрузку', async ({ page }) => {
     await page.goto('/catalog');
-    await expect(page.getByText('Найдено: 15 образцов')).toBeVisible();
+    await expect(page.getByText('Найдено: 18 образцов')).toBeVisible();
 
     await pickMaterial(page, 'Базальт');
     await expect(page).toHaveURL(/material=basalt/);
-    await expect(page.getByText('Найдено: 4 образца')).toBeVisible();
+    await expect(page.getByText('Найдено: 5 образцов')).toBeVisible();
 
     await page.reload();
-    await expect(page.getByText('Найдено: 4 образца')).toBeVisible();
+    await expect(page.getByText('Найдено: 5 образцов')).toBeVisible();
     await expect(page.getByRole('button', { name: 'Убрать фильтр: Базальт' })).toBeVisible();
   });
 
   test('«назад» возвращает предыдущие фильтры', async ({ page }) => {
     await page.goto('/catalog?material=basalt');
-    await expect(page.getByText('Найдено: 4 образца')).toBeVisible();
+    await expect(page.getByText('Найдено: 5 образцов')).toBeVisible();
 
     await pickMaterial(page, 'Орех');
     await expect(page).toHaveURL(/material=basalt%2Cwalnut|material=basalt,walnut/);
 
     await page.goBack();
     await expect(page).toHaveURL(/material=basalt$/);
-    await expect(page.getByText('Найдено: 4 образца')).toBeVisible();
+    await expect(page.getByText('Найдено: 5 образцов')).toBeVisible();
   });
 
   test('сброс фильтров из пустого результата', async ({ page }) => {
     await page.goto('/catalog?volume=50&priceMax=5000');
     await expect(page.getByRole('heading', { name: 'Такой породы у нас пока нет' })).toBeVisible();
     await page.getByRole('button', { name: 'Сбросить фильтры' }).click();
-    await expect(page.getByText('Найдено: 15 образцов')).toBeVisible();
+    await expect(page.getByText('Найдено: 18 образцов')).toBeVisible();
   });
 });
 
 test.describe('товар', () => {
   test('смена объёма меняет цену и наличие', async ({ page }) => {
     await page.goto('/catalog/basalt');
-    await expect(page.getByRole('heading', { level: 1, name: 'Базальт' })).toBeVisible();
+    await expect(page.getByRole('heading', { level: 1, name: 'Дым базальта' })).toBeVisible();
 
     // По умолчанию 50 мл: последние три флакона.
     await expect(page.getByLabel('50 мл')).toBeChecked();

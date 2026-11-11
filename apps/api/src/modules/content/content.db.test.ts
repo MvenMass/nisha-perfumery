@@ -58,9 +58,9 @@ describe('главная и журнал', () => {
     expect(home.slides).toHaveLength(3);
     expect(home.slides[0]?.ctaHref).toBe('/catalog');
     expect(home.articles.map((item) => item.slug)).toEqual([
+      'five-rocks',
+      'reading-the-pyramid',
       'concrete-courtyard',
-      'amber-glass',
-      'perfumer-interview',
     ]);
   });
 

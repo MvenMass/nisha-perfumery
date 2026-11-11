@@ -13,6 +13,6 @@ test('главная открывается и показывает бестсе
     page.getByRole('heading', { level: 1, name: 'Ароматы, высеченные из камня' }),
   ).toBeVisible();
   const specimens = page.getByRole('region', { name: 'Образцы породы' });
-  await expect(specimens.getByRole('link', { name: 'Базальт', exact: true })).toBeVisible();
+  await expect(specimens.getByRole('link', { name: 'Дым базальта', exact: true })).toBeVisible();
   expect(errors).toEqual([]);
 });
