@@ -49,19 +49,19 @@ test.describe('админка', () => {
 
   test('пополнение закончившегося объёма возвращает его в продажу', async ({ page }) => {
     await page.goto('/catalog/cut');
-    await page.getByText('100 мл').click();
+    await page.getByText('100 мл', { exact: true }).click();
     await expect(page.getByRole('button', { name: /Сообщить о.поступлении/ })).toBeVisible();
 
     await signInAdmin(page, '/admin/products');
-    await page.getByLabel('Поиск образцов').fill('Срез');
-    await page.getByRole('link', { name: 'Срез', exact: true }).click();
+    await page.getByLabel('Поиск образцов').fill('Спил ореха');
+    await page.getByRole('link', { name: 'Спил ореха', exact: true }).click();
     // Объёмы в форме по возрастанию: 100 мл — последний.
     await page.getByLabel('Остаток').last().fill('5');
     await page.getByRole('button', { name: 'Сохранить' }).click();
     await expect(page.getByRole('status').filter({ hasText: 'Сохранено' })).toBeVisible();
 
     await page.goto('/catalog/cut');
-    await page.getByText('100 мл').click();
+    await page.getByText('100 мл', { exact: true }).click();
     await expect(page.getByRole('button', { name: /Добавить в.корзину/ })).toBeVisible();
   });
 

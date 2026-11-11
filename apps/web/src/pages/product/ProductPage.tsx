@@ -2,7 +2,11 @@ import { useRef } from 'react';
 import { useParams } from 'react-router';
 
 import { useProduct } from '../../entities/product/api/queries';
-import { DENSITY_LABELS, formatSpecimenNumber } from '../../entities/product/lib/format';
+import {
+  DENSITY_LABELS,
+  formatSpecimenNumber,
+  productTypeLine,
+} from '../../entities/product/lib/format';
 import { ApiError } from '../../shared/api/http';
 import { cx } from '../../shared/lib/cx';
 import { typograph } from '../../shared/lib/typograph';
@@ -106,6 +110,12 @@ export function ProductPage() {
               <h1 className={styles.name} data-reveal="text">
                 {data.name}
               </h1>
+              <p className={styles.typeLine}>
+                {productTypeLine(
+                  data.concentration,
+                  data.variants.map((variant) => variant.volumeMl),
+                )}
+              </p>
               <p className={styles.description}>{typograph(data.description)}</p>
             </div>
             <dl className={styles.facts}>

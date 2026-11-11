@@ -4,6 +4,7 @@ import {
   DENSITY_LABELS,
   formatSpecimenNumber,
   productHref,
+  productTypeLine,
 } from '../../entities/product/lib/format';
 import type { ProductCardData } from './ProductCard';
 
@@ -24,6 +25,7 @@ export function toProductCard(
     href: productHref(item.slug),
     number: formatSpecimenNumber(item.specimenNumber),
     name: item.name,
+    typeLine: productTypeLine(item.concentration, item.volumesMl),
     materialName: item.material.name,
     notes: item.keyNotes.join(', '),
     priceFromKopecks: item.priceFromKopecks,

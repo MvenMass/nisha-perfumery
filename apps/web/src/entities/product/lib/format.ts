@@ -19,6 +19,20 @@ export const formatSpecimenNumber = (value: number) => String(value).padStart(2,
 
 export const formatVolume = (volumeMl: number) => `${volumeMl}${NBSP}мл`;
 
+/**
+ * Строка под названием аромата: по ней сразу понятно, что это парфюм, а не камень (D-077).
+ * «парфюмерная вода» + объёмы → «Парфюмерная вода · 30 / 50 / 100 мл»;
+ * у наборов объём уже в концентрации: «набор: 5 × 10 мл» → «Набор · 5 × 10 мл».
+ */
+export function productTypeLine(concentration: string, volumesMl: readonly number[]): string {
+  const set = /^набор:\s*(.+)$/i.exec(concentration);
+  if (set) return `Набор · ${set[1] ?? ''}`;
+  const type = concentration.charAt(0).toUpperCase() + concentration.slice(1);
+  if (volumesMl.length === 0) return type;
+  const volumes = [...volumesMl].sort((a, b) => a - b).join(' / ');
+  return `${type} · ${volumes}${NBSP}мл`;
+}
+
 export const specimensCount = (count: number) =>
   `${count}${NBSP}${plural(count, ['образец', 'образца', 'образцов'])}`;
 

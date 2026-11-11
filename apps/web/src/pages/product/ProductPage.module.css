@@ -555,3 +555,9 @@
 .skeletonPage {
   min-height: 100vh;
 }
+
+.typeLine {
+  font-size: var(--fs-14);
+  letter-spacing: var(--ls-6);
+  color: var(--color-text-muted);
+}

@@ -17,6 +17,8 @@ export type ProductCardData = {
   /** Номер образца без «№»: «03». */
   number: string;
   name: string;
+  /** «Парфюмерная вода · 30 / 50 / 100 мл» — чтобы было понятно, что это аромат. */
+  typeLine?: string | undefined;
   materialName: string;
   /** Ключевые ноты строкой: «перец, ладан, ветивер». */
   notes: string;
@@ -123,6 +125,7 @@ export function ProductCard({
             </Link>
           }
         />
+        {product.typeLine && <p className={styles.typeLine}>{product.typeLine}</p>}
         {!product.rows && <p className={styles.notes}>{product.notes}</p>}
         <div className={styles.footer}>
           <span className={styles.price}>от&nbsp;{formatPrice(product.priceFromKopecks)}</span>
