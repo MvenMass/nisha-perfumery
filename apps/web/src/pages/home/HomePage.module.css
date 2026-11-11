@@ -166,10 +166,27 @@
 .categoryPhoto {
   position: absolute;
   inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Затемнение снизу: подпись на снимке читается при любом кадре. */
+.category::after {
+  position: absolute;
+  inset: 0;
+  content: '';
+  background: linear-gradient(
+    to top,
+    var(--color-shade-deep) 0%,
+    var(--color-shade-soft) 55%,
+    transparent 100%
+  );
 }
 
 .categoryTitle {
   position: relative;
+  z-index: 1;
   max-width: 240px;
   font-family: var(--font-serif);
   font-size: var(--fs-28);
@@ -179,6 +196,7 @@
 
 .categoryMore {
   position: relative;
+  z-index: 1;
   display: inline-flex;
   gap: var(--sp-10);
   align-items: center;
@@ -326,21 +344,23 @@
   flex-direction: column;
 }
 
-/* Рамка снимка; сам «снимок» — слой внутри: его раскрывает шторка и двигает параллакс. */
+/* Рамка снимка; снимок внутри раскрывает шторка и двигает параллакс. */
 .materialsPhoto {
   position: relative;
   min-height: 320px;
   margin: 0 calc(-1 * var(--gutter));
+  overflow: hidden;
+  background: linear-gradient(140deg, var(--color-stone) 0%, var(--color-basalt) 100%);
 }
 
+/* Фон рамки остаётся, пока снимок грузится: место занято, раскладка не прыгает. */
 .materialsFill,
 .boutiqueFill {
   position: absolute;
   inset: 0;
-}
-
-.materialsFill {
-  background: linear-gradient(140deg, var(--color-stone) 0%, var(--color-basalt) 100%);
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .materialsText {
@@ -412,9 +432,7 @@
 .boutiquePhoto {
   position: relative;
   min-height: 280px;
-}
-
-.boutiqueFill {
+  overflow: hidden;
   background: linear-gradient(
     115deg,
     var(--color-bg) 0%,

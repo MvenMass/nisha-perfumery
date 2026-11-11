@@ -61,19 +61,22 @@ export const CATEGORY_TILES = [
   {
     slug: 'women',
     title: 'Женские ароматы',
-    photoAlt: 'Флакон на коряге ореха',
+    photo: '/images/category-women-960.jpg',
+    photoAlt: 'Флакон в деревянном футляре на тёмной ткани',
     tone: 'walnut',
   },
   {
     slug: 'men',
     title: 'Мужские ароматы',
-    photoAlt: 'Чёрный флакон на базальте',
+    photo: '/images/category-men-960.jpg',
+    photoAlt: 'Стеклянный флакон на чёрном фоне',
     tone: 'basalt',
   },
   {
     slug: 'home',
     title: 'Для дома и\u00A0пространства',
-    photoAlt: 'Свеча и диффузор в тёплом свете',
+    photo: '/images/category-home-960.jpg',
+    photoAlt: 'Горящая свеча и каменная чаша на столе из травертина',
     tone: 'copperDark',
   },
 ] as const;

@@ -13,6 +13,7 @@ import { typograph } from '../../shared/lib/typograph';
 import { ButtonLink } from '../../shared/ui/Button/Button';
 import { Container } from '../../shared/ui/Container/Container';
 import { Icon } from '../../shared/ui/Icon/Icon';
+import { Picture } from '../../shared/ui/Picture/Picture';
 import { SectionLabel } from '../../shared/ui/SectionLabel/SectionLabel';
 import { Skeleton } from '../../shared/ui/Skeleton/Skeleton';
 import { NotesPyramid } from '../../widgets/notes-pyramid/NotesPyramid';
@@ -66,7 +67,12 @@ export function Categories() {
               to={`/catalog?category=${tile.slug}`}
               className={cx(styles.category, styles[tile.tone])}
             >
-              <span role="img" aria-label={tile.photoAlt} className={styles.categoryPhoto} />
+              <Picture
+                src={tile.photo}
+                alt={tile.photoAlt}
+                sizes="(min-width: 1024px) 33vw, 100vw"
+                className={styles.categoryPhoto}
+              />
               <span className={styles.categoryTitle}>{tile.title}</span>
               <span className={styles.categoryMore}>
                 Смотреть <Icon name="arrow-right" size={16} />
@@ -317,14 +323,13 @@ export function Materials() {
   return (
     <section aria-labelledby="materials-title" className={styles.materials}>
       <Container className={styles.materialsInner}>
-        <div
-          role="img"
-          aria-label="Крупный план приглушённого травертина: поры, естественные неровности, тень от флакона"
-          className={styles.materialsPhoto}
-          data-reveal="media"
-          data-parallax
-        >
-          <span data-reveal-layer className={styles.materialsFill} />
+        <div className={styles.materialsPhoto} data-reveal="media" data-parallax>
+          <Picture
+            src="/images/materials-960.jpg"
+            alt="Травертин в тёплом свете: поры, неровности и мягкая тень"
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            className={styles.materialsFill}
+          />
         </div>
         <div className={styles.materialsText}>
           <SectionLabel>Материалы</SectionLabel>
@@ -402,13 +407,16 @@ export function Boutique({ store }: { store: StoreInfo | undefined }) {
           </ButtonLink>
         </div>
         <div
-          role="img"
-          aria-label="Интерьер бутика: матовые чёрные стены, ореховые полки, каменный стол, тёплый оранжевый свет"
           className={cx(styles.splitWide, styles.boutiquePhoto)}
           data-reveal="media"
           data-parallax
         >
-          <span data-reveal-layer className={styles.boutiqueFill} />
+          <Picture
+            src="/images/boutique-960.jpg"
+            alt="Полутёмный зал: освещённые полки в глубине и силуэт гостя"
+            sizes="(min-width: 1024px) 50vw, 100vw"
+            className={styles.boutiqueFill}
+          />
         </div>
       </Container>
     </section>

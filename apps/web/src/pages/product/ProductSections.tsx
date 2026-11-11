@@ -8,6 +8,7 @@ import { formatPrice } from '../../shared/lib/money';
 import { useCascade } from '../../shared/lib/motion/useCascade';
 import { typograph } from '../../shared/lib/typograph';
 import { Container } from '../../shared/ui/Container/Container';
+import { Picture } from '../../shared/ui/Picture/Picture';
 import { SectionLabel } from '../../shared/ui/SectionLabel/SectionLabel';
 import { Skeleton } from '../../shared/ui/Skeleton/Skeleton';
 import { NotesPyramid } from '../../widgets/notes-pyramid/NotesPyramid';
@@ -47,14 +48,27 @@ function splitStory(story: string): { quote: string; rest: string } {
 export function StorySection({ product }: { product: ProductDetail }) {
   if (!product.story) return null;
   const { quote, rest } = splitStory(product.story);
+  // Второй снимок товара — фактура его материала (сид, D-076); если его нет — фон-заглушка.
+  const texture = product.images[1];
   return (
     <section className={styles.storySection} aria-labelledby="story-title">
       <Container className={styles.storyInner}>
-        <div
-          role="img"
-          aria-label={`Фактура материала «${product.material.name}» крупным планом`}
-          className={styles.storyPhoto}
-        />
+        {texture ? (
+          <div className={styles.storyPhoto}>
+            <Picture
+              src={texture.url}
+              alt={texture.alt}
+              sizes="(min-width: 1024px) 50vw, 100vw"
+              className={styles.storyImage}
+            />
+          </div>
+        ) : (
+          <div
+            role="img"
+            aria-label={`Фактура материала «${product.material.name}» крупным планом`}
+            className={styles.storyPhoto}
+          />
+        )}
         <div className={styles.storyText}>
           <SectionLabel>
             <span id="story-title">История образца</span>
@@ -95,7 +109,17 @@ export function RelatedSection({ slug }: { slug: string }) {
                 <li key={item.id}>
                   <Link to={productHref(item.slug)} className={styles.relatedCard}>
                     <span aria-hidden="true" className={styles.relatedPhoto}>
-                      <span data-cascade-media className={styles.relatedFill} />
+                      {item.image ? (
+                        <Picture
+                          src={item.image.url}
+                          alt=""
+                          sizes="(min-width: 1024px) 25vw, 50vw"
+                          className={styles.relatedFill}
+                          data-cascade-media
+                        />
+                      ) : (
+                        <span data-cascade-media className={styles.relatedFill} />
+                      )}
                     </span>
                     <span data-cascade-body className={styles.relatedNumber}>
                       Образец №&nbsp;{formatSpecimenNumber(item.specimenNumber)}
