@@ -63,6 +63,13 @@ export function createSmoothWheel(gsap: Gsap): SmoothScroll & { kill: () => void
   const maxScroll = () => document.documentElement.scrollHeight - window.innerHeight;
 
   const tick = (_time: number, deltaMs: number) => {
+    // Прокрутку сдвинули в обход нас (снятие закрепления сцены компенсирует высоту) —
+    // переносим и цель, иначе инерция дёрнула бы страницу обратно.
+    const moved = window.scrollY - current;
+    if (Math.abs(moved) > 2) {
+      current += moved;
+      target += moved;
+    }
     current = approach(current, target, deltaMs);
     window.scrollTo(0, current);
     if (current === target) stop();

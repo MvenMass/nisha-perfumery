@@ -8,6 +8,7 @@ import { formatPrice } from '../../shared/lib/money';
 import { useDesktopMotion } from '../../shared/lib/motion/useDesktopMotion';
 import { useCascade } from '../../shared/lib/motion/useCascade';
 import { useGsap } from '../../shared/lib/motion/useGsap';
+import { pinPlayed, releaseAfterPlay } from '../../shared/lib/motion/pin-once';
 import { typograph } from '../../shared/lib/typograph';
 import { ButtonLink } from '../../shared/ui/Button/Button';
 import { Container } from '../../shared/ui/Container/Container';
@@ -128,7 +129,7 @@ export function CrossSection({ product }: { product: ProductDetail }) {
   useGsap(
     sectionRef,
     ({ gsap, ScrollTrigger }, section) => {
-      if (!desktop) return;
+      if (!desktop || pinPlayed('cross')) return;
       const layers = section.querySelectorAll('[data-pyramid-layer]');
       const ticks = section.querySelectorAll('[data-pyramid-tick]');
       const timeline = gsap.timeline({
@@ -139,6 +140,7 @@ export function CrossSection({ product }: { product: ProductDetail }) {
           pin: true,
           scrub: 0.8,
           invalidateOnRefresh: true,
+          onLeave: releaseAfterPlay('cross', ScrollTrigger),
         },
       });
       timeline
@@ -219,7 +221,7 @@ export function Process() {
     ({ gsap, ScrollTrigger }, section) => {
       const wrap = stepsRef.current;
       const progress = wrap?.querySelector(`.${styles.stepsProgress}`);
-      if (!desktop || !wrap || !progress) return;
+      if (!desktop || !wrap || !progress || pinPlayed('process')) return;
       const steps = wrap.querySelectorAll(`.${styles.step}`);
       const dots = wrap.querySelectorAll(`.${styles.stepDot}`);
       const timeline = gsap.timeline({
@@ -230,6 +232,7 @@ export function Process() {
           pin: true,
           scrub: 0.8,
           invalidateOnRefresh: true,
+          onLeave: releaseAfterPlay('process', ScrollTrigger),
         },
       });
       timeline
