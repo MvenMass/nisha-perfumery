@@ -1,4 +1,4 @@
-import { lazy, Suspense, useState } from 'react';
+import { useState } from 'react';
 import { Outlet, ScrollRestoration, useLocation } from 'react-router';
 
 import { useCart } from '../entities/cart/queries';
@@ -10,13 +10,10 @@ import styles from './AppLayout.module.css';
 import { Intro } from './Intro';
 import { useSmoothScroll } from './useSmoothScroll';
 
-// Шторка переходов — только десктоп с мышью: телефон её код не скачивает.
-const PageCurtain = lazy(async () => ({ default: (await import('./PageCurtain')).PageCurtain }));
-
 export function AppLayout() {
   const [searchOpen, setSearchOpen] = useState(false);
   const { pathname } = useLocation();
-  const desktop = useSmoothScroll();
+  useSmoothScroll();
   // Флаконы, которые можно купить, — то же число, что «Товары, N шт.» в итоге корзины (D-028).
   const loadedCount = useCart(useViewer()).data?.summary.bottlesCount;
   const cartCount = loadedCount ?? 0;
@@ -43,11 +40,6 @@ export function AppLayout() {
         </div>
       </main>
       <Footer />
-      {desktop && (
-        <Suspense fallback={null}>
-          <PageCurtain />
-        </Suspense>
-      )}
       <Intro />
       <ScrollRestoration />
     </div>

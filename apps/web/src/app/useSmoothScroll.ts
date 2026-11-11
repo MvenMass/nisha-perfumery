@@ -15,9 +15,8 @@ function isSmoothHandle(handle: unknown): boolean {
 /**
  * Инерционная прокрутка колесом на витринных страницах десктопа с мышью (этап 9.1, D-074).
  * На телефоне и при reduced motion — обычная, GSAP ради неё не грузится.
- * Возвращает, десктоп ли это с мышью: от этого зависят и другие десктопные сцены (шторка).
  */
-export function useSmoothScroll(): boolean {
+export function useSmoothScroll(): void {
   const desktop = useDesktopMotion();
   const showcase = useMatches().some((match) => isSmoothHandle(match.handle));
   const { pathname, hash } = useLocation();
@@ -56,6 +55,4 @@ export function useSmoothScroll(): boolean {
     const target = document.getElementById(decodeURIComponent(hash.slice(1)));
     if (target) getSmoothScroll()?.glideTo(target);
   }, [pathname, hash]);
-
-  return desktop;
 }
